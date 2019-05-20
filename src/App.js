@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import Home from './pages/home'
 import Login from './pages/login'
 import Penilaian from './pages/penilaian'
-// import moduleName from 'module'
 
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;

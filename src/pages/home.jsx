@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Card } from 'antd'
+import logo from '../logo_work.svg';
 
 export class home extends Component {
   render() {
@@ -12,6 +13,7 @@ export class home extends Component {
           Aplikasi ini diperuntukan sebagai alat penilaian kinerja pegawai dalam waktu 1 bulan. 
           Nilai dihitung dari penilaian atasan, absensi, serta ketepatan pengisian daily activity.
         </p>
+        <img src={logo} className="App-logo" alt="logo" />
       </Card>
     )
   }
