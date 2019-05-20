@@ -6,6 +6,8 @@ import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import Home from './pages/home'
 import Login from './pages/login'
+import Penilaian from './pages/penilaian'
+// import moduleName from 'module'
 
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -77,11 +79,12 @@ class App extends React.Component {
                 </Header>
                 <Content style={{ margin: '0 16px' }}>
                   <Breadcrumb style={{ margin: '16px 0' }}>
-                    <Breadcrumb.Item>User</Breadcrumb.Item>
-                    <Breadcrumb.Item>Bill</Breadcrumb.Item>
+                    <Breadcrumb.Item>Apel</Breadcrumb.Item>
+                    <Breadcrumb.Item>Home</Breadcrumb.Item>
                   </Breadcrumb>
-                  <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>Bill is a cat.</div>
+                  {/* <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>Bill is a cat.</div> */}
                   <Route exact path="/" component={Home} />
+                  <Route path="/penilaian" component={Penilaian} />
                   <Route path="/login" component={Login} />
 
                 </Content>
