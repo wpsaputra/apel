@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card } from 'antd'
+import { Card, Row, Col } from 'antd'
 import logo from '../logo_work.svg';
 
 export class home extends Component {
@@ -7,12 +7,19 @@ export class home extends Component {
     return (
       <Card>
         <h1>
-          Apel Sicakep
+          APEL CAKEP
         </h1>
-        <p>
-          Aplikasi ini diperuntukan sebagai alat penilaian kinerja pegawai dalam waktu 1 bulan. 
-          Nilai dihitung dari penilaian atasan, absensi, serta ketepatan pengisian daily activity.
-        </p>
+        <Row>
+          <Col span={16}>
+          <p>
+            Aplikasi ini merupakan alat bantu penilaian kinerja pegawai secara bulanan. 
+            Nilai dihitung berdasarkan komponen Realisasi Pekerjaan, Ketepatan Waktu Pengumpulan CKP, 
+            Kepatuhan Pengisian Daily Activity dan Skoring Terlambat dan Cepat Pulang Pegawai Bulanan.
+            </p>
+          </Col>
+          {/* <Col span={8}>col-12</Col> */}
+        </Row>
+        
         <img src={logo} className="App-logo" alt="logo" />
       </Card>
     )

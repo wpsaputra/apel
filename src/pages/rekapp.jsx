@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Card, DatePicker, Table, Divider, Tag, notification, Button, Select } from 'antd'
+import { Card, DatePicker, Table, Tag, notification, Button, Select } from 'antd'
 
-const { MonthPicker, YearPicker } = DatePicker;
+const { MonthPicker } = DatePicker;
 const Option = Select.Option;
 
 const openNotification = () => {
