@@ -7,6 +7,9 @@ import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import Home from './pages/home'
 import Login from './pages/login'
 import Penilaian from './pages/penilaian'
+import Rekapb from './pages/rekapb';
+import Rekapp from './pages/rekapp';
+import Admin from './pages/admin';
 
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -51,8 +54,8 @@ class App extends React.Component {
                       </span>
                     }
                   >
-                    <Menu.Item key="3">Per Pegawai</Menu.Item>
-                    <Menu.Item key="4">Bulanan</Menu.Item>
+                    <Menu.Item key="/rekapp">Per Pegawai <NavLink to='/rekapp'> Per Pegawai </NavLink></Menu.Item>
+                    <Menu.Item key="/rekapb">Bulanan <NavLink to='/rekapb'> Bulanan </NavLink></Menu.Item>
                     {/* <Menu.Item key="5">Alex</Menu.Item> */}
                   </SubMenu>
                   <SubMenu
@@ -64,7 +67,7 @@ class App extends React.Component {
                       </span>
                     }
                   >
-                    <Menu.Item key="6">Administrator</Menu.Item>
+                    <Menu.Item key="/admin">Administrator <NavLink to='/admin'> Administrator </NavLink></Menu.Item>
                     {/* <Menu.Item key="8">Team 2</Menu.Item> */}
                   </SubMenu>
                   {/* <Menu.Item key="9">
@@ -84,6 +87,9 @@ class App extends React.Component {
                   {/* <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>Bill is a cat.</div> */}
                   <Route exact path="/" component={Home} />
                   <Route path="/penilaian" component={Penilaian} />
+                  <Route path="/rekapp" component={Rekapp} />
+                  <Route path="/rekapb" component={Rekapb} />
+                  <Route path="/admin" component={Admin} />
                   <Route path="/login" component={Login} />
 
                 </Content>
