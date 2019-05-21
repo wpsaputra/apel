@@ -14,20 +14,22 @@ export class penilaian extends Component {
                     dataIndex: 'niplama',
                     key: 'niplama',
                     render: text => <a href="javascript:;">{text.niplama}</a>,
-                    sorter: (a, b) => a.niplama.niplama - b.niplama.niplama
+                    sorter: (a, b) => a.niplama.niplama - b.niplama.niplama,
                 },
                 {
                     title: 'Nama Pegawai',
                     dataIndex: 'niplama',
                     key: 'nama',
                     render: text => <span>{text.nama}</span>,
-                    sorter: (a, b) => a.niplama.nama - b.niplama.nama
+                    sorter: (a, b) => a.niplama.nama.localeCompare(b.niplama.nama),
+                    
                 },
                 {
                     title: 'ID Satker',
                     dataIndex: 'niplama',
                     key: 'id_satker',
                     render: text => <span>{text.id_satker}</span>,
+                    sorter: (a, b) => a.niplama.id_satker - b.niplama.id_satker,
                 },
                 {
                     title: 'Skor Realisasi Pekerjaan',
@@ -78,9 +80,9 @@ export class penilaian extends Component {
                     key: 'action',
                     render: (text, record) => (
                         <span>
-                            <a href="javascript:;">Edit</a>
+                            <a href="javascript:;" onClick={()=>this.edit(record)}>Edit</a>
                             <Divider type="vertical" />
-                            <a href="javascript:;">Delete</a>
+                            <a href="javascript:;" onClick={()=>this.delete(record)}>Delete</a>
                         </span>
                     ),
                 },
@@ -90,13 +92,35 @@ export class penilaian extends Component {
         this.openNotification = this.openNotification.bind(this);
         this.onChange = this.onChange.bind(this);
         this.fetchData = this.fetchData.bind(this);
+        this.edit = this.edit.bind(this);
+        this.delete = this.delete.bind(this);
+    }
+
+    edit(record){
+        console.log(record);
+        let newData = this.state.data;
+        
+        newData.filter(v => v.id === record.id)[0].niplama.nama = "tsubasa";
+        console.log("edit");
+
+        this.setState({data: newData});
+    }
+
+    delete(record){
+        console.log(record);
+        let newData = this.state.data;
+        
+        newData = newData.filter(v => v.id !== record.id);
+        console.log("delete");
+
+        this.setState({data: newData});
     }
 
     openNotification() {
         notification.open({
             message: 'Perubahan Tabel',
             description:
-                'Konten tabel berhasil dirubah',
+                'Konten tabel berhasil diload',
             onClick: () => {
                 console.log('Notification Clicked!');
             },
