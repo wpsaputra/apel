@@ -202,9 +202,11 @@ export class penilaian extends Component {
 
     onChange(date, dateString) {
         // console.log(date, dateString);
-        this.setState({dateString: dateString});
-        console.log(date.format('M'));
-        this.fetchData(date);
+        if(date!==null){
+            this.setState({dateString: dateString});
+            console.log(date.format('M'));
+            this.fetchData(date);
+        }
     }
 
     fetchData(date) {
