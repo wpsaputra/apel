@@ -69,6 +69,7 @@ export class penilaian extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            name: "",
             dateString: moment().format('MMMM YYYY'),
             isModalVisible: false,
             row_record: {},
@@ -167,6 +168,7 @@ export class penilaian extends Component {
     edit(record) {
         console.log(record);
         this.setState({row_record: record});
+        this.setState({name: record.niplama.nama});
         
         // let newData = this.state.data;
         // newData.filter(v => v.id === record.id)[0].niplama.nama = "tsubasa";
@@ -294,7 +296,7 @@ export class penilaian extends Component {
                 <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai {this.state.dateString}</h1>
                 <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} />
                 <CollectionCreateForm
-                    title={"Edit Nilai Pegawai"}
+                    title={"Edit Nilai "+this.state.name}
                     wrappedComponentRef={this.saveFormRef}
                     visible={this.state.isModalVisible}
                     onCancel={this.handleCancel}
