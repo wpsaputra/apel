@@ -8,8 +8,9 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
     // eslint-disable-next-line
     class extends React.Component {
         render() {
-            const { visible, onCancel, onCreate, form, title } = this.props;
+            const { visible, onCancel, onCreate, form, title, row_record } = this.props;
             const { getFieldDecorator } = form;
+
             return (
                 <Modal
                     visible={visible}
@@ -27,31 +28,31 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
                         <Form.Item label="Skor Realisasi Pekerjaan">
                             {getFieldDecorator('skor_realisasi_pekerjaan', {
                                 rules: [{ required: true, message: 'Please input the title of collection!' }],
-                                initialValue: 0,
+                                initialValue: row_record.skor_realisasi_pekerjaan,
                             })(<InputNumber min={0} max={100} autoFocus={true} />)}
                         </Form.Item>
                         <Form.Item label="Skor Ketepatan Waktu">
                             {getFieldDecorator('skor_ketepatan_waktu', {
                                 rules: [{ required: true, message: 'Please input the title of collection!' }],
-                                initialValue: 0,
+                                initialValue: row_record.skor_ketepatan_waktu,
                             })(<InputNumber min={0} max={100} />)}
                         </Form.Item>
                         <Form.Item label="Skor Daily Activity">
                             {getFieldDecorator('skor_daily_activity', {
                                 rules: [{ required: true, message: 'Please input the title of collection!' }],
-                                initialValue: 0,
+                                initialValue: row_record.skor_daily_activity,
                             })(<InputNumber min={0} max={100} />)}
                         </Form.Item>
                         <Form.Item label="Skor TL & PSW">
                             {getFieldDecorator('skor_tl_psw', {
                                 rules: [{ required: true, message: 'Please input the title of collection!' }],
-                                initialValue: 0,
+                                initialValue: row_record.skor_tl_psw,
                             })(<InputNumber min={0} max={100} />)}
                         </Form.Item>
                         <Form.Item label="Nilai CKP R">
                             {getFieldDecorator('nilai_ckp_r', {
                                 rules: [{ required: true, message: 'Please input the title of collection!' }],
-                                initialValue: 0,
+                                initialValue: row_record.nilai_ckp_r,
                             })(<InputNumber min={0} max={100} />)}
                         </Form.Item>
                     </Form>
@@ -67,6 +68,7 @@ export class penilaian extends Component {
         super(props);
         this.state = {
             isModalVisible: false,
+            row_record: {},
             columns: [
                 {
                     title: 'NIP Pegawai',
@@ -160,6 +162,8 @@ export class penilaian extends Component {
     // Table Action
     edit(record) {
         console.log(record);
+        this.setState({row_record: record});
+        
         let newData = this.state.data;
 
         newData.filter(v => v.id === record.id)[0].niplama.nama = "tsubasa";
@@ -220,7 +224,9 @@ export class penilaian extends Component {
 
     // Modal action
     handleCancel = () => {
+        const form = this.formRef.props.form;
         this.setState({ isModalVisible: false });
+        form.resetFields();
     };
 
     handleCreate = () => {
@@ -251,6 +257,7 @@ export class penilaian extends Component {
                     visible={this.state.isModalVisible}
                     onCancel={this.handleCancel}
                     onCreate={this.handleCreate}
+                    row_record ={this.state.row_record}
                 />
 
             </Card>
