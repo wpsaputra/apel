@@ -4,63 +4,6 @@ import { Card, DatePicker, Table, Divider, Tag, notification, Modal, InputNumber
 const { MonthPicker } = DatePicker;
 const axios = require('axios');
 
-const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
-    // eslint-disable-next-line
-    class extends React.Component {
-        render() {
-            const { visible, onCancel, onCreate, form, title } = this.props;
-            const { getFieldDecorator } = form;
-            return (
-                <Modal
-                    visible={visible}
-                    title={title}
-                    okText="Save"
-                    onCancel={onCancel}
-                    onOk={onCreate}
-                >
-                    <Form layout="vertical">
-                        {/* <Form.Item label="Title">
-                            {getFieldDecorator('title', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
-                            })(<Input />)}
-                        </Form.Item> */}
-                        <Form.Item label="Skor Realisasi Pekerjaan">
-                            {getFieldDecorator('skor_realisasi_pekerjaan', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
-                                initialValue: 0,
-                            })(<InputNumber min={0} max={100} autoFocus={true} />)}
-                        </Form.Item>
-                        <Form.Item label="Skor Ketepatan Waktu">
-                            {getFieldDecorator('skor_ketepatan_waktu', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
-                                initialValue: 0,
-                            })(<InputNumber min={0} max={100} />)}
-                        </Form.Item>
-                        <Form.Item label="Skor Daily Activity">
-                            {getFieldDecorator('skor_daily_activity', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
-                                initialValue: 0,
-                            })(<InputNumber min={0} max={100} />)}
-                        </Form.Item>
-                        <Form.Item label="Skor TL & PSW">
-                            {getFieldDecorator('skor_tl_psw', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
-                                initialValue: 0,
-                            })(<InputNumber min={0} max={100} />)}
-                        </Form.Item>
-                        <Form.Item label="Nilai CKP R">
-                            {getFieldDecorator('nilai_ckp_r', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
-                                initialValue: 0,
-                            })(<InputNumber min={0} max={100} />)}
-                        </Form.Item>
-                    </Form>
-                </Modal>
-            );
-        }
-    },
-);
-
 
 export class penilaian extends Component {
     constructor(props) {
@@ -153,11 +96,10 @@ export class penilaian extends Component {
         this.fetchData = this.fetchData.bind(this);
         this.edit = this.edit.bind(this);
         this.delete = this.delete.bind(this);
-        this.handleCreate = this.handleCreate.bind(this);
+        this.handleOk = this.handleOk.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
     }
 
-    // Table Action
     edit(record) {
         console.log(record);
         let newData = this.state.data;
@@ -178,6 +120,16 @@ export class penilaian extends Component {
         console.log("delete");
 
         this.setState({ data: newData });
+    }
+
+    handleOk(e) {
+        console.log(e);
+        this.setState({ isModalVisible: false });
+    }
+
+    handleCancel(e) {
+        console.log(e);
+        this.setState({ isModalVisible: false });
     }
 
     openNotification() {
@@ -218,41 +170,44 @@ export class penilaian extends Component {
             });
     }
 
-    // Modal action
-    handleCancel = () => {
-        this.setState({ isModalVisible: false });
-    };
-
-    handleCreate = () => {
-        const form = this.formRef.props.form;
-        form.validateFields((err, values) => {
-            if (err) {
-                return;
-            }
-
-            console.log('Received values of form: ', values);
-            form.resetFields();
-            this.setState({ isModalVisible: false });
-        });
-    };
-
-    saveFormRef = formRef => {
-        this.formRef = formRef;
-    };
-
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
             <Card>
                 <MonthPicker style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Select month" />
                 <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} />
-                <CollectionCreateForm
-                    title={"Edit Nilai Pegawai"}
-                    wrappedComponentRef={this.saveFormRef}
+                <Modal
+                    title="Edit Nilai Pegawai"
                     visible={this.state.isModalVisible}
-                    onCancel={this.handleCancel}
-                    onCreate={this.handleCreate}
-                />
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}>
+                    {/* <InputNumber autoFocus={true} min={0} max={100} defaultValue={0} />
+                    <InputNumber min={0} max={100} defaultValue={0} />
+                    <InputNumber min={0} max={100} defaultValue={0} />
+                    <InputNumber min={0} max={100} defaultValue={0} />
+                    <InputNumber disabled={true} min={0} max={100} defaultValue={0} /> */}
 
+                    <Form layout="vertical">
+                        <Form.Item label="Title">
+                            {getFieldDecorator('title', {
+                                rules: [{ required: true, message: 'Please input the title of collection!' }],
+                            })(<Input />)}
+                        </Form.Item>
+                        <Form.Item label="Description">
+                            {getFieldDecorator('description')(<Input type="textarea" />)}
+                        </Form.Item>
+                        <Form.Item className="collection-create-form_last-form-item">
+                            {getFieldDecorator('modifier', {
+                                initialValue: 'public',
+                            })(
+                                <Radio.Group>
+                                    <Radio value="public">Public</Radio>
+                                    <Radio value="private">Private</Radio>
+                                </Radio.Group>,
+                            )}
+                        </Form.Item>
+                    </Form>
+                </Modal>
             </Card>
         )
     }
