@@ -157,6 +157,7 @@ export class penilaian extends Component {
         this.delete = this.delete.bind(this);
         this.handleCreate = this.handleCreate.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.updateData = this.updateData.bind(this);
     }
 
     // Table Action
@@ -222,6 +223,39 @@ export class penilaian extends Component {
             });
     }
 
+    updateData(values){
+        var self = this;
+        let url = "http://localhost/api.php/records/penilaian/"+this.state.row_record.id;
+        axios.put(url, values)
+            .then(function (response) {
+                // handle success
+                console.log("update data");
+                console.log(response.data);
+
+                let newData = self.state.data;
+                newData.filter(v => v.id === self.state.row_record.id)[0].skor_realisasi_pekerjaan = values.skor_realisasi_pekerjaan;
+                newData.filter(v => v.id === self.state.row_record.id)[0].skor_ketepatan_waktu = values.skor_ketepatan_waktu;
+                newData.filter(v => v.id === self.state.row_record.id)[0].skor_daily_activity = values.skor_daily_activity;
+                newData.filter(v => v.id === self.state.row_record.id)[0].skor_tl_psw = values.skor_tl_psw;
+                newData.filter(v => v.id === self.state.row_record.id)[0].nilai_ckp_r = values.nilai_ckp_r;
+
+                console.log("newData :");
+                console.log(newData);
+
+                self.setState({data: newData});
+            
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+                self.openNotification();
+            });
+
+    }
+
     // Modal action
     handleCancel = () => {
         const form = this.formRef.props.form;
@@ -237,6 +271,10 @@ export class penilaian extends Component {
             }
 
             console.log('Received values of form: ', values);
+            this.updateData(values);
+
+
+
             form.resetFields();
             this.setState({ isModalVisible: false });
         });
