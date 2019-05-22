@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Card, DatePicker, Table, Divider, Tag, notification, Modal, InputNumber, Form, Radio, Input } from 'antd'
+import moment from 'moment';
+import 'moment/locale/id'
 
 const { MonthPicker } = DatePicker;
 const axios = require('axios');
@@ -67,6 +69,7 @@ export class penilaian extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            dateString: moment().format('MMMM YYYY'),
             isModalVisible: false,
             row_record: {},
             columns: [
@@ -165,12 +168,11 @@ export class penilaian extends Component {
         console.log(record);
         this.setState({row_record: record});
         
-        let newData = this.state.data;
+        // let newData = this.state.data;
+        // newData.filter(v => v.id === record.id)[0].niplama.nama = "tsubasa";
+        // console.log("edit");
+        // this.setState({ data: newData });
 
-        newData.filter(v => v.id === record.id)[0].niplama.nama = "tsubasa";
-        console.log("edit");
-
-        this.setState({ data: newData });
         this.setState({ isModalVisible: true });
 
     }
@@ -198,6 +200,7 @@ export class penilaian extends Component {
 
     onChange(date, dateString) {
         // console.log(date, dateString);
+        this.setState({dateString: dateString});
         console.log(date.format('M'));
         this.fetchData(date);
     }
@@ -287,7 +290,8 @@ export class penilaian extends Component {
     render() {
         return (
             <Card>
-                <MonthPicker style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Select month" />
+                <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
+                <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai {this.state.dateString}</h1>
                 <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} />
                 <CollectionCreateForm
                     title={"Edit Nilai Pegawai"}
