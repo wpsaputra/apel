@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Card, DatePicker, Table, Divider, Tag, notification, Modal, InputNumber, Form, Radio, Input } from 'antd'
+import { Card, DatePicker, Table, Divider, Tag, notification, Modal, InputNumber, Form, Button, Input, Icon } from 'antd'
+import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import 'moment/locale/id'
 
@@ -69,7 +70,8 @@ export class penilaian extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: "",
+            searchText: '',
+            name: '',
             dateString: moment().format('MMMM YYYY'),
             isModalVisible: false,
             row_record: {},
@@ -80,14 +82,16 @@ export class penilaian extends Component {
                     key: 'niplama',
                     render: text => <a href="javascript:;">{text.niplama}</a>,
                     sorter: (a, b) => a.niplama.niplama - b.niplama.niplama,
+                    // ...this.getColumnSearchProps('niplama'),
                 },
                 {
                     title: 'Nama Pegawai',
                     dataIndex: 'niplama',
                     key: 'nama',
-                    render: text => <span>{text.nama}</span>,
+                    // render: text => <span>{text.nama}</span>,
                     sorter: (a, b) => a.niplama.nama.localeCompare(b.niplama.nama),
-
+                    ...this.getColumnSearchProps('nama'),
+                    
                 },
                 {
                     title: 'ID Satker',
@@ -162,14 +166,18 @@ export class penilaian extends Component {
         this.handleCreate = this.handleCreate.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.updateData = this.updateData.bind(this);
+        //search
+        this.getColumnSearchProps = this.getColumnSearchProps.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+        this.handleReset = this.handleReset.bind(this);
     }
 
     // Table Action
     edit(record) {
         console.log(record);
-        this.setState({row_record: record});
-        this.setState({name: record.niplama.nama});
-        
+        this.setState({ row_record: record });
+        this.setState({ name: record.niplama.nama });
+
         // let newData = this.state.data;
         // newData.filter(v => v.id === record.id)[0].niplama.nama = "tsubasa";
         // console.log("edit");
@@ -202,8 +210,8 @@ export class penilaian extends Component {
 
     onChange(date, dateString) {
         // console.log(date, dateString);
-        if(date!==null){
-            this.setState({dateString: dateString});
+        if (date !== null) {
+            this.setState({ dateString: dateString });
             console.log(date.format('M'));
             this.fetchData(date);
         }
@@ -230,9 +238,9 @@ export class penilaian extends Component {
             });
     }
 
-    updateData(values){
+    updateData(values) {
         var self = this;
-        let url = "http://localhost/api.php/records/penilaian/"+this.state.row_record.id;
+        let url = "http://localhost/api.php/records/penilaian/" + this.state.row_record.id;
         axios.put(url, values)
             .then(function (response) {
                 // handle success
@@ -249,8 +257,8 @@ export class penilaian extends Component {
                 console.log("newData :");
                 console.log(newData);
 
-                self.setState({data: newData});
-            
+                self.setState({ data: newData });
+
             })
             .catch(function (error) {
                 // handle error
@@ -291,6 +299,73 @@ export class penilaian extends Component {
         this.formRef = formRef;
     };
 
+    // Search
+    getColumnSearchProps = dataIndex => ({
+        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+            <div style={{ padding: 8 }}>
+                <Input
+                    ref={node => {
+                        this.searchInput = node;
+                    }}
+                    placeholder={`Search ${dataIndex}`}
+                    value={selectedKeys[0]}
+                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+                    onPressEnter={() => this.handleSearch(selectedKeys, confirm)}
+                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                />
+                <Button
+                    type="primary"
+                    onClick={() => this.handleSearch(selectedKeys, confirm)}
+                    icon="search"
+                    size="small"
+                    style={{ width: 90, marginRight: 8 }}
+                >
+                    Search
+            </Button>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                    Reset
+            </Button>
+            </div>
+        ),
+        filterIcon: filtered => (
+            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+        ),
+        onFilter: (value, record) =>
+            // record[dataIndex]
+            //     .toString()
+            //     .toLowerCase()
+            //     .includes(value.toLowerCase()),
+            
+            record.niplama[dataIndex]
+                .toString()
+                .toLowerCase()
+                .includes(value.toLowerCase()),
+            // console.log(value),
+        onFilterDropdownVisibleChange: visible => {
+            if (visible) {
+                setTimeout(() => this.searchInput.select());
+            }
+        },
+        render: text => (
+            <Highlighter
+                highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                searchWords={[this.state.searchText]}
+                autoEscape
+                textToHighlight={text.nama.toString()}
+            />
+        ),
+    });
+
+    handleSearch = (selectedKeys, confirm) => {
+        confirm();
+        this.setState({ searchText: selectedKeys[0] });
+    };
+
+    handleReset = clearFilters => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    };
+
     render() {
         return (
             <Card>
@@ -298,12 +373,12 @@ export class penilaian extends Component {
                 <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai {this.state.dateString}</h1>
                 <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} />
                 <CollectionCreateForm
-                    title={"Edit Nilai "+this.state.name}
+                    title={"Edit Nilai " + this.state.name}
                     wrappedComponentRef={this.saveFormRef}
                     visible={this.state.isModalVisible}
                     onCancel={this.handleCancel}
                     onCreate={this.handleCreate}
-                    row_record ={this.state.row_record}
+                    row_record={this.state.row_record}
                 />
 
             </Card>
