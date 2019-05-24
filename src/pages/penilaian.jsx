@@ -241,6 +241,13 @@ export class penilaian extends Component {
     updateData(values) {
         var self = this;
         let url = "http://localhost/api.php/records/penilaian/" + this.state.row_record.id;
+        let status = "complete";
+        for (const key of Object.keys(values)) {
+            if(values[key]==0){
+                status = "incomplete";
+            }
+        }
+        values.status = status;
         axios.put(url, values)
             .then(function (response) {
                 // handle success
@@ -253,6 +260,7 @@ export class penilaian extends Component {
                 newData.filter(v => v.id === self.state.row_record.id)[0].skor_daily_activity = values.skor_daily_activity;
                 newData.filter(v => v.id === self.state.row_record.id)[0].skor_tl_psw = values.skor_tl_psw;
                 newData.filter(v => v.id === self.state.row_record.id)[0].nilai_ckp_r = values.nilai_ckp_r;
+                newData.filter(v => v.id === self.state.row_record.id)[0].status = values.status;
 
                 console.log("newData :");
                 console.log(newData);
