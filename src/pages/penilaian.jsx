@@ -30,34 +30,34 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
                         </Form.Item> */}
                         <Form.Item label="Skor Realisasi Pekerjaan">
                             {getFieldDecorator('skor_realisasi_pekerjaan', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
+                                rules: [{ required: true, message: 'Silahkan input Skor Realisasi Pekerjaan!' }],
                                 initialValue: row_record.skor_realisasi_pekerjaan,
                             })(<InputNumber min={0} max={100} autoFocus={true} />)}
                         </Form.Item>
                         <Form.Item label="Skor Ketepatan Waktu">
                             {getFieldDecorator('skor_ketepatan_waktu', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
+                                rules: [{ required: true, message: 'Silahkan input Skor Ketepatan Waktu!' }],
                                 initialValue: row_record.skor_ketepatan_waktu,
                             })(<InputNumber min={0} max={100} />)}
                         </Form.Item>
                         <Form.Item label="Skor Daily Activity">
                             {getFieldDecorator('skor_daily_activity', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
+                                rules: [{ required: true, message: 'Silahkan input Skor Daily Activity' }],
                                 initialValue: row_record.skor_daily_activity,
                             })(<InputNumber min={0} max={100} />)}
                         </Form.Item>
                         <Form.Item label="Skor TL & PSW">
                             {getFieldDecorator('skor_tl_psw', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
+                                rules: [{ required: true, message: 'Silahkan input Skor TL & PSW!' }],
                                 initialValue: row_record.skor_tl_psw,
                             })(<InputNumber min={0} max={100} />)}
                         </Form.Item>
-                        <Form.Item label="Nilai CKP R">
+                        {/* <Form.Item label="Nilai CKP R">
                             {getFieldDecorator('nilai_ckp_r', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
+                                rules: [{ required: true, message: 'Silahkan input Nilai CKP R!' }],
                                 initialValue: row_record.nilai_ckp_r,
                             })(<InputNumber min={0} max={100} />)}
-                        </Form.Item>
+                        </Form.Item> */}
                     </Form>
                 </Modal>
             );
@@ -91,7 +91,7 @@ export class penilaian extends Component {
                     // render: text => <span>{text.nama}</span>,
                     sorter: (a, b) => a.niplama.nama.localeCompare(b.niplama.nama),
                     ...this.getColumnSearchProps('nama'),
-                    
+
                 },
                 {
                     title: 'ID Satker',
@@ -243,11 +243,17 @@ export class penilaian extends Component {
         let url = "http://localhost/api.php/records/penilaian/" + this.state.row_record.id;
         let status = "complete";
         for (const key of Object.keys(values)) {
-            if(values[key]==0){
+            if (values[key] == 0) {
                 status = "incomplete";
             }
         }
         values.status = status;
+
+        let nilai_ckp_r = 0;
+        nilai_ckp_r = values.skor_realisasi_pekerjaan * 0.3 + values.skor_ketepatan_waktu * 0.2 + values.skor_daily_activity * 0.2 +
+            values.skor_tl_psw * 0.3;
+        values.nilai_ckp_r = nilai_ckp_r.toFixed(0);
+
         axios.put(url, values)
             .then(function (response) {
                 // handle success
@@ -343,12 +349,12 @@ export class penilaian extends Component {
             //     .toString()
             //     .toLowerCase()
             //     .includes(value.toLowerCase()),
-            
+
             record.niplama[dataIndex]
                 .toString()
                 .toLowerCase()
                 .includes(value.toLowerCase()),
-            // console.log(value),
+        // console.log(value),
         onFilterDropdownVisibleChange: visible => {
             if (visible) {
                 setTimeout(() => this.searchInput.select());
