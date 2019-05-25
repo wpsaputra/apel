@@ -150,7 +150,9 @@ export class penilaian extends Component {
                     render: (text, record) => (
                         <span>
                             <a href="javascript:;" onClick={() => this.edit(record)}>Edit</a>
+                            {/* <Button type="primary" icon="search" /> */}
                             <Divider type="vertical" />
+                            {/* <Button type="primary" icon="search" /> */}
                             <a href="javascript:;" onClick={() => this.delete(record)}>Delete</a>
                         </span>
                     ),
@@ -384,6 +386,7 @@ export class penilaian extends Component {
         return (
             <Card>
                 <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
+                <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }}>Add Penilaian</Button>
                 <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai {this.state.dateString}</h1>
                 <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} />
                 <CollectionCreateForm
