@@ -1,5 +1,12 @@
 <?php
 
+header('Access-Control-Allow-Origin: *');
+
+header('Access-Control-Allow-Methods: GET, POST');
+
+header("Access-Control-Allow-Headers: X-Requested-With");
+
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -41,7 +48,8 @@ try {
     $stmt->execute();
     $conn->commit();
 
-    echo json_encode($sql);
+    // echo json_encode($sql);
+    echo json_encode("Insert Success");
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
 }

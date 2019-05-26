@@ -70,8 +70,12 @@ export class penilaian extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isAsyncModalVisible: false,
+            confirmLoading: false,
+            asyncModalText: "Menu ini akan menambahkan rekap nilai seluruh pegawai",
             searchText: '',
             name: '',
+            date: moment(),
             dateString: moment().format('MMMM YYYY'),
             isModalVisible: false,
             row_record: {},
@@ -172,6 +176,10 @@ export class penilaian extends Component {
         this.getColumnSearchProps = this.getColumnSearchProps.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
+        //asyncModal
+        this.showAsyncModal = this.showAsyncModal.bind(this);
+        this.cancelAsyncModal = this.cancelAsyncModal.bind(this);
+        this.okAsyncModal = this.okAsyncModal.bind(this);
     }
 
     // Table Action
@@ -213,7 +221,7 @@ export class penilaian extends Component {
     onChange(date, dateString) {
         // console.log(date, dateString);
         if (date !== null) {
-            this.setState({ dateString: dateString });
+            this.setState({ date: date, dateString: dateString });
             console.log(date.format('M'));
             this.fetchData(date);
         }
@@ -228,7 +236,7 @@ export class penilaian extends Component {
             .then(function (response) {
                 // handle success
                 console.log(response.data.records);
-                self.setState({ data: response.data.records });
+                self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
             })
             .catch(function (error) {
                 // handle error
@@ -382,11 +390,46 @@ export class penilaian extends Component {
         this.setState({ searchText: '' });
     };
 
+    //asyncModal
+    showAsyncModal(){
+        this.setState({isAsyncModalVisible: true});
+    }
+    
+    cancelAsyncModal(){
+        this.setState({isAsyncModalVisible: false});
+    }
+
+    okAsyncModal(){
+        var self = this;
+        let url = "http://localhost/refresh.php?month=$month&year=$year";
+        url = url.replace("$month", this.state.date.format('M')).replace("$year", this.state.date.format('YYYY'));
+        // axios.get('http://localhost/api.php/records/penilaian')
+
+        this.setState({confirmLoading: true});
+        
+        axios.get(url)
+            .then(function (response) {
+                // handle success
+                console.log(response.data);
+                // self.setState({ data: response.data.records });
+                self.fetchData(self.state.date);
+            })
+            .catch(function (error) {
+                // handle error
+                // self.setState({asyncModalText: error});
+                console.log(error);
+            })
+    }
+
+    componentDidMount(){
+        this.fetchData(this.state.date);
+    }
+
     render() {
         return (
             <Card>
                 <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
-                <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }}>Add Penilaian</Button>
+                <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Add Penilaian</Button>
                 <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai {this.state.dateString}</h1>
                 <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} />
                 <CollectionCreateForm
@@ -397,6 +440,16 @@ export class penilaian extends Component {
                     onCreate={this.handleCreate}
                     row_record={this.state.row_record}
                 />
+
+                <Modal
+                    title="Add Penilaian"
+                    visible={this.state.isAsyncModalVisible}
+                    onOk={this.okAsyncModal}
+                    confirmLoading={this.state.confirmLoading}
+                    onCancel={this.cancelAsyncModal}
+                >
+                    <p>{this.state.asyncModalText} {this.state.dateString}</p>
+                </Modal>
 
             </Card>
         )
