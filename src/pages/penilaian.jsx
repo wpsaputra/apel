@@ -205,7 +205,24 @@ export class penilaian extends Component {
         newData = newData.filter(v => v.id !== record.id);
         console.log("delete");
 
-        this.setState({ data: newData });
+        var self = this;
+        let url = "http://localhost/api.php/records/penilaian/"+record.id;
+        axios.delete(url)
+            .then(function (response) {
+                // handle success
+                console.log(response.data.records);
+                self.setState({ data: newData });
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+                self.openNotification();
+            });
+
+        // this.setState({ data: newData });
     }
 
     openNotification() {
