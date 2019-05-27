@@ -10,6 +10,7 @@ import Penilaian from './pages/penilaian'
 import Rekapb from './pages/rekapb';
 import Rekapp from './pages/rekapp';
 import Admin from './pages/admin';
+import Panduan from './pages/panduan';
 
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -74,6 +75,11 @@ class App extends React.Component {
                     <Icon type="file" />
                     <span>File</span>
                   </Menu.Item> */}
+                  <Menu.Item key="/faq">
+                    <Icon type="book" />
+                    <span>FAQ</span>
+                    <NavLink to='/faq'> FAQ </NavLink>
+                  </Menu.Item>
                 </Menu>
               </Sider>
               <Layout>
@@ -91,6 +97,7 @@ class App extends React.Component {
                   <Route path="/rekapb" component={Rekapb} />
                   <Route path="/admin" component={Admin} />
                   <Route path="/login" component={Login} />
+                  <Route path="/faq" component={Panduan} />
 
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>Copyright ©2019 Created by Developers</Footer>
