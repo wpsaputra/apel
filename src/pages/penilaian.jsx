@@ -6,6 +6,10 @@ import 'moment/locale/id'
 
 const { MonthPicker } = DatePicker;
 const axios = require('axios');
+// const url_api = "http://localhost/api.php";
+// const url_refresh = "http://localhost/refresh.php";
+const url_api = "http://10.74.8.176/api.php";
+const url_refresh = "http://10.74.8.176/refresh.php";
 
 const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
     // eslint-disable-next-line
@@ -206,7 +210,7 @@ export class penilaian extends Component {
         console.log("delete");
 
         var self = this;
-        let url = "http://localhost/api.php/records/penilaian/"+record.id;
+        let url = url_api+"/records/penilaian/"+record.id;
         axios.delete(url)
             .then(function (response) {
                 // handle success
@@ -247,7 +251,7 @@ export class penilaian extends Component {
 
     fetchData(date) {
         var self = this;
-        let url = "http://localhost/api.php/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
+        let url = url_api+"/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
         url = url.replace("$month", date.format('M')).replace("$year", date.format('YYYY'));
         // axios.get('http://localhost/api.php/records/penilaian')
         axios.get(url)
@@ -268,7 +272,7 @@ export class penilaian extends Component {
 
     updateData(values, form) {
         var self = this;
-        let url = "http://localhost/api.php/records/penilaian/" + this.state.row_record.id;
+        let url = url_api+"/records/penilaian/" + this.state.row_record.id;
         let status = "complete";
         for (const key of Object.keys(values)) {
             if (values[key] == 0) {
@@ -418,7 +422,7 @@ export class penilaian extends Component {
 
     okAsyncModal(){
         var self = this;
-        let url = "http://localhost/refresh.php?month=$month&year=$year";
+        let url = url_refresh+"?month=$month&year=$year";
         url = url.replace("$month", this.state.date.format('M')).replace("$year", this.state.date.format('YYYY'));
         // axios.get('http://localhost/api.php/records/penilaian')
 
