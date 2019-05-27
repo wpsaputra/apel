@@ -11,7 +11,7 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
     // eslint-disable-next-line
     class extends React.Component {
         render() {
-            const { visible, onCancel, onCreate, form, title, row_record } = this.props;
+            const { visible, onCancel, onCreate, form, title, row_record, confirmLoading } = this.props;
             const { getFieldDecorator } = form;
 
             return (
@@ -21,6 +21,7 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
                     okText="Save"
                     onCancel={onCancel}
                     onOk={onCreate}
+                    confirmLoading={confirmLoading}
                 >
                     <Form layout="vertical">
                         {/* <Form.Item label="Title">
@@ -248,7 +249,7 @@ export class penilaian extends Component {
             });
     }
 
-    updateData(values) {
+    updateData(values, form) {
         var self = this;
         let url = "http://localhost/api.php/records/penilaian/" + this.state.row_record.id;
         let status = "complete";
@@ -282,6 +283,8 @@ export class penilaian extends Component {
                 console.log(newData);
 
                 self.setState({ data: newData });
+                self.setState({ isModalVisible: false, confirmLoading: false });
+                form.resetFields();
 
             })
             .catch(function (error) {
@@ -310,12 +313,9 @@ export class penilaian extends Component {
             }
 
             console.log('Received values of form: ', values);
-            this.updateData(values);
+            this.setState({ confirmLoading: true });
+            this.updateData(values, form);
 
-
-
-            form.resetFields();
-            this.setState({ isModalVisible: false });
         });
     };
 
@@ -439,6 +439,7 @@ export class penilaian extends Component {
                     onCancel={this.handleCancel}
                     onCreate={this.handleCreate}
                     row_record={this.state.row_record}
+                    confirmLoading={this.state.confirmLoading}
                 />
 
                 <Modal
