@@ -5,7 +5,7 @@ import './index.css';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import Home from './pages/home'
-import Login from './pages/login'
+import WrappedNormalLoginForm from './pages/login'
 import Penilaian from './pages/penilaian'
 import Rekapb from './pages/rekapb';
 import Rekapp from './pages/rekapp';
@@ -39,7 +39,8 @@ class App extends React.Component {
                   <Menu.Item key="/">
                     <Icon type="home" />
                     <span>Home</span>
-                    <NavLink to='/' exact={true}> Home </NavLink>
+                    {/* <NavLink to='/' exact={true}> Home </NavLink> */}
+                    <NavLink to='/'> Home </NavLink>
                   </Menu.Item>
                   <Menu.Item key="/penilaian">
                     <Icon type="calculator" />
@@ -80,6 +81,11 @@ class App extends React.Component {
                     <span>FAQ</span>
                     <NavLink to='/faq'> FAQ </NavLink>
                   </Menu.Item>
+                  <Menu.Item key="/login">
+                    <Icon type="login" />
+                    <span>Login</span>
+                    <NavLink to='/login'> Login </NavLink>
+                  </Menu.Item>
                 </Menu>
               </Sider>
               <Layout>
@@ -96,8 +102,9 @@ class App extends React.Component {
                   <Route path="/rekapp" component={Rekapp} />
                   <Route path="/rekapb" component={Rekapb} />
                   <Route path="/admin" component={Admin} />
-                  <Route path="/login" component={Login} />
+                  {/* <Route path="/login" component={Login} /> */}
                   <Route path="/faq" component={Panduan} />
+                  <Route path="/login" component={WrappedNormalLoginForm} />
 
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>Copyright ©2019 Created by Developers</Footer>
