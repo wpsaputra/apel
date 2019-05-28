@@ -1,12 +1,12 @@
 import React from 'react';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { NavLink } from "react-router-dom";
-// import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
-class dashboard extends React.Component {
+class Login extends React.Component {
     state = {
         collapsed: false,
     };
@@ -16,14 +16,12 @@ class dashboard extends React.Component {
     };
     render() {
         const { children, ...rest } = this.props;
-        console.log(this.props.location);
         return (
             <div>
                 <Layout style={{ minHeight: '100vh' }}>
                     <Sider breakpoint="lg" collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
                         <div className="logo"> <Icon type="apple" theme="filled" style={{ fontSize: '40px', color: 'grey' }} /> </div>
-                        {/* <Menu theme="dark" selectedKeys={[props.location.pathname]} mode="inline"> */}
-                        <Menu theme="dark" mode="inline">
+                        <Menu theme="dark" selectedKeys={[this.props.location.pathname]} mode="inline">
                             <Menu.Item key="/">
                                 <Icon type="home" />
                                 <span>Home</span>
@@ -89,5 +87,6 @@ class dashboard extends React.Component {
     }
 }
 
+const dashboard = withRouter(props => <Login {...props}/>);
 
 export default dashboard;
