@@ -1,9 +1,32 @@
-.login-form {
+/* .login-form {
     max-width: 300px;
-}
+} */
 .login-form-forgot {
     float: right;
 }
 .login-form-button {
     width: 100%;
+}
+
+.App {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+.Aligner {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.Aligner-item {
+    max-width: 50%;
+}
+  
+.Aligner-item--top {
+    align-self: flex-start;
+}
+  
+.Aligner-item--bottom {
+    align-self: flex-end;
 }
