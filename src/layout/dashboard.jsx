@@ -71,6 +71,16 @@ class Login extends React.Component {
                     </Sider>
                     <Layout>
                         <Header style={{ background: '#fff', padding: 0 }}>
+                            <Menu
+                                theme="light"
+                                mode="horizontal"
+                                defaultSelectedKeys={['2']}
+                                style={{ lineHeight: '64px', background: '#fff', padding: 0, float: 'right', marginRight: '15px' }}
+                            >
+                                <Menu.Item key="/login">
+                                    <NavLink to='/login'><Icon type="rocket" />Logout</NavLink>
+                                </Menu.Item>
+                            </Menu>
                         </Header>
                         <Content style={{ margin: '0 16px' }}>
                             <Breadcrumb style={{ margin: '16px 0' }}>
@@ -87,6 +97,6 @@ class Login extends React.Component {
     }
 }
 
-const dashboard = withRouter(props => <Login {...props}/>);
+const dashboard = withRouter(props => <Login {...props} />);
 
 export default dashboard;
