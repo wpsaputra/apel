@@ -20,7 +20,8 @@
 }
   
 .Aligner-item {
-    max-width: 50%;
+    /* max-width: 50%; */
+    max-width: 300px;
 }
   
 .Aligner-item--top {
