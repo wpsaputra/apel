@@ -14,6 +14,20 @@ import Panduan from './pages/panduan';
 import RouteLayout from './layout/RouteLayout';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isSignedIn : false
+    };
+    this.signIn = this.signIn.bind(this);
+  }
+
+  signIn(){
+    this.setState({isSignedIn: true});
+  }
+
+
+
   render() {
     return (
       <div className="App">
@@ -27,13 +41,13 @@ class App extends React.Component {
               <RouteLayout path="/page1" component={Page1} />
               <RouteLayout path="/page2" component={Page2} />
               <Route component={PageNotFound} /> */}
-            <RouteLayout exact path="/" component={Home} />
-            <RouteLayout path="/penilaian" component={Penilaian} />
-            <RouteLayout path="/rekapp" component={Rekapp} />
-            <RouteLayout path="/rekapb" component={Rekapb} />
-            <RouteLayout path="/admin" component={Admin} />
-            <RouteLayout path="/faq" component={Panduan} />
-            <Route path="/login" component={WrappedNormalLoginForm} />
+            <RouteLayout auth={this.state} exact path="/" component={Home} />
+            <RouteLayout auth={this.state} path="/penilaian" component={Penilaian} />
+            <RouteLayout auth={this.state} path="/rekapp" component={Rekapp} />
+            <RouteLayout auth={this.state} path="/rekapb" component={Rekapb} />
+            <RouteLayout auth={this.state} path="/admin" component={Admin} />
+            <RouteLayout auth={this.state} path="/faq" component={Panduan} />
+            <Route auth={this.state} signIn={this.signIn} path="/login" component={WrappedNormalLoginForm} />
           </Switch>
         </Router>
       </div>

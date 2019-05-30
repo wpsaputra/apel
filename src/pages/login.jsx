@@ -4,20 +4,36 @@ import './login.css';
 import { Form, Icon, Input, Button, Checkbox, Card } from 'antd';
 
 export class login extends Component {
+  constructor(props) {
+    super(props);
+    // this.state = {
+    //   auth: this.props.auth
+    // };
+  }
+
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
       }
+      let newAuth = this.state.auth;
+      // newAuth.isSignedIn = true;
+      // this.setState({auth: newAuth});
+      
+      // console.log("this.props");
+      // console.log(this.state.auth);
+
+      // this.props.signIn();
     });
   };
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    console.log(this.props);
     return (
-      <div class="Aligner">
-        <div class="Aligner-item">
+      <div className="Aligner">
+        <div className="Aligner-item">
           <Card style={{ width: "300px" }}>
             <Form onSubmit={this.handleSubmit} className="login-form">
               <Form.Item>
@@ -62,7 +78,7 @@ export class login extends Component {
   }
 }
 
-const WrappedNormalLoginForm = Form.create({ name: 'normal_login' })(login);
+const WrappedNormalLoginForm = Form.create({ name: 'normal_login'})(login);
 
 // export default login
 export default WrappedNormalLoginForm
