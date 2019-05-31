@@ -49,8 +49,9 @@ export class login extends Component {
         newAuth.id_satker= response.data.id_satker;
         newAuth.nama= response.data.nama;
         newAuth.niplama= response.data.niplama;
-        
+
         self.setState({auth: newAuth});
+        localStorage.setItem("apel-state", JSON.stringify(self.state));
         self.props.history.push("/");
 
 
@@ -66,6 +67,7 @@ export class login extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    console.log(localStorage.getItem("apel-state"));
     return (
       <div className="Aligner">
         <div className="Aligner-item">
