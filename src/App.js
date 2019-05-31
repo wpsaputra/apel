@@ -24,7 +24,34 @@ class App extends React.Component {
       id_satker: "",
       nama: "",
       niplama: "",
+      date: ""
     };
+    this.checkLocalStorage = this.checkLocalStorage.bind(this); 
+  }
+
+  checkLocalStorage(){
+    let storage = localStorage.getItem("apel-state");
+    if(storage!==null){
+      // console.log("null");
+      // console.log(storage);
+      let temp = JSON.parse(storage);
+      temp = temp.auth;
+      let currentDate = new Date();
+      let prevDate = Date.parse(temp.date);
+      let diff = Math.abs(currentDate - prevDate) / 3600000; //get hours difference
+      console.log(diff);
+      if(diff<=1){
+        this.setState({isSignedIn: true});
+        this.setState({...temp});
+      }
+
+    }
+  }
+
+  componentWillMount(){
+    this.checkLocalStorage();
+    // this.setState({isSignedIn: true});
+    console.log(this.state);
   }
 
   render() {

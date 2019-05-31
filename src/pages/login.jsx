@@ -33,7 +33,7 @@ export class login extends Component {
       .then(function (response) {
         // handle success
         console.log(response.data);
-        if (response.data === 'Error Login') {
+        if (JSON.stringify(response.data).includes('Error')) {
           self.props.form.setFields({
             password: {
               errors: [new Error('Incorrect username or password')],
@@ -49,12 +49,12 @@ export class login extends Component {
         newAuth.id_satker= response.data.id_satker;
         newAuth.nama= response.data.nama;
         newAuth.niplama= response.data.niplama;
+        newAuth.id_level= response.data.id_level;
+        newAuth.date= new Date();
 
         self.setState({auth: newAuth});
         localStorage.setItem("apel-state", JSON.stringify(self.state));
         self.props.history.push("/");
-
-
 
       })
       .catch(function (error) {
@@ -67,7 +67,7 @@ export class login extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    console.log(localStorage.getItem("apel-state"));
+    // console.log(localStorage.getItem("apel-state"));
     return (
       <div className="Aligner">
         <div className="Aligner-item">
