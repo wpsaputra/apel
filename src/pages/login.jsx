@@ -3,12 +3,17 @@ import React, { Component } from 'react'
 import './login.css';
 import { Form, Icon, Input, Button, Checkbox, Card } from 'antd';
 
+const axios = require('axios');
+const url_login = "http://localhost/login.php";
+// const url_login = "http://10.74.8.176/login.php";
+
 export class login extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   auth: this.props.auth
-    // };
+    this.state = {
+      auth: this.props.auth
+    };
+    this.signIn = this.signIn.bind(this);
   }
 
   handleSubmit = e => {
@@ -16,21 +21,51 @@ export class login extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
+        this.signIn(values);
       }
-      let newAuth = this.state.auth;
-      // newAuth.isSignedIn = true;
-      // this.setState({auth: newAuth});
-      
-      // console.log("this.props");
-      // console.log(this.state.auth);
 
-      // this.props.signIn();
     });
   };
 
+  signIn(values) {
+    var self = this;
+    axios.post(url_login, values)
+      .then(function (response) {
+        // handle success
+        console.log(response.data);
+        if (response.data === 'Error Login') {
+          self.props.form.setFields({
+            password: {
+              errors: [new Error('Incorrect username or password')],
+            },
+          });
+          return;
+        }
+
+        let newAuth = self.state.auth;
+        newAuth.isSignedIn = true;
+        newAuth.id_gol= response.data.id_gol;
+        newAuth.id_org= response.data.id_org;
+        newAuth.id_satker= response.data.id_satker;
+        newAuth.nama= response.data.nama;
+        newAuth.niplama= response.data.niplama;
+        
+        self.setState({auth: newAuth});
+        self.props.history.push("/");
+
+
+
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      });
+
+
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
-    console.log(this.props);
     return (
       <div className="Aligner">
         <div className="Aligner-item">
@@ -78,7 +113,7 @@ export class login extends Component {
   }
 }
 
-const WrappedNormalLoginForm = Form.create({ name: 'normal_login'})(login);
+const WrappedNormalLoginForm = Form.create({ name: 'normal_login' })(login);
 
 // export default login
 export default WrappedNormalLoginForm

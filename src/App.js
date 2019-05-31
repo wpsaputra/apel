@@ -17,16 +17,15 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isSignedIn : false
+      isSignedIn: false,
+      id_gol: "",
+      id_level: "",
+      id_org: "",
+      id_satker: "",
+      nama: "",
+      niplama: "",
     };
-    this.signIn = this.signIn.bind(this);
   }
-
-  signIn(){
-    this.setState({isSignedIn: true});
-  }
-
-
 
   render() {
     return (
@@ -47,7 +46,11 @@ class App extends React.Component {
             <RouteLayout auth={this.state} path="/rekapb" component={Rekapb} />
             <RouteLayout auth={this.state} path="/admin" component={Admin} />
             <RouteLayout auth={this.state} path="/faq" component={Panduan} />
-            <Route auth={this.state} signIn={this.signIn} path="/login" component={WrappedNormalLoginForm} />
+            {/* <Route auth={this.state} signIn={this.signIn} path="/login" component={WrappedNormalLoginForm} /> */}
+            <Route
+              path='/login'
+              render={(props) => <WrappedNormalLoginForm {...props} auth={this.state} />}
+            />
           </Switch>
         </Router>
       </div>
