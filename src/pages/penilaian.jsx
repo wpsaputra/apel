@@ -6,10 +6,10 @@ import 'moment/locale/id'
 
 const { MonthPicker } = DatePicker;
 const axios = require('axios');
-// const url_api = "http://localhost/api.php";
-// const url_refresh = "http://localhost/refresh.php";
-const url_api = "http://10.74.8.176/api.php";
-const url_refresh = "http://10.74.8.176/refresh.php";
+const url_api = "http://localhost/api.php";
+const url_refresh = "http://localhost/refresh.php";
+// const url_api = "http://10.74.8.176/api.php";
+// const url_refresh = "http://10.74.8.176/refresh.php";
 
 const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
     // eslint-disable-next-line
@@ -75,6 +75,7 @@ export class penilaian extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            auth: this.props.auth,
             isAsyncModalVisible: false,
             confirmLoading: false,
             asyncModalText: "Menu ini akan menambahkan rekap nilai seluruh pegawai",
@@ -447,6 +448,7 @@ export class penilaian extends Component {
     }
 
     render() {
+        console.log(this.props);
         return (
             <Card>
                 <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />

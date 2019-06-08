@@ -14,6 +14,13 @@ class Login extends React.Component {
     onCollapse = collapsed => {
         this.setState({ collapsed });
     };
+
+    onLogout = () =>{
+        localStorage.removeItem("apel-state");
+        this.props.history.push("/login");
+    }
+
+
     render() {
         const { children, ...rest } = this.props;
         return (
@@ -62,11 +69,11 @@ class Login extends React.Component {
                                 <span>FAQ</span>
                                 <NavLink to='/faq'> FAQ </NavLink>
                             </Menu.Item>
-                            <Menu.Item key="/login">
+                            {/* <Menu.Item key="/login">
                                 <Icon type="login" />
                                 <span>Login</span>
                                 <NavLink to='/login'> Login </NavLink>
-                            </Menu.Item>
+                            </Menu.Item> */}
                         </Menu>
                     </Sider>
                     <Layout>
@@ -77,8 +84,9 @@ class Login extends React.Component {
                                 defaultSelectedKeys={['2']}
                                 style={{ lineHeight: '64px', background: '#fff', padding: 0, float: 'right', marginRight: '15px' }}
                             >
-                                <Menu.Item key="/login">
-                                    <NavLink to='/login'><Icon type="rocket" />Logout</NavLink>
+                                <Menu.Item key="/logout" onClick={this.onLogout}>
+                                    {/* <NavLink to='/login'><Icon type="rocket" />Logout</NavLink> */}
+                                    <Icon type="rocket" />Logout
                                 </Menu.Item>
                             </Menu>
                         </Header>

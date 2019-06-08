@@ -1,12 +1,16 @@
 <?php
 
 header('Access-Control-Allow-Origin: *');
+header('Content-type: application/json');
 header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With");
 
 header("Access-Control-Request-Headers: x-requested-with");
 header("Access-Control-Allow-Headers: *");
 // header("Access-Control-Allow-Headers: X-Requested-With");
+// header('Content-Type: application/json');
+
+// header('Access-Control-Allow-Origin: *');
 
 $servername = "localhost";
 $username_ckp = "root";
