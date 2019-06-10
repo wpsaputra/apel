@@ -4,7 +4,7 @@ import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import 'moment/locale/id'
 
-const { MonthPicker } = DatePicker;
+// const { MonthPicker } = DatePicker;
 const axios = require('axios');
 const modeValue={
     date: 0,

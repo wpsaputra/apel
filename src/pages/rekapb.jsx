@@ -6,92 +6,10 @@ import 'moment/locale/id'
 
 const { MonthPicker } = DatePicker;
 const axios = require('axios');
-const modeValue={
-    date: 0,
-    month: 1,
-    year: 2,
-    decade: 3
-};
 const url_api = "http://localhost/api.php";
-const url_refresh = "http://localhost/refresh.php";
+// const url_refresh = "http://localhost/refresh.php";
 // const url_api = "http://10.74.8.176/api.php";
 // const url_refresh = "http://10.74.8.176/refresh.php";
-
-class MyDatePicker extends React.Component {
-    static defaultProps={
-        topMode: "month",
-        defaultValue: moment(),
-        value: moment(),
-        format: "YYYY-MM-DD"
-    };
-    constructor(props) { 
-        super(props);        
-        this.state={
-            value: this.props.value || this.props.defaultValue,
-            mode: this.props.topMode,
-            preMode: this.props.topMode
-        };
-        this.isOnChange = false;
-    }
-    componentWillReceiveProps(nextProps, nextContext){
-        if(this.props.topMode != nextProps.topMode){
-            this.setState({
-                mode: nextProps.topMode
-            });
-        }
-    }
-    /**
-     * 
-     * @param {*} value 
-     * @param {要打開面板} mode 
-     */
-    onPanelChange(value, mode){
-        // console.log(`onPanelChange date:${value} mode:${mode}`);
-        //mode==null默認是從year返回到month
-        mode = mode || "month";
-        let open = true;
-        //1. 往上打開，沒有任何問題，直接打開
-        if(modeValue[this.state.mode] > modeValue[mode] && modeValue[this.props.topMode] > modeValue[mode]) {
-            //向下
-            open = false;
-            mode = this.props.topMode;
-        }
-        //只關閉窗口和賦值，當前的mode不變
-        this.setState({
-            value, open, mode,
-            preMode: this.state.mode
-        });
-        this.props.onChange(value, value.format("YYYY"));
-    }
-    /**
-     * 在date的情況下選擇直接退出
-     */
-    onChange(value, dateStr){
-        // console.log(`onChange date:${value} dateStr:${dateStr}`);
-        this.isOnChange = true;
-        this.setState({
-            open: false,
-            value
-        });
-    }
-    
-    render() {
-        // console.log(`state:${JSON.stringify(this.state)}`);
-        return (
-            <DatePicker 
-                value={this.state.value} 
-                mode={this.state.mode}
-                open={this.state.open}
-                format={this.props.format}
-                onFocus={()=>!this.isOnChange&&(this.isOnChange=!this.isOnChange,this.setState({open:true}))}
-                onChange={this.onChange.bind(this)}
-                onPanelChange={this.onPanelChange.bind(this)}
-                onOpenChange={(open)=>this.setState({open})}
-            />
-        );
-    }
-
-}
 
 export class rekapb extends Component {
     constructor(props) {
