@@ -454,7 +454,7 @@ export class penilaian extends Component {
                 <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
                 <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Add Penilaian</Button>
                 <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai {this.state.dateString}</h1>
-                <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} />
+                <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{overflowY: 'auto'}} />
                 <CollectionCreateForm
                     title={"Edit Nilai " + this.state.name}
                     wrappedComponentRef={this.saveFormRef}

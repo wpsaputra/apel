@@ -40,7 +40,7 @@ class App extends React.Component {
       let prevDate = Date.parse(temp.date);
       let diff = Math.abs(currentDate - prevDate) / 3600000; //get hours difference
       console.log(diff);
-      if(diff<=1){
+      if(diff<=2){
         this.setState({isSignedIn: true});
         this.setState({...temp});
       }
