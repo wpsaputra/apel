@@ -24,6 +24,7 @@ class App extends React.Component {
       id_satker: "",
       nama: "",
       niplama: "",
+      nm_satker: "",
       date: ""
     };
     this.checkLocalStorage = this.checkLocalStorage.bind(this); 

@@ -50,6 +50,7 @@ export class login extends Component {
         newAuth.nama= response.data.nama;
         newAuth.niplama= response.data.niplama;
         newAuth.id_level= response.data.id_level;
+        newAuth.nm_satker= response.data.nm_satker;
         newAuth.date= new Date();
 
         self.setState({auth: newAuth});

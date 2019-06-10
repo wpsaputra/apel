@@ -56,7 +56,8 @@ function getUserProfile($usr, $pass, $servername, $dbname_ckp, $username, $passw
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$dbname_ckp", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $stmt = $conn->prepare("SELECT a.niplama, b.nama, a.id_level, b.id_gol, b.id_org, b.id_satker FROM `autentifikasi` a LEFT JOIN master_pegawai b ON a.niplama=b.niplama WHERE a.username=:username");
+        // $stmt = $conn->prepare("SELECT a.niplama, b.nama, a.id_level, b.id_gol, b.id_org, b.id_satker FROM `autentifikasi` a LEFT JOIN master_pegawai b ON a.niplama=b.niplama WHERE a.username=:username");
+        $stmt = $conn->prepare("SELECT a.niplama, b.nama, a.id_level, b.id_gol, b.id_org, b.id_satker, c.nm_satker FROM `autentifikasi` a LEFT JOIN master_pegawai b ON a.niplama=b.niplama LEFT JOIN master_satker c ON b.id_satker=c.id_satker WHERE a.username=:username");
         $stmt->bindParam(':username', $usr);
         // $stmt->bindParam(':md5_pass', $md5_pass);
         $stmt->execute();
