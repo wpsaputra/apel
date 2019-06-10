@@ -307,7 +307,7 @@ export class rekapp extends Component {
                 {/* <MonthPicker format='YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih tahun" /> */}
                 <MyDatePicker format='YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih tahun" topMode='year'/>
                 <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} >Download Pdf</Button>
-                <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai Tahun {this.state.date.format("YYYY")}</h1>
+                <h1 style={{ textAlign: 'center' }}>Rekap Penilaian CKP-R Pegawai Tahun {this.state.date.format("YYYY")}</h1>
                 <h1 style={{ textAlign: 'center' }}> {this.state.auth.nm_satker} </h1>
                 <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{overflowY: 'auto'}} pagination={false} bordered />
             </Card>

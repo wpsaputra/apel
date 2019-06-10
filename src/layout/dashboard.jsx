@@ -94,6 +94,7 @@ class Login extends React.Component {
                             <Breadcrumb style={{ margin: '16px 0' }}>
                                 <Breadcrumb.Item>Apel</Breadcrumb.Item>
                                 <Breadcrumb.Item>Home</Breadcrumb.Item>
+                                {/* <Breadcrumb.Item>{this.props.location.pathname}</Breadcrumb.Item> */}
                             </Breadcrumb>
                             {children}
                         </Content>
