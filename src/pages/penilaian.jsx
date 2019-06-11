@@ -45,17 +45,29 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
                                 initialValue: row_record.skor_ketepatan_waktu,
                             })(<InputNumber min={0} max={100} />)}
                         </Form.Item>
-                        <Form.Item label="Skor Daily Activity">
-                            {getFieldDecorator('skor_daily_activity', {
-                                rules: [{ required: true, message: 'Silahkan input Skor Daily Activity' }],
-                                initialValue: row_record.skor_daily_activity,
+                        <Form.Item label="Skor Kualitas Pekerjaan">
+                            {getFieldDecorator('skor_kualitas_pekerjaan', {
+                                rules: [{ required: true, message: 'Silahkan input Skor Kualitas Pekerjaan!' }],
+                                initialValue: row_record.skor_kualitas_pekerjaan,
                             })(<InputNumber min={0} max={100} />)}
                         </Form.Item>
-                        <Form.Item label="Skor TL & PSW">
-                            {getFieldDecorator('skor_tl_psw', {
-                                rules: [{ required: true, message: 'Silahkan input Skor TL & PSW!' }],
-                                initialValue: row_record.skor_tl_psw,
+                        <Form.Item label="Skor Kesungguhan Kerja">
+                            {getFieldDecorator('skor_kesungguhan_kerja', {
+                                rules: [{ required: true, message: 'Silahkan input Skor Kesungguhan Kerja!' }],
+                                initialValue: row_record.skor_kesungguhan_kerja,
                             })(<InputNumber min={0} max={100} />)}
+                        </Form.Item>
+                        <Form.Item label="Jumlah Daily Kosong">
+                            {getFieldDecorator('jumlah_daily_kosong', {
+                                rules: [{ required: true, message: 'Silahkan input Skor Daily Activity' }],
+                                initialValue: row_record.jumlah_daily_kosong,
+                            })(<InputNumber min={0} max={31} />)}
+                        </Form.Item>
+                        <Form.Item label="Jumlah TL & PSW">
+                            {getFieldDecorator('jumlah_tl_psw', {
+                                rules: [{ required: true, message: 'Silahkan input Skor TL & PSW!' }],
+                                initialValue: row_record.jumlah_tl_psw,
+                            })(<InputNumber min={0} max={31} />)}
                         </Form.Item>
                         {/* <Form.Item label="Nilai CKP R">
                             {getFieldDecorator('nilai_ckp_r', {
@@ -329,16 +341,72 @@ export class penilaian extends Component {
         let url = url_api + "/records/penilaian/" + this.state.row_record.id;
         let status = "complete";
         for (const key of Object.keys(values)) {
-            if (values[key] == 0) {
+            if (values[key] == 0 && key!=='jumlah_daily_kosong' && key!=='jumlah_tl_psw') {
                 status = "incomplete";
             }
         }
         values.status = status;
 
+        // let nilai_ckp_r = 0;
+        // nilai_ckp_r = values.skor_realisasi_pekerjaan * 0.3 + values.skor_ketepatan_waktu * 0.2 + values.skor_daily_activity * 0.2 +
+        //     values.skor_tl_psw * 0.3;
+        // values.nilai_ckp_r = nilai_ckp_r.toFixed(0);
+
+        // calculate field rata_rata_kinerja 
+        let rata_rata_kinerja = 0;
+        rata_rata_kinerja = (values.skor_realisasi_pekerjaan*0.25 + values.skor_ketepatan_waktu*0.25 + values.skor_kualitas_pekerjaan*0.25 + values.skor_kesungguhan_kerja*0.25);
+        values.rata_rata_kinerja = rata_rata_kinerja.toFixed(0);
+
+        // calculate field skor_kinerja
+        let skor_kinerja = 98;
+        if(rata_rata_kinerja.toFixed(0)>=95){
+            skor_kinerja = 100;
+        }
+        if(rata_rata_kinerja.toFixed(0)<=94&&rata_rata_kinerja.toFixed(0)>=90){
+            skor_kinerja = 99;
+        }
+        values.skor_kinerja = skor_kinerja;
+
+        //calculate skor_daily_activity
+        let skor_daily_activity = 96;
+        if(values.jumlah_daily_kosong==0){
+            skor_daily_activity = 100;
+        }
+        if(values.jumlah_daily_kosong>=1&&values.jumlah_daily_kosong<=5){
+            skor_daily_activity = 99;
+        }
+        if(values.jumlah_daily_kosong>=6&&values.jumlah_daily_kosong<=10){
+            skor_daily_activity = 98;
+        }
+        if(values.jumlah_daily_kosong>=11&&values.jumlah_daily_kosong<=15){
+            skor_daily_activity = 97;
+        }
+        values.skor_daily_activity = skor_daily_activity;
+
+        //calculate skor tl& psw
+        let skor_tl_psw=95;
+        if(values.jumlah_tl_psw<=1){
+            skor_tl_psw = 100;
+        }
+        if(values.jumlah_tl_psw>=2&&values.jumlah_tl_psw<=3){
+            skor_tl_psw = 99;
+        }
+        if(values.jumlah_tl_psw>=4&&values.jumlah_tl_psw<=5){
+            skor_tl_psw = 98;
+        }
+        if(values.jumlah_tl_psw>=6&&values.jumlah_tl_psw<=7){
+            skor_tl_psw = 97;
+        }
+        if(values.jumlah_tl_psw>=8&&values.jumlah_tl_psw<=9){
+            skor_tl_psw = 96;
+        }
+        values.skor_tl_psw = skor_tl_psw;
+
+        //calculate ckor ckp-r 
         let nilai_ckp_r = 0;
-        nilai_ckp_r = values.skor_realisasi_pekerjaan * 0.3 + values.skor_ketepatan_waktu * 0.2 + values.skor_daily_activity * 0.2 +
-            values.skor_tl_psw * 0.3;
-        values.nilai_ckp_r = nilai_ckp_r.toFixed(0);
+        nilai_ckp_r = skor_kinerja*0.5 + skor_daily_activity*0.2 + skor_tl_psw*0.3;
+        values.nilai_ckp_r = nilai_ckp_r;
+
 
         axios.put(url, values)
             .then(function (response) {
@@ -347,15 +415,31 @@ export class penilaian extends Component {
                 console.log(response.data);
 
                 let newData = self.state.data;
+                // newData.filter(v => v.id === self.state.row_record.id)[0] = values;
+
+                // newData.filter(v => v.id === self.state.row_record.id)[0].skor_realisasi_pekerjaan = values.skor_realisasi_pekerjaan;
+                // newData.filter(v => v.id === self.state.row_record.id)[0].skor_ketepatan_waktu = values.skor_ketepatan_waktu;
+                // newData.filter(v => v.id === self.state.row_record.id)[0].skor_daily_activity = values.skor_daily_activity;
+                // newData.filter(v => v.id === self.state.row_record.id)[0].skor_tl_psw = values.skor_tl_psw;
+                // newData.filter(v => v.id === self.state.row_record.id)[0].nilai_ckp_r = values.nilai_ckp_r;
+                // newData.filter(v => v.id === self.state.row_record.id)[0].status = values.status;
+
                 newData.filter(v => v.id === self.state.row_record.id)[0].skor_realisasi_pekerjaan = values.skor_realisasi_pekerjaan;
                 newData.filter(v => v.id === self.state.row_record.id)[0].skor_ketepatan_waktu = values.skor_ketepatan_waktu;
+                newData.filter(v => v.id === self.state.row_record.id)[0].skor_kualitas_pekerjaan = values.skor_kualitas_pekerjaan;
+                newData.filter(v => v.id === self.state.row_record.id)[0].skor_kesungguhan_kerja = values.skor_kesungguhan_kerja;
+                newData.filter(v => v.id === self.state.row_record.id)[0].rata_rata_kinerja = values.rata_rata_kinerja;
+                newData.filter(v => v.id === self.state.row_record.id)[0].skor_kinerja = values.skor_kinerja;
+
+                newData.filter(v => v.id === self.state.row_record.id)[0].jumlah_daily_kosong = values.jumlah_daily_kosong;
                 newData.filter(v => v.id === self.state.row_record.id)[0].skor_daily_activity = values.skor_daily_activity;
+                newData.filter(v => v.id === self.state.row_record.id)[0].jumlah_tl_psw = values.jumlah_tl_psw;
                 newData.filter(v => v.id === self.state.row_record.id)[0].skor_tl_psw = values.skor_tl_psw;
                 newData.filter(v => v.id === self.state.row_record.id)[0].nilai_ckp_r = values.nilai_ckp_r;
                 newData.filter(v => v.id === self.state.row_record.id)[0].status = values.status;
 
-                console.log("newData :");
-                console.log(newData);
+                // console.log("newData :");
+                // console.log(newData);
 
                 self.setState({ data: newData });
                 self.setState({ isModalVisible: false, confirmLoading: false });
