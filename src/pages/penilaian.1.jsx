@@ -86,14 +86,14 @@ export class penilaian extends Component {
             isModalVisible: false,
             row_record: {},
             columns: [
-                // {
-                //     title: 'NIP Pegawai',
-                //     dataIndex: 'niplama',
-                //     key: 'niplama',
-                //     render: text => <a href="javascript:;">{text.niplama}</a>,
-                //     sorter: (a, b) => a.niplama.niplama - b.niplama.niplama,
-                //     // ...this.getColumnSearchProps('niplama'),
-                // },
+                {
+                    title: 'NIP Pegawai',
+                    dataIndex: 'niplama',
+                    key: 'niplama',
+                    render: text => <a href="javascript:;">{text.niplama}</a>,
+                    sorter: (a, b) => a.niplama.niplama - b.niplama.niplama,
+                    // ...this.getColumnSearchProps('niplama'),
+                },
                 {
                     title: 'Nama Pegawai',
                     dataIndex: 'niplama',
@@ -111,84 +111,31 @@ export class penilaian extends Component {
                     sorter: (a, b) => a.niplama.id_satker - b.niplama.id_satker,
                 },
                 {
-                    title: 'Kinerja',
-                    children: [
-                        {
-                            title: 'Realisasi Pekerjaan',
-                            dataIndex: 'skor_realisasi_pekerjaan',
-                            key: 'skor_realisasi_pekerjaan',
-                            sorter: (a, b) => a.skor_realisasi_pekerjaan - b.skor_realisasi_pekerjaan,
-                        },
-                        {
-                            title: 'Ketepatan Waktu',
-                            dataIndex: 'skor_ketepatan_waktu',
-                            key: 'skor_ketepatan_waktu',
-                            sorter: (a, b) => a.skor_ketepatan_waktu - b.skor_ketepatan_waktu,
-                        },
-                        {
-                            title: 'Kualitas Pekerjaan',
-                            dataIndex: 'skor_kualitas_pekerjaan',
-                            key: 'skor_kualitas_pekerjaan',
-                            sorter: (a, b) => a.skor_kualitas_pekerjaan - b.skor_kualitas_pekerjaan,
-                        },
-                        {
-                            title: 'Kesungguhan Kerja',
-                            dataIndex: 'skor_kesungguhan_kerja',
-                            key: 'skor_kesungguhan_kerja',
-                            sorter: (a, b) => a.skor_kesungguhan_kerja - b.skor_kesungguhan_kerja,
-                        },
-                        {
-                            title: 'Rata-rata',
-                            dataIndex: 'rata_rata_kinerja',
-                            key: 'rata_rata_kinerja',
-                            sorter: (a, b) => a.rata_rata_kinerja - b.rata_rata_kinerja,
-                        },
-                        {
-                            title: 'Skor',
-                            dataIndex: 'skor_kinerja',
-                            key: 'skor_kinerja',
-                            sorter: (a, b) => a.skor_kinerja - b.skor_kinerja,
-                        },
-                    ],
+                    title: 'Skor Realisasi Pekerjaan',
+                    dataIndex: 'skor_realisasi_pekerjaan',
+                    key: 'skor_realisasi_pekerjaan',
+                    sorter: (a, b) => a.skor_realisasi_pekerjaan - b.skor_realisasi_pekerjaan,
                 },
                 {
-                    title: 'Daily Activity',
-                    children: [
-                        {
-                            title: 'Jumlah Daily Kosong',
-                            dataIndex: 'jumlah_daily_kosong',
-                            key: 'jumlah_daily_kosong',
-                            sorter: (a, b) => a.jumlah_daily_kosong - b.jumlah_daily_kosong,
-                        },
-                        {
-                            title: 'Skor Daily Activity',
-                            dataIndex: 'skor_daily_activity',
-                            key: 'skor_daily_activity',
-                            sorter: (a, b) => a.skor_daily_activity - b.skor_daily_activity,
-                        },
-                    ],
-
+                    title: 'Skor Ketepatan Waktu',
+                    dataIndex: 'skor_ketepatan_waktu',
+                    key: 'skor_ketepatan_waktu',
+                    sorter: (a, b) => a.skor_ketepatan_waktu - b.skor_ketepatan_waktu,
                 },
                 {
-                    title: 'TL & PSW',
-                    children: [
-                        {
-                            title: 'Jumlah TL & PSW',
-                            dataIndex: 'jumlah_tl_psw',
-                            key: 'jumlah_tl_psw',
-                            sorter: (a, b) => a.jumlah_tl_psw - b.jumlah_tl_psw,
-                        },
-                        {
-                            title: 'Skor TL & PSW',
-                            dataIndex: 'skor_tl_psw',
-                            key: 'skor_tl_psw',
-                            sorter: (a, b) => a.skor_tl_psw - b.skor_tl_psw,
-                        },
-                    ],
-
+                    title: 'Skor Daily Activity',
+                    dataIndex: 'skor_daily_activity',
+                    key: 'skor_daily_activity',
+                    sorter: (a, b) => a.skor_daily_activity - b.skor_daily_activity,
                 },
                 {
-                    title: 'Nilai CKP-R',
+                    title: 'Skor TL & PSW',
+                    dataIndex: 'skor_tl_psw',
+                    key: 'skor_tl_psw',
+                    sorter: (a, b) => a.skor_tl_psw - b.skor_tl_psw,
+                },
+                {
+                    title: 'Nilai CKP R',
                     dataIndex: 'nilai_ckp_r',
                     key: 'nilai_ckp_r',
                     sorter: (a, b) => a.nilai_ckp_r - b.nilai_ckp_r,
@@ -264,7 +211,7 @@ export class penilaian extends Component {
         console.log("delete");
 
         var self = this;
-        let url = url_api + "/records/penilaian/" + record.id;
+        let url = url_api+"/records/penilaian/"+record.id;
         axios.delete(url)
             .then(function (response) {
                 // handle success
@@ -305,7 +252,7 @@ export class penilaian extends Component {
 
     fetchData(date) {
         var self = this;
-        let url = url_api + "/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
+        let url = url_api+"/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
         url = url.replace("$month", date.format('M')).replace("$year", date.format('YYYY'));
         // axios.get('http://localhost/api.php/records/penilaian')
         axios.get(url)
@@ -326,7 +273,7 @@ export class penilaian extends Component {
 
     updateData(values, form) {
         var self = this;
-        let url = url_api + "/records/penilaian/" + this.state.row_record.id;
+        let url = url_api+"/records/penilaian/" + this.state.row_record.id;
         let status = "complete";
         for (const key of Object.keys(values)) {
             if (values[key] == 0) {
@@ -466,22 +413,22 @@ export class penilaian extends Component {
     };
 
     //asyncModal
-    showAsyncModal() {
-        this.setState({ isAsyncModalVisible: true });
+    showAsyncModal(){
+        this.setState({isAsyncModalVisible: true});
+    }
+    
+    cancelAsyncModal(){
+        this.setState({isAsyncModalVisible: false});
     }
 
-    cancelAsyncModal() {
-        this.setState({ isAsyncModalVisible: false });
-    }
-
-    okAsyncModal() {
+    okAsyncModal(){
         var self = this;
-        let url = url_refresh + "?month=$month&year=$year";
+        let url = url_refresh+"?month=$month&year=$year";
         url = url.replace("$month", this.state.date.format('M')).replace("$year", this.state.date.format('YYYY'));
         // axios.get('http://localhost/api.php/records/penilaian')
 
-        this.setState({ confirmLoading: true });
-
+        this.setState({confirmLoading: true});
+        
         axios.get(url)
             .then(function (response) {
                 // handle success
@@ -496,7 +443,7 @@ export class penilaian extends Component {
             })
     }
 
-    componentDidMount() {
+    componentDidMount(){
         this.fetchData(this.state.date);
     }
 
@@ -507,7 +454,7 @@ export class penilaian extends Component {
                 <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
                 <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Add Penilaian</Button>
                 <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai {this.state.dateString}</h1>
-                <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{ overflowY: 'auto' }} bordered />
+                <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{overflowY: 'auto'}} />
                 <CollectionCreateForm
                     title={"Edit Nilai " + this.state.name}
                     wrappedComponentRef={this.saveFormRef}
