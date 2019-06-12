@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, DatePicker, Table, Divider, Tag, notification, Modal, InputNumber, Form, Button, Input, Icon } from 'antd'
+import { Card, DatePicker, Table, Divider, Tag, notification, Modal, InputNumber, Form, Button, Input, Icon, Alert } from 'antd'
 import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import 'moment/locale/id'
@@ -8,6 +8,7 @@ const { MonthPicker } = DatePicker;
 const axios = require('axios');
 const url_api = "http://localhost/api.php";
 const url_refresh = "http://localhost/refresh.php";
+const url_pegawai = "http://localhost/pegawai.php";
 // const url_api = "http://10.74.8.176/api.php";
 // const url_refresh = "http://10.74.8.176/refresh.php";
 
@@ -87,6 +88,7 @@ export class penilaian extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            filterData: [],
             auth: this.props.auth,
             isAsyncModalVisible: false,
             confirmLoading: false,
@@ -324,7 +326,38 @@ export class penilaian extends Component {
             .then(function (response) {
                 // handle success
                 console.log(response.data.records);
-                self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
+                let tempRecord = response.data.records;
+                // tempRecord = tempRecord.filter(v =>  self.state.filterData.niplama.includes(v.niplama.niplama));
+                // tempRecord = tempRecord.filter(v =>  v.niplama.niplama==="340057236");
+                // tempRecord = tempRecord.filter(v =>  v.niplama.niplama===self.state.filterData[0].niplama);
+                tempRecord = tempRecord.filter(v =>  self.state.filterData.some(item => item.niplama === v.niplama.niplama));
+                console.log("temp record", tempRecord); 
+                // self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
+                self.setState({ data: tempRecord, confirmLoading: false, isAsyncModalVisible: false });
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+                self.openNotification();
+            });
+    }
+
+    fetchPegawai() {
+        var self = this;
+        let url = url_pegawai + "?id_lvl=$id_lvl&id_org=$id_org&id_satker=$id_satker";
+        url = url.replace("$id_lvl", this.state.auth.id_level).replace("$id_org", this.state.auth.id_org).replace("$id_satker", this.state.auth.id_satker);
+        // axios.get('http://localhost/api.php/records/penilaian')
+        console.log(url);
+        axios.get(url)
+            .then(function (response) {
+                // handle success
+                console.log(response.data);
+                self.setState({ filterData: response.data });
+                self.fetchData(self.state.date);
+                // self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
             })
             .catch(function (error) {
                 // handle error
@@ -581,38 +614,53 @@ export class penilaian extends Component {
     }
 
     componentDidMount() {
-        this.fetchData(this.state.date);
+        // this.fetchData(this.state.date);
+        this.fetchPegawai();
     }
 
     render() {
         console.log(this.props);
         return (
-            <Card>
-                <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
-                <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Add Penilaian</Button>
-                <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai {this.state.dateString}</h1>
-                <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{ overflowY: 'auto' }} bordered />
-                <CollectionCreateForm
-                    title={"Edit Nilai " + this.state.name}
-                    wrappedComponentRef={this.saveFormRef}
-                    visible={this.state.isModalVisible}
-                    onCancel={this.handleCancel}
-                    onCreate={this.handleCreate}
-                    row_record={this.state.row_record}
-                    confirmLoading={this.state.confirmLoading}
-                />
+            <div>
+                {this.state.auth.id_level==4 ? (
+                    <div>
+                        <Alert
+                        message="User dengan level 4 (Staff) tidak bisa melakukan penilaian CKP"
+                        type="warning"
+                        closable
+                        />
+                        <br/>
+                    </div>
+                  ) : (<div></div>
+                )}
+                <Card>
+                    <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
+                    <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Add Penilaian</Button>
+                    <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai {this.state.dateString}</h1>
+                    <h1 style={{ textAlign: 'center' }}> {this.state.auth.nm_satker} </h1>
+                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{ overflowY: 'auto' }} bordered />
+                    <CollectionCreateForm
+                        title={"Edit Nilai " + this.state.name}
+                        wrappedComponentRef={this.saveFormRef}
+                        visible={this.state.isModalVisible}
+                        onCancel={this.handleCancel}
+                        onCreate={this.handleCreate}
+                        row_record={this.state.row_record}
+                        confirmLoading={this.state.confirmLoading}
+                    />
 
-                <Modal
-                    title="Add Penilaian"
-                    visible={this.state.isAsyncModalVisible}
-                    onOk={this.okAsyncModal}
-                    confirmLoading={this.state.confirmLoading}
-                    onCancel={this.cancelAsyncModal}
-                >
-                    <p>{this.state.asyncModalText} {this.state.dateString}</p>
-                </Modal>
+                    <Modal
+                        title="Add Penilaian"
+                        visible={this.state.isAsyncModalVisible}
+                        onOk={this.okAsyncModal}
+                        confirmLoading={this.state.confirmLoading}
+                        onCancel={this.cancelAsyncModal}
+                    >
+                        <p>{this.state.asyncModalText} {this.state.dateString}</p>
+                    </Modal>
 
-            </Card>
+                </Card>
+            </div>
         )
     }
 }
