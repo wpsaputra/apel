@@ -634,7 +634,11 @@ export class penilaian extends Component {
                 )}
                 <Card>
                     <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
-                    <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Add Penilaian</Button>
+                    {/* <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal} disabled>Add Penilaian</Button> */}
+                    {this.state.auth.id_level==4 ? (
+                        <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} disabled>Add Penilaian</Button>
+                        ) : (<Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Add Penilaian</Button>
+                    )}
                     <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai {this.state.dateString}</h1>
                     <h1 style={{ textAlign: 'center' }}> {this.state.auth.nm_satker} </h1>
                     <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{ overflowY: 'auto' }} bordered loading={this.state.isTableLoading} />
