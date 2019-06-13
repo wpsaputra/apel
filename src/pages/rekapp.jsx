@@ -113,7 +113,8 @@ export class rekapp extends Component {
                     title: 'NIP Pegawai',
                     dataIndex: 'niplama',
                     key: 'niplama',
-                    render: text => <a href="javascript:;">{text.niplama}</a>,
+                    // render: text => <a href="javascript:;">{text.niplama}</a>,
+                    render: text => <span>{text.niplama}</span>,
                     // sorter: (a, b) => a.niplama.niplama - b.niplama.niplama,
                 },
                 {

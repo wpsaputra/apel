@@ -101,14 +101,14 @@ export class penilaian extends Component {
             isModalVisible: false,
             row_record: {},
             columns: [
-                // {
-                //     title: 'NIP Pegawai',
-                //     dataIndex: 'niplama',
-                //     key: 'niplama',
-                //     render: text => <a href="javascript:;">{text.niplama}</a>,
-                //     sorter: (a, b) => a.niplama.niplama - b.niplama.niplama,
-                //     // ...this.getColumnSearchProps('niplama'),
-                // },
+                {
+                    title: 'NIP Pegawai',
+                    dataIndex: 'niplama',
+                    key: 'niplama',
+                    render: text => <a href="javascript:;">{text.niplama}</a>,
+                    sorter: (a, b) => a.niplama.niplama - b.niplama.niplama,
+                    // ...this.getColumnSearchProps('niplama'),
+                },
                 {
                     title: 'Nama Pegawai',
                     dataIndex: 'niplama',
@@ -118,13 +118,13 @@ export class penilaian extends Component {
                     ...this.getColumnSearchProps('nama'),
 
                 },
-                {
-                    title: 'ID Satker',
-                    dataIndex: 'niplama',
-                    key: 'id_satker',
-                    render: text => <span>{text.id_satker}</span>,
-                    sorter: (a, b) => a.niplama.id_satker - b.niplama.id_satker,
-                },
+                // {
+                //     title: 'ID Satker',
+                //     dataIndex: 'niplama',
+                //     key: 'id_satker',
+                //     render: text => <span>{text.id_satker}</span>,
+                //     sorter: (a, b) => a.niplama.id_satker - b.niplama.id_satker,
+                // },
                 {
                     title: 'Kinerja',
                     children: [
