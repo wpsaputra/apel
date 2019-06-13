@@ -15,7 +15,7 @@ class Login extends React.Component {
         this.setState({ collapsed });
     };
 
-    onLogout = () =>{
+    onLogout = () => {
         localStorage.removeItem("apel-state");
         this.props.history.push("/login");
     }
@@ -23,6 +23,30 @@ class Login extends React.Component {
 
     render() {
         const { children, ...rest } = this.props;
+        let path = "Path";
+        switch (this.props.location.pathname) {
+            case "/":
+                path = "Home";
+                break;
+            case "/panduan":
+                path = "Panduan";
+                break;
+            case "/penilaian":
+                path = "Penilaian";
+                break;
+            case "/rekapb":
+                path = "Rekap Bulanan";
+                break;
+            case "/rekapp":
+                path = "Rekap per Pegawai";
+                break;
+            case "/admin":
+                path = "Administrator";
+                break;
+            case "/faq":
+                path = "FAQ";
+                break;
+        }
         return (
             <div>
                 <Layout style={{ minHeight: '100vh' }}>
@@ -93,7 +117,8 @@ class Login extends React.Component {
                         <Content style={{ margin: '0 16px' }}>
                             <Breadcrumb style={{ margin: '16px 0' }}>
                                 <Breadcrumb.Item>Apel</Breadcrumb.Item>
-                                <Breadcrumb.Item>Home</Breadcrumb.Item>
+                                {/* <Breadcrumb.Item>Home</Breadcrumb.Item> */}
+                                <Breadcrumb.Item>{path}</Breadcrumb.Item>
                                 {/* <Breadcrumb.Item>{this.props.location.pathname}</Breadcrumb.Item> */}
                             </Breadcrumb>
                             {children}
