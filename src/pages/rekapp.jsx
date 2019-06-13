@@ -97,6 +97,7 @@ export class rekapp extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isTableLoading: false,
             auth: this.props.auth,
             isAsyncModalVisible: false,
             confirmLoading: false,
@@ -211,6 +212,7 @@ export class rekapp extends Component {
         let url = url_api+"/records/penilaian?filter=niplama,eq,$niplama&filter=tahun_ckp,eq,$year&join=master_pegawai&order=bulan_ckp,asc";
         url = url.replace("$niplama", this.state.auth.niplama).replace("$year", date.format('YYYY'));
         // axios.get('http://localhost/api.php/records/penilaian')
+        self.setState({ isTableLoading: true });
         axios.get(url)
             .then(function (response) {
                 // handle success
@@ -224,6 +226,7 @@ export class rekapp extends Component {
             .finally(function () {
                 // always executed
                 self.openNotification();
+                self.setState({ isTableLoading: false });
             });
     }
 
@@ -309,7 +312,7 @@ export class rekapp extends Component {
                 <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} >Download Pdf</Button>
                 <h1 style={{ textAlign: 'center' }}>Rekap Penilaian CKP-R Pegawai Tahun {this.state.date.format("YYYY")}</h1>
                 <h1 style={{ textAlign: 'center' }}> {this.state.auth.nm_satker} </h1>
-                <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{overflowY: 'auto'}} pagination={false} bordered />
+                <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{overflowY: 'auto'}} pagination={false} bordered loading={this.state.isTableLoading} />
             </Card>
         )
     }

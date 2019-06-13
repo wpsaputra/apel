@@ -88,6 +88,7 @@ export class penilaian extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isTableLoading: false,
             filterData: [],
             auth: this.props.auth,
             isAsyncModalVisible: false,
@@ -322,6 +323,7 @@ export class penilaian extends Component {
         let url = url_api + "/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
         url = url.replace("$month", date.format('M')).replace("$year", date.format('YYYY'));
         // axios.get('http://localhost/api.php/records/penilaian')
+        self.setState({ isTableLoading: true });
         axios.get(url)
             .then(function (response) {
                 // handle success
@@ -342,6 +344,7 @@ export class penilaian extends Component {
             .finally(function () {
                 // always executed
                 self.openNotification();
+                self.setState({ isTableLoading: false });
             });
     }
 
@@ -363,10 +366,6 @@ export class penilaian extends Component {
                 // handle error
                 console.log(error);
             })
-            .finally(function () {
-                // always executed
-                self.openNotification();
-            });
     }
 
     updateData(values, form) {
@@ -638,7 +637,7 @@ export class penilaian extends Component {
                     <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Add Penilaian</Button>
                     <h1 style={{ textAlign: 'center' }}>Rekap Penilaian Pegawai {this.state.dateString}</h1>
                     <h1 style={{ textAlign: 'center' }}> {this.state.auth.nm_satker} </h1>
-                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{ overflowY: 'auto' }} bordered />
+                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{ overflowY: 'auto' }} bordered loading={this.state.isTableLoading} />
                     <CollectionCreateForm
                         title={"Edit Nilai " + this.state.name}
                         wrappedComponentRef={this.saveFormRef}
