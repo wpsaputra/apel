@@ -23,7 +23,7 @@ class Login extends React.Component {
 
     render() {
         const { children, ...rest } = this.props;
-        let path = "Path";
+        let path = "404";
         switch (this.props.location.pathname) {
             case "/":
                 path = "Home";

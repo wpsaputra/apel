@@ -12,6 +12,7 @@ import Rekapp from './pages/rekapp';
 import Admin from './pages/admin';
 import Panduan from './pages/panduan';
 import RouteLayout from './layout/RouteLayout';
+import NotFound from './pages/notfound';
 
 class App extends React.Component {
   constructor(props) {
@@ -74,11 +75,14 @@ class App extends React.Component {
             <RouteLayout auth={this.state} path="/rekapb" component={Rekapb} />
             <RouteLayout auth={this.state} path="/admin" component={Admin} />
             <RouteLayout auth={this.state} path="/faq" component={Panduan} />
+            {/* <RouteLayout auth={this.state} path="/404" component={NotFound} /> */}
+            {/* <RouteLayout auth={this.state} component={NotFound} /> */}
             {/* <Route auth={this.state} signIn={this.signIn} path="/login" component={WrappedNormalLoginForm} /> */}
             <Route
               path='/login'
               render={(props) => <WrappedNormalLoginForm {...props} auth={this.state} />}
             />
+            <Route component={NotFound} />
           </Switch>
         </Router>
       </div>
