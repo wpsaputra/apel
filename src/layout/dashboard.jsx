@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { NavLink } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
+import { Avatar } from "antd";
 
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -47,6 +48,9 @@ class Login extends React.Component {
                 path = "FAQ";
                 break;
         }
+        let avatarLink = "https://sultradata.com/project/daily-activity/images/foto/$niplama.jpg";
+        let niplama = this.props.auth.niplama;
+        avatarLink = avatarLink.replace("$niplama", niplama);
         return (
             <div>
                 <Layout style={{ minHeight: '100vh' }}>
@@ -108,6 +112,10 @@ class Login extends React.Component {
                                 defaultSelectedKeys={['2']}
                                 style={{ lineHeight: '64px', background: '#fff', padding: 0, float: 'right', marginRight: '15px' }}
                             >
+                                <Avatar
+                                    icon="user"
+                                    src={avatarLink}
+                                />
                                 <Menu.Item key="/logout" onClick={this.onLogout}>
                                     {/* <NavLink to='/login'><Icon type="rocket" />Logout</NavLink> */}
                                     <Icon type="rocket" />Logout

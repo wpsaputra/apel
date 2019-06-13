@@ -13,7 +13,7 @@ const RouteLayout = ({ component: Component, auth, ...rest }) => {
     //   </Dashboard>
     // )} />
     <Route {...rest} render={matchProps => auth.isSignedIn === true
-      ?<Dashboard>
+      ?<Dashboard auth={auth}>
         <Component {...matchProps} auth={auth} />
       </Dashboard>
       :<Redirect to={{pathname: '/login', state: {from: matchProps.location}}} />
