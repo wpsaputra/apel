@@ -3,7 +3,8 @@ import { Card, DatePicker, Table, Tag, notification, Button, Input, Icon } from 
 import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import 'moment/locale/id'
-import {url_api, url_refresh, url_pegawai} from '../constant/constant';
+import { url_api, url_refresh, url_pegawai } from '../constant/constant';
+import { PDFExport } from '@progress/kendo-react-pdf';
 
 const { MonthPicker } = DatePicker;
 const axios = require('axios');
@@ -81,13 +82,13 @@ export class rekapb extends Component {
                     title: 'Status',
                     key: 'status',
                     dataIndex: 'status',
-                    render: status => (
-                        <span>
-                            <Tag color={status === 'incomplete' ? 'volcano' : 'green'}>
-                                {status.toUpperCase()}
-                            </Tag>
-                        </span>
-                    ),
+                    // render: status => (
+                    //     <span>
+                    //         <Tag color={status === 'incomplete' ? 'volcano' : 'green'}>
+                    //             {status.toUpperCase()}
+                    //         </Tag>
+                    //     </span>
+                    // ),
                     // filters: [{ text: 'complete', value: 'complete' }, { text: 'incomplete', value: 'incomplete' }],
                     // onFilter: (value, record) => record.status.indexOf(value) === 0,
                 },
@@ -125,7 +126,7 @@ export class rekapb extends Component {
 
     fetchData(date) {
         var self = this;
-        let url = url_api+"/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
+        let url = url_api + "/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
         url = url.replace("$month", date.format('M')).replace("$year", date.format('YYYY'));
         // axios.get('http://localhost/api.php/records/penilaian')
         self.setState({ isTableLoading: true });
@@ -219,8 +220,12 @@ export class rekapb extends Component {
     };
 
 
-    componentDidMount(){
+    componentDidMount() {
         this.fetchData(this.state.date);
+    }
+
+    exportPDFWithComponent = () => {
+        this.pdfExportComponent.save();
     }
 
     render() {
@@ -229,10 +234,12 @@ export class rekapb extends Component {
             <Card>
                 <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
                 {/* <MyDatePicker format='YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih tahun" topMode='year'/> */}
-                <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} >Download Pdf</Button>
-                <h1 style={{ textAlign: 'center' }}>Rekap Penilaian CKP-R Pegawai Tahun {this.state.date.format("YYYY")}</h1>
-                <h1 style={{ textAlign: 'center' }}> {this.state.auth.nm_satker} </h1>
-                <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{overflowY: 'auto'}} pagination={true} bordered loading={this.state.isTableLoading} />
+                <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} onClick={this.exportPDFWithComponent} >Download Pdf</Button>
+                <PDFExport ref={(component) => this.pdfExportComponent = component} paperSize="A4" landscape scale={0.8} margin="2cm" >
+                    <h1 style={{ textAlign: 'center' }}>{"Rekap Penilaian CKP-R Pegawai Tahun "+this.state.date.format("YYYY")}</h1>
+                    <h1 style={{ textAlign: 'center' }}>{this.state.auth.nm_satker} </h1>
+                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{ overflowY: 'auto' }} pagination={true} bordered loading={this.state.isTableLoading} />
+                </PDFExport>
             </Card>
         )
     }

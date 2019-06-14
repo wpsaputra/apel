@@ -3,11 +3,13 @@ import { Card, DatePicker, Table, Tag, notification, Button, Input, Icon } from 
 import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import 'moment/locale/id';
-import {url_api, url_refresh, url_pegawai} from '../constant/constant';
+import { url_api, url_refresh, url_pegawai } from '../constant/constant';
+import { PDFExport } from '@progress/kendo-react-pdf';
+// import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
 
 // const { MonthPicker } = DatePicker;
 const axios = require('axios');
-const modeValue={
+const modeValue = {
     date: 0,
     month: 1,
     year: 2,
@@ -15,23 +17,23 @@ const modeValue={
 };
 
 class MyDatePicker extends React.Component {
-    static defaultProps={
+    static defaultProps = {
         topMode: "month",
         defaultValue: moment(),
         value: moment(),
         format: "YYYY-MM-DD"
     };
-    constructor(props) { 
-        super(props);        
-        this.state={
+    constructor(props) {
+        super(props);
+        this.state = {
             value: this.props.value || this.props.defaultValue,
             mode: this.props.topMode,
             preMode: this.props.topMode
         };
         this.isOnChange = false;
     }
-    componentWillReceiveProps(nextProps, nextContext){
-        if(this.props.topMode != nextProps.topMode){
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (this.props.topMode != nextProps.topMode) {
             this.setState({
                 mode: nextProps.topMode
             });
@@ -42,13 +44,13 @@ class MyDatePicker extends React.Component {
      * @param {*} value 
      * @param {要打開面板} mode 
      */
-    onPanelChange(value, mode){
+    onPanelChange(value, mode) {
         // console.log(`onPanelChange date:${value} mode:${mode}`);
         //mode==null默認是從year返回到month
         mode = mode || "month";
         let open = true;
         //1. 往上打開，沒有任何問題，直接打開
-        if(modeValue[this.state.mode] > modeValue[mode] && modeValue[this.props.topMode] > modeValue[mode]) {
+        if (modeValue[this.state.mode] > modeValue[mode] && modeValue[this.props.topMode] > modeValue[mode]) {
             //向下
             open = false;
             mode = this.props.topMode;
@@ -63,7 +65,7 @@ class MyDatePicker extends React.Component {
     /**
      * 在date的情況下選擇直接退出
      */
-    onChange(value, dateStr){
+    onChange(value, dateStr) {
         // console.log(`onChange date:${value} dateStr:${dateStr}`);
         this.isOnChange = true;
         this.setState({
@@ -71,19 +73,19 @@ class MyDatePicker extends React.Component {
             value
         });
     }
-    
+
     render() {
         // console.log(`state:${JSON.stringify(this.state)}`);
         return (
-            <DatePicker 
-                value={this.state.value} 
+            <DatePicker
+                value={this.state.value}
                 mode={this.state.mode}
                 open={this.state.open}
                 format={this.props.format}
-                onFocus={()=>!this.isOnChange&&(this.isOnChange=!this.isOnChange,this.setState({open:true}))}
+                onFocus={() => !this.isOnChange && (this.isOnChange = !this.isOnChange, this.setState({ open: true }))}
                 onChange={this.onChange.bind(this)}
                 onPanelChange={this.onPanelChange.bind(this)}
-                onOpenChange={(open)=>this.setState({open})}
+                onOpenChange={(open) => this.setState({ open })}
             />
         );
     }
@@ -91,6 +93,7 @@ class MyDatePicker extends React.Component {
 }
 
 export class rekapp extends Component {
+    pdfExportComponent;
     constructor(props) {
         super(props);
         this.state = {
@@ -163,13 +166,14 @@ export class rekapp extends Component {
                     title: 'Status',
                     key: 'status',
                     dataIndex: 'status',
-                    render: status => (
-                        <span>
-                            <Tag color={status === 'incomplete' ? 'volcano' : 'green'}>
-                                {status.toUpperCase()}
-                            </Tag>
-                        </span>
-                    ),
+                    // render: status => (
+                    //     <div>
+                    //         {/* <Tag color={status === 'incomplete' ? 'volcano' : 'green'}>
+                    //             {status.toUpperCase()}
+                    //         </Tag> */}
+                    //         {status}
+                    //     </div>
+                    // ),
                     // filters: [{ text: 'complete', value: 'complete' }, { text: 'incomplete', value: 'incomplete' }],
                     // onFilter: (value, record) => record.status.indexOf(value) === 0,
                 },
@@ -207,7 +211,7 @@ export class rekapp extends Component {
 
     fetchData(date) {
         var self = this;
-        let url = url_api+"/records/penilaian?filter=niplama,eq,$niplama&filter=tahun_ckp,eq,$year&join=master_pegawai&order=bulan_ckp,asc";
+        let url = url_api + "/records/penilaian?filter=niplama,eq,$niplama&filter=tahun_ckp,eq,$year&join=master_pegawai&order=bulan_ckp,asc";
         url = url.replace("$niplama", this.state.auth.niplama).replace("$year", date.format('YYYY'));
         // axios.get('http://localhost/api.php/records/penilaian')
         self.setState({ isTableLoading: true });
@@ -297,8 +301,12 @@ export class rekapp extends Component {
     };
 
 
-    componentDidMount(){
+    componentDidMount() {
         this.fetchData(this.state.date);
+    }
+
+    exportPDFWithComponent = () => {
+        this.pdfExportComponent.save();
     }
 
     render() {
@@ -306,11 +314,13 @@ export class rekapp extends Component {
         return (
             <Card>
                 {/* <MonthPicker format='YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih tahun" /> */}
-                <MyDatePicker format='YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih tahun" topMode='year'/>
-                <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} >Download Pdf</Button>
-                <h1 style={{ textAlign: 'center' }}>Rekap Penilaian CKP-R Pegawai Tahun {this.state.date.format("YYYY")}</h1>
-                <h1 style={{ textAlign: 'center' }}> {this.state.auth.nm_satker} </h1>
-                <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{overflowY: 'auto'}} pagination={false} bordered loading={this.state.isTableLoading} />
+                <MyDatePicker format='YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih tahun" topMode='year' />
+                <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} onClick={this.exportPDFWithComponent} >Download Pdf</Button>
+                <PDFExport ref={(component) => this.pdfExportComponent = component} paperSize="A4" landscape scale={0.8} margin="2cm" >
+                    <h1 style={{ textAlign: 'center' }}>{"Rekap Penilaian CKP-R Pegawai Tahun "+this.state.date.format("YYYY")}</h1>
+                    <h1 style={{ textAlign: 'center' }}>{this.state.auth.nm_satker}</h1>
+                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
+                </PDFExport>
             </Card>
         )
     }
