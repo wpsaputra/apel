@@ -238,7 +238,7 @@ export class rekapb extends Component {
                 <PDFExport ref={(component) => this.pdfExportComponent = component} paperSize="A4" landscape scale={0.8} margin="2cm" >
                     <h1 style={{ textAlign: 'center' }}>{"Rekap Penilaian CKP-R Pegawai Tahun "+this.state.date.format("YYYY")}</h1>
                     <h1 style={{ textAlign: 'center' }}>{this.state.auth.nm_satker} </h1>
-                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{ overflowY: 'auto' }} pagination={true} bordered loading={this.state.isTableLoading} />
+                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
                 </PDFExport>
             </Card>
         )
