@@ -437,7 +437,7 @@ export class penilaian extends Component {
         //calculate ckor ckp-r 
         let nilai_ckp_r = 0;
         nilai_ckp_r = skor_kinerja*0.5 + skor_daily_activity*0.2 + skor_tl_psw*0.3;
-        values.nilai_ckp_r = nilai_ckp_r;
+        values.nilai_ckp_r = nilai_ckp_r.toFixed(0);
 
 
         axios.put(url, values)
