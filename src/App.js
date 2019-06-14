@@ -1,6 +1,6 @@
 import React from 'react';
 // import ReactDOM from 'react-dom';
-import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
 import './index.css';
 // import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
