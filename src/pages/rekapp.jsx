@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { Card, DatePicker, Table, Tag, notification, Button, Input, Icon } from 'antd'
 import Highlighter from 'react-highlight-words';
 import moment from 'moment';
-import 'moment/locale/id'
+import 'moment/locale/id';
+import {url_api, url_refresh, url_pegawai} from '../constant/constant';
 
 // const { MonthPicker } = DatePicker;
 const axios = require('axios');
@@ -12,10 +13,6 @@ const modeValue={
     year: 2,
     decade: 3
 };
-const url_api = "http://localhost/api.php";
-const url_refresh = "http://localhost/refresh.php";
-// const url_api = "http://10.74.8.176/api.php";
-// const url_refresh = "http://10.74.8.176/refresh.php";
 
 class MyDatePicker extends React.Component {
     static defaultProps={
