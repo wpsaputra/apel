@@ -588,8 +588,12 @@ export class penilaian extends Component {
 
     okAsyncModal() {
         var self = this;
-        let url = url_refresh + "?month=$month&year=$year";
-        url = url.replace("$month", this.state.date.format('M')).replace("$year", this.state.date.format('YYYY'));
+        let url = url_refresh + "?month=$month&year=$year&nip=$nip";
+        let nip = "";
+        this.state.filterData.forEach(item => nip = nip+item.niplama+",");
+        nip = nip.substring(0, nip.length-1);
+        console.log(nip);
+        url = url.replace("$month", this.state.date.format('M')).replace("$year", this.state.date.format('YYYY')).replace("$nip", nip);
         // axios.get('http://localhost/api.php/records/penilaian')
 
         this.setState({ confirmLoading: true });

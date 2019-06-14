@@ -12,9 +12,6 @@ $dbname = "ckpnew";
 
 $month = $_GET["month"];
 $year = $_GET["year"];
-$nip = $_GET["nip"];
-$nip = explode(",", $nip);
-// print_r($nip);
 
 if (!ctype_digit(strval($month)) || !ctype_digit(strval($year))) {
     echo "Error: Your variable is not an integer";
@@ -24,22 +21,17 @@ if (!ctype_digit(strval($month)) || !ctype_digit(strval($year))) {
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // $stmt = $conn->prepare("SELECT niplama FROM master_pegawai");
-    // $stmt->execute();
+    $stmt = $conn->prepare("SELECT niplama FROM master_pegawai");
+    $stmt->execute();
 
-    // // set the resulting array to associative
-    // $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    // $array_niplama = array();
-    // foreach ($stmt->fetchAll() as $k => $v) {
-    //     foreach ($v as $col => $nip) {
-    //         // $array_niplama[] = "(" . $nip . ", " . $month . ", " . $year . ", ". "80)";
-    //         $array_niplama[] = "(" . $nip . ", " . $month . ", " . $year . ", " . "'incomplete')";
-    //     }
-    // }
-
+    // set the resulting array to associative
+    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
     $array_niplama = array();
-    foreach ($nip as $key => $value) {
-        $array_niplama[] = "(" . $value . ", " . $month . ", " . $year . ", " . "'incomplete')";
+    foreach ($stmt->fetchAll() as $k => $v) {
+        foreach ($v as $col => $nip) {
+            // $array_niplama[] = "(" . $nip . ", " . $month . ", " . $year . ", ". "80)";
+            $array_niplama[] = "(" . $nip . ", " . $month . ", " . $year . ", " . "'incomplete')";
+        }
     }
 
     // $sql = "INSERT INTO penilaian (niplama, bulan_ckp, tahun_ckp, skor_realisasi_pekerjaan) VALUES " . implode(", ", $array_niplama).

@@ -112,15 +112,18 @@ class Login extends React.Component {
                                 defaultSelectedKeys={['2']}
                                 style={{ lineHeight: '64px', background: '#fff', padding: 0, float: 'right', marginRight: '15px' }}
                             >
-                                <Avatar
-                                    icon="user"
-                                    src={avatarLink}
-                                />
+
                                 <Menu.Item key="/logout" onClick={this.onLogout}>
                                     {/* <NavLink to='/login'><Icon type="rocket" />Logout</NavLink> */}
                                     <Icon type="rocket" />Logout
                                 </Menu.Item>
                             </Menu>
+                            <Avatar
+                                icon="user"
+                                src={avatarLink}
+                                // style={{ position: 'relative', lineHeight: '64px', background: '#fff', padding: 0, float: 'right' }}
+                                style={{ position: 'relative', marginTop: '20px', padding: 0, float: 'right' }}
+                            />
                         </Header>
                         <Content style={{ margin: '0 16px' }}>
                             <Breadcrumb style={{ margin: '16px 0' }}>
