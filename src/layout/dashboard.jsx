@@ -16,6 +16,12 @@ class Login extends React.Component {
         this.setState({ collapsed });
     };
 
+    toggle = () => {
+        this.setState({
+          collapsed: !this.state.collapsed,
+        });
+    };
+
     onLogout = () => {
         localStorage.removeItem("apel-state");
         this.props.history.push("/login");
@@ -106,6 +112,11 @@ class Login extends React.Component {
                     </Sider>
                     <Layout>
                         <Header style={{ background: '#fff', padding: 0 }}>
+                            <Icon
+                                className="trigger"
+                                type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
+                                onClick={this.toggle}
+                            />
                             <Menu
                                 theme="light"
                                 mode="horizontal"
