@@ -1,25 +1,30 @@
 <?php
 
-header('Access-Control-Allow-Origin: *');
-header('Content-type: application/json');
-header('Access-Control-Allow-Methods: GET, POST');
-header("Access-Control-Allow-Headers: X-Requested-With");
-
-header("Access-Control-Request-Headers: x-requested-with");
-header("Access-Control-Allow-Headers: *");
+// header('Access-Control-Allow-Origin: *');
+// header('Content-type: application/json');
+// header('Access-Control-Allow-Methods: GET, POST');
 // header("Access-Control-Allow-Headers: X-Requested-With");
+
+// header("Access-Control-Request-Headers: x-requested-with");
+// header("Access-Control-Allow-Headers: *");
+// // header("Access-Control-Allow-Headers: X-Requested-With");
 // header('Content-Type: application/json');
 
 // header('Access-Control-Allow-Origin: *');
 
-$servername = "localhost";
-$username_ckp = "root";
-$password_ckp = "";
-$dbname_ckp = "ckpnew";
+header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+header('Access-Control-Max-Age: 1000');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
 
-$username_daily = "root";
-$password_daily = "";
-$dbname_daily = "dailyactivity";
+$servername = "localhost";
+$username_ckp = "sultradata_ckpnew";
+$password_ckp = "EkkKnj_2Hst^";
+$dbname_ckp = "sultradata_ckpnew";
+
+$username_daily = "sultrada_db74";
+$password_daily = "sultra740k3!";
+$dbname_daily = "sultrada_dailyactivity";
 
 $_POST = json_decode(file_get_contents("php://input"),true);
 
