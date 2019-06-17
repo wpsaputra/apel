@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
-import { Card } from 'antd'
+import React, { Component } from 'react';
+import { Card } from 'antd';
+import {url_panduan} from '../constant/constant';
 
 export class panduan extends Component {
   render() {
@@ -16,7 +17,7 @@ export class panduan extends Component {
           (3) Registrasi administrator.</p>
         <br/>
         <strong>Q: Apakah ada panduan tata cara penggunaan aplikasi?</strong>
-        <p>A: Panduan penggunaan aplikasi dapat di download pada <a href="javascript:;">link</a> berikut</p>
+        <p>A: Panduan penggunaan aplikasi dapat di download pada <a href={url_panduan} target="_blank" >link</a> berikut</p>
         <br/>
       </Card>
     )
