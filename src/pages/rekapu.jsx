@@ -13,6 +13,7 @@ export class rekapu extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            filterData: [],
             isTableLoading: false,
             auth: this.props.auth,
             isAsyncModalVisible: false,
@@ -134,11 +135,14 @@ export class rekapu extends Component {
             .then(function (response) {
                 // handle success
                 console.log(response.data.records);
-                let newData = response.data.records;
-                // newData.filter(v => v.id === self.state.row_record.id);
-                newData = newData.filter(v => v.niplama.id_satker === self.state.auth.id_satker);
-                newData = newData.sort((a, b) => a.niplama.nama.localeCompare(b.niplama.nama));
-                self.setState({ data: newData, confirmLoading: false, isAsyncModalVisible: false });
+                let tempRecord = response.data.records;
+                // tempRecord = tempRecord.filter(v =>  self.state.filterData.niplama.includes(v.niplama.niplama));
+                // tempRecord = tempRecord.filter(v =>  v.niplama.niplama==="340057236");
+                // tempRecord = tempRecord.filter(v =>  v.niplama.niplama===self.state.filterData[0].niplama);
+                tempRecord = tempRecord.filter(v =>  self.state.filterData.some(item => item.niplama === v.niplama.niplama));
+                console.log("temp record", tempRecord); 
+                // self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
+                self.setState({ data: tempRecord, confirmLoading: false, isAsyncModalVisible: false });
             })
             .catch(function (error) {
                 // handle error
@@ -149,6 +153,26 @@ export class rekapu extends Component {
                 self.openNotification();
                 self.setState({ isTableLoading: false });
             });
+    }
+
+    fetchPegawai() {
+        var self = this;
+        let url = url_pegawai + "?id_lvl=$id_lvl&id_org=$id_org&id_satker=$id_satker";
+        url = url.replace("$id_lvl", this.state.auth.id_level).replace("$id_org", this.state.auth.id_org).replace("$id_satker", this.state.auth.id_satker);
+        // axios.get('http://localhost/api.php/records/penilaian')
+        console.log(url);
+        axios.get(url)
+            .then(function (response) {
+                // handle success
+                console.log(response.data);
+                self.setState({ filterData: response.data });
+                self.fetchData(self.state.date);
+                // self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
     }
 
 
@@ -221,6 +245,7 @@ export class rekapu extends Component {
 
 
     componentDidMount() {
+        this.fetchPegawai();
         this.fetchData(this.state.date);
     }
 
