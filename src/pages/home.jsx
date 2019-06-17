@@ -19,13 +19,7 @@ export class home extends Component {
           </Col>
           {/* <Col span={8}>col-12</Col> */}
         </Row>
-
-        <Row>
-          <Col span={24}>
-            <img src={logo} className="App-logo" alt="logo" />
-          </Col>
-        </Row>
-
+        <img src={logo} className="App-logo" alt="logo" style={{position: 'relative', width:'100%', maxWidth: '664.747px'}}/>
       </Card>
     )
   }
