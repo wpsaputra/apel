@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 // import 'antd/dist/antd.css';
 import './login.css';
 import { Form, Icon, Input, Button, Checkbox, Card } from 'antd';
+import {url_login} from '../constant/constant';
 
 const axios = require('axios');
-const url_login = "http://localhost/login.php";
+// const url_login = "http://localhost/login.php";
 // const url_login = "http://10.74.8.176/login.php";
 
 export class login extends Component {

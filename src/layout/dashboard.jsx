@@ -87,7 +87,7 @@ class Login extends React.Component {
                                 <Menu.Item key="/rekapb">Bulanan <NavLink to='/rekapb'> Bulanan </NavLink></Menu.Item>
                                 {/* <Menu.Item key="5">Alex</Menu.Item> */}
                             </SubMenu>
-                            <SubMenu
+                            {/* <SubMenu
                                 key="sub2"
                                 title={
                                     <span>
@@ -97,7 +97,7 @@ class Login extends React.Component {
                                 }
                             >
                                 <Menu.Item key="/admin">Administrator <NavLink to='/admin'> Administrator </NavLink></Menu.Item>
-                            </SubMenu>
+                            </SubMenu> */}
                             <Menu.Item key="/faq">
                                 <Icon type="book" />
                                 <span>FAQ</span>

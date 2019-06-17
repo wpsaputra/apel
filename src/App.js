@@ -73,7 +73,7 @@ class App extends React.Component {
             <RouteLayout auth={this.state} path="/penilaian" component={Penilaian} />
             <RouteLayout auth={this.state} path="/rekapp" component={Rekapp} />
             <RouteLayout auth={this.state} path="/rekapb" component={Rekapb} />
-            <RouteLayout auth={this.state} path="/admin" component={Admin} />
+            {/* <RouteLayout auth={this.state} path="/admin" component={Admin} /> */}
             <RouteLayout auth={this.state} path="/faq" component={Panduan} />
             {/* <RouteLayout auth={this.state} path="/404" component={NotFound} /> */}
             {/* <RouteLayout auth={this.state} component={NotFound} /> */}
