@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 // import 'antd/dist/antd.css';
 import './login.css';
-import { Form, Icon, Input, Button, Checkbox, Card } from 'antd';
-import {url_login} from '../constant/constant';
+import { Form, Icon, Input, Button, Checkbox, Card, Popover } from 'antd';
+import { url_login } from '../constant/constant';
 
 const axios = require('axios');
 // const url_login = "http://localhost/login.php";
@@ -12,7 +12,8 @@ export class login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      auth: this.props.auth
+      auth: this.props.auth,
+      visible: false,
     };
     this.signIn = this.signIn.bind(this);
   }
@@ -45,16 +46,16 @@ export class login extends Component {
 
         let newAuth = self.state.auth;
         newAuth.isSignedIn = true;
-        newAuth.id_gol= response.data.id_gol;
-        newAuth.id_org= response.data.id_org;
-        newAuth.id_satker= response.data.id_satker;
-        newAuth.nama= response.data.nama;
-        newAuth.niplama= response.data.niplama;
-        newAuth.id_level= response.data.id_level;
-        newAuth.nm_satker= response.data.nm_satker;
-        newAuth.date= new Date();
+        newAuth.id_gol = response.data.id_gol;
+        newAuth.id_org = response.data.id_org;
+        newAuth.id_satker = response.data.id_satker;
+        newAuth.nama = response.data.nama;
+        newAuth.niplama = response.data.niplama;
+        newAuth.id_level = response.data.id_level;
+        newAuth.nm_satker = response.data.nm_satker;
+        newAuth.date = new Date();
 
-        self.setState({auth: newAuth});
+        self.setState({ auth: newAuth });
         localStorage.setItem("apel-state", JSON.stringify(self.state));
         self.props.history.push("/");
 
@@ -66,6 +67,16 @@ export class login extends Component {
 
 
   }
+
+  hide = () => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleVisibleChange = visible => {
+    this.setState({ visible });
+  };
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -101,9 +112,18 @@ export class login extends Component {
                   valuePropName: 'checked',
                   initialValue: true,
                 })(<Checkbox>Remember me</Checkbox>)}
-                <a className="login-form-forgot" href="">
-                  Forgot password
-                </a>
+                <Popover
+                  content={<a onClick={this.hide}>Close</a>}
+                  title="Forget Password"
+                  content="Gunakan username dan password yang sama dengan daily activity"
+                  trigger="click"
+                  visible={this.state.visible}
+                  onVisibleChange={this.handleVisibleChange}
+                >
+                  <a className="login-form-forgot" href="javascript:;">
+                    Forgot password
+                  </a>
+                </Popover>
                 <Button type="primary" htmlType="submit" className="login-form-button">
                   Log in
                 </Button>
