@@ -47,6 +47,9 @@ class Login extends React.Component {
             case "/rekapp":
                 path = "Rekap per Pegawai";
                 break;
+            case "/rekapu":
+                path = "Rekap per Unit Kerja";
+                break;
             case "/admin":
                 path = "Administrator";
                 break;
@@ -85,6 +88,7 @@ class Login extends React.Component {
                             >
                                 <Menu.Item key="/rekapp">Per Pegawai <NavLink to='/rekapp'> Per Pegawai </NavLink></Menu.Item>
                                 <Menu.Item key="/rekapb">Bulanan <NavLink to='/rekapb'> Bulanan </NavLink></Menu.Item>
+                                <Menu.Item key="/rekapu">Per Unit Kerja <NavLink to='/rekapu'> Per Unit Kerja </NavLink></Menu.Item>
                                 {/* <Menu.Item key="5">Alex</Menu.Item> */}
                             </SubMenu>
                             {/* <SubMenu

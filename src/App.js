@@ -9,10 +9,11 @@ import WrappedNormalLoginForm from './pages/login'
 import Penilaian from './pages/penilaian'
 import Rekapb from './pages/rekapb';
 import Rekapp from './pages/rekapp';
-import Admin from './pages/admin';
+// import Admin from './pages/admin';
 import Panduan from './pages/panduan';
 import RouteLayout from './layout/RouteLayout';
 import NotFound from './pages/notfound';
+import Rekapu from './pages/rekapu';
 
 class App extends React.Component {
   constructor(props) {
@@ -73,6 +74,7 @@ class App extends React.Component {
             <RouteLayout auth={this.state} path="/penilaian" component={Penilaian} />
             <RouteLayout auth={this.state} path="/rekapp" component={Rekapp} />
             <RouteLayout auth={this.state} path="/rekapb" component={Rekapb} />
+            <RouteLayout auth={this.state} path="/rekapu" component={Rekapu} />
             {/* <RouteLayout auth={this.state} path="/admin" component={Admin} /> */}
             <RouteLayout auth={this.state} path="/faq" component={Panduan} />
             {/* <RouteLayout auth={this.state} path="/404" component={NotFound} /> */}

@@ -114,7 +114,7 @@ export class login extends Component {
                 })(<Checkbox>Remember me</Checkbox>)}
                 <Popover
                   content={<a onClick={this.hide}>Close</a>}
-                  title="Forget Password"
+                  // title="Forgot Password"
                   content="Gunakan username dan password yang sama dengan daily activity"
                   trigger="click"
                   visible={this.state.visible}
