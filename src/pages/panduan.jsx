@@ -16,6 +16,9 @@ export class panduan extends Component {
         <p>A: (1) Pembuatan penilaian ckp berdasarkan komponen perhitungan. (2) Rekapitulasi nilai per pegawai dan per tahun. 
           (3) Registrasi administrator.</p>
         <br/>
+        <strong>Q: Browser apa yang disupport oleh APEL CAKEP?</strong>
+        <p>A: Browser terbaru (evergreen) firefox dan chrome disuport oleh APEL CAKEP, sedangkan internet explorer dan browser versi lawas tidak disupport oleh APEL CAKEP.</p>
+        <br/>
         <strong>Q: Apakah ada panduan tata cara penggunaan aplikasi?</strong>
         <p>A: Panduan penggunaan aplikasi dapat di download pada <a href={url_panduan} target="_blank" >link</a> berikut</p>
         <br/>
