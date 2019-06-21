@@ -383,14 +383,14 @@ export class penilaian extends Component {
         // calculate field rata_rata_kinerja 
         let rata_rata_kinerja = 0;
         rata_rata_kinerja = (values.skor_realisasi_pekerjaan*0.25 + values.skor_ketepatan_waktu*0.25 + values.skor_kualitas_pekerjaan*0.25 + values.skor_kesungguhan_kerja*0.25);
-        values.rata_rata_kinerja = rata_rata_kinerja.toFixed(0);
+        values.rata_rata_kinerja = rata_rata_kinerja.toFixed(2);
 
         // calculate field skor_kinerja
         let skor_kinerja = 98;
-        if(rata_rata_kinerja.toFixed(0)>=95){
+        if(rata_rata_kinerja.toFixed(2)>=95){
             skor_kinerja = 100;
         }
-        if(rata_rata_kinerja.toFixed(0)<=94&&rata_rata_kinerja.toFixed(0)>=90){
+        if(rata_rata_kinerja.toFixed(2)<95&&rata_rata_kinerja.toFixed(0)>=90){
             skor_kinerja = 99;
         }
         values.skor_kinerja = skor_kinerja;
@@ -433,7 +433,7 @@ export class penilaian extends Component {
         //calculate ckor ckp-r 
         let nilai_ckp_r = 0;
         nilai_ckp_r = skor_kinerja*0.5 + skor_daily_activity*0.2 + skor_tl_psw*0.3;
-        values.nilai_ckp_r = nilai_ckp_r.toFixed(0);
+        values.nilai_ckp_r = nilai_ckp_r.toFixed(2);
 
 
         axios.put(url, values)
