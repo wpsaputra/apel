@@ -41,6 +41,9 @@ class Login extends React.Component {
             case "/penilaian":
                 path = "Penilaian";
                 break;
+            case "/penilaian_eselon_3":
+                path = "Penilaian Eselon 3";
+                break;
             case "/rekapb":
                 path = "Rekap Bulanan";
                 break;
@@ -72,11 +75,20 @@ class Login extends React.Component {
                                 {/* <NavLink to='/' exact={true}> Home </NavLink> */}
                                 <NavLink to='/'> Home </NavLink>
                             </Menu.Item>
-                            <Menu.Item key="/penilaian">
-                                <Icon type="calculator" />
-                                <span>Penilaian</span>
-                                <NavLink to='/penilaian'> Penilaian </NavLink>
-                            </Menu.Item>
+                            {this.props.auth.id_level==1 ? (
+                                <Menu.Item key="/penilaian_eselon_3">
+                                    <Icon type="calculator" />
+                                    <span>Penilaian</span>
+                                    <NavLink to='/penilaian_eselon_3'> Penilaian </NavLink>
+                                </Menu.Item>
+                            ) : (
+                                <Menu.Item key="/penilaian">
+                                    <Icon type="calculator" />
+                                    <span>Penilaian</span>
+                                    <NavLink to='/penilaian'> Penilaian </NavLink>
+                                </Menu.Item>
+                            )}
+                            
                             <SubMenu
                                 key="sub1"
                                 title={

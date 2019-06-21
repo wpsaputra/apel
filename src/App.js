@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from './pages/home'
 import WrappedNormalLoginForm from './pages/login'
 import Penilaian from './pages/penilaian'
+import Penilaianes3 from './pages/penilaianes3'
 import Rekapb from './pages/rekapb';
 import Rekapp from './pages/rekapp';
 // import Admin from './pages/admin';
@@ -72,6 +73,7 @@ class App extends React.Component {
               <Route component={PageNotFound} /> */}
             <RouteLayout auth={this.state} exact path="/" component={Home} />
             <RouteLayout auth={this.state} path="/penilaian" component={Penilaian} />
+            <RouteLayout auth={this.state} path="/penilaian_eselon_3" component={Penilaianes3} />
             <RouteLayout auth={this.state} path="/rekapp" component={Rekapp} />
             <RouteLayout auth={this.state} path="/rekapb" component={Rekapb} />
             <RouteLayout auth={this.state} path="/rekapu" component={Rekapu} />
