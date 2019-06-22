@@ -1,18 +1,21 @@
 import React, { Component } from 'react'
-import { Card, DatePicker, Table, Tag, notification, Button, Input, Icon } from 'antd'
+import { Card, DatePicker, Table, Tag, notification, Button, Input, Icon, Select } from 'antd'
 import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import 'moment/locale/id'
-import { url_api, url_refresh, url_pegawai } from '../constant/constant';
+import { url_api, url_refresh, url_pegawai, unit_kerja_prov, unit_kerja_kab } from '../constant/constant';
 import { PDFExport } from '@progress/kendo-react-pdf';
 
 const { MonthPicker } = DatePicker;
+const { Option } = Select;
 const axios = require('axios');
 
 export class rekapb extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            unit_kerja: [],
+            bidangFilter: 92000,
             isTableLoading: false,
             auth: this.props.auth,
             isAsyncModalVisible: false,
@@ -102,6 +105,7 @@ export class rekapb extends Component {
         this.getColumnSearchProps = this.getColumnSearchProps.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
     openNotification() {
@@ -138,6 +142,12 @@ export class rekapb extends Component {
                 // newData.filter(v => v.id === self.state.row_record.id);
                 newData = newData.filter(v => v.niplama.id_satker === self.state.auth.id_satker);
                 newData = newData.sort((a, b) => a.niplama.nama.localeCompare(b.niplama.nama));
+                if(self.state.bidangFilter!=92000 && self.state.auth.id_satker=='7400'){
+                    newData = newData.filter(v => v.niplama.id_org.substring(0,3) == self.state.bidangFilter.toString().substring(0,3));
+                }
+                if(self.state.bidangFilter!=92800 && self.state.auth.id_satker!='7400'){
+                    newData = newData.filter(v => v.niplama.id_org.substring(0,4) == self.state.bidangFilter.toString().substring(0,4));
+                }
                 self.setState({ data: newData, confirmLoading: false, isAsyncModalVisible: false });
             })
             .catch(function (error) {
@@ -221,6 +231,11 @@ export class rekapb extends Component {
 
 
     componentDidMount() {
+        if(this.state.auth.id_satker==7400){
+            this.setState({unit_kerja: unit_kerja_prov});
+        }else{
+            this.setState({unit_kerja: unit_kerja_kab, bidangFilter: 92800});
+        }
         this.fetchData(this.state.date);
     }
 
@@ -228,15 +243,38 @@ export class rekapb extends Component {
         this.pdfExportComponent.save();
     }
 
+    handleSelectChange(value) {
+        console.log(`selected ${value}`);
+        this.setState({ bidangFilter: value });
+        this.fetchData(this.state.date);
+    }
+
     render() {
         console.log(this.props);
+        let defaultSelect = "";
+        if(this.state.auth.id_satker==7400){
+            defaultSelect = "BPS Propinsi"
+        }else{
+            defaultSelect = "BPS Kabupaten/Kota"
+        }
         return (
             <Card>
                 <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
+                <Select defaultValue={defaultSelect} style={{ width: 200, marginLeft: "5px" }} onChange={this.handleSelectChange}>
+                    {this.state.unit_kerja.map((val, index) => {
+                        return <Option key={index} value={val.id_org}>{val.nm_org}</Option>
+                    })}
+                    {/* <Option value="jack">Jack</Option>
+                    <Option value="lucy">Lucy</Option>
+                    <Option value="disabled" disabled>
+                        Disabled
+                    </Option>
+                    <Option value="Yiminghe">yiminghe</Option> */}
+                </Select>
                 {/* <MyDatePicker format='YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih tahun" topMode='year'/> */}
                 <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} onClick={this.exportPDFWithComponent} >Download Pdf</Button>
                 <PDFExport ref={(component) => this.pdfExportComponent = component} paperSize="A4" landscape scale={0.8} margin="2cm" >
-                    <h1 style={{ textAlign: 'center' }}>{"Rekap Penilaian CKP-R Pegawai Tahun "+this.state.date.format("YYYY")}</h1>
+                    <h1 style={{ textAlign: 'center' }}>{"Rekap Penilaian CKP-R Pegawai Tahun " + this.state.date.format("YYYY")}</h1>
                     <h1 style={{ textAlign: 'center' }}>{this.state.auth.nm_satker} </h1>
                     <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
                 </PDFExport>

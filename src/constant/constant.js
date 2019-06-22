@@ -39,11 +39,11 @@ export const unit_kerja_prov = [
         "nm_org": "Bidang Integrasi Pengolahan dan Diseminasi Statistik",
         "ket": 1
     },
-    {
-        "id_org": 92800,
-        "nm_org": "BPS Kabupaten/Kota",
-        "ket": 2
-    }
+    // {
+    //     "id_org": 92800,
+    //     "nm_org": "BPS Kabupaten/Kota",
+    //     "ket": 2
+    // }
 ];
 export const unit_kerja_kab = [
     {
