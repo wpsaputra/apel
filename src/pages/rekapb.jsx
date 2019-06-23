@@ -14,6 +14,7 @@ export class rekapb extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            nama_unit_kerja: '',
             unit_kerja: [],
             bidangFilter: 92000,
             isTableLoading: false,
@@ -232,9 +233,9 @@ export class rekapb extends Component {
 
     componentDidMount() {
         if(this.state.auth.id_satker==7400){
-            this.setState({unit_kerja: unit_kerja_prov});
+            this.setState({unit_kerja: unit_kerja_prov, nama_unit_kerja: "BPS Propinsi"});
         }else{
-            this.setState({unit_kerja: unit_kerja_kab, bidangFilter: 92800});
+            this.setState({unit_kerja: unit_kerja_kab, bidangFilter: 92800, nama_unit_kerja: "BPS Kabupaten/Kota"});
         }
         this.fetchData(this.state.date);
     }
@@ -245,8 +246,9 @@ export class rekapb extends Component {
 
     handleSelectChange(value) {
         console.log(`selected ${value}`);
-        this.setState({ bidangFilter: value });
+        this.setState({ bidangFilter: value, nama_unit_kerja: this.state.unit_kerja.filter(v => v.id_org === value)[0].nm_org });
         this.fetchData(this.state.date);
+        // console.log(this.state.unit_kerja.filter(v => v.id_org === value)[0].nm_org);
     }
 
     render() {
@@ -274,8 +276,9 @@ export class rekapb extends Component {
                 {/* <MyDatePicker format='YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih tahun" topMode='year'/> */}
                 <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} onClick={this.exportPDFWithComponent} >Download Pdf</Button>
                 <PDFExport ref={(component) => this.pdfExportComponent = component} paperSize="A4" landscape scale={0.8} margin="2cm" >
-                    <h1 style={{ textAlign: 'center' }}>{"Rekap Penilaian CKP-R Pegawai Tahun " + this.state.date.format("YYYY")}</h1>
+                    <h1 style={{ textAlign: 'center' }}>{"Rekap Penilaian CKP-R Pegawai " + this.state.date.format("MMMM YYYY")}</h1>
                     <h1 style={{ textAlign: 'center' }}>{this.state.auth.nm_satker} </h1>
+                    <h4>Unit Kerja : {this.state.nama_unit_kerja}</h4>
                     <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
                 </PDFExport>
             </Card>
