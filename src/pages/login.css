@@ -1,6 +1,12 @@
 /* .login-form {
     max-width: 300px;
 } */
+/* @import url(https://fonts.googleapis.com/css?family=Seaweed+Script);
+@import url(https://fonts.googleapis.com/css?family=Arvo:700); */
+@import url(https://fonts.googleapis.com/css?family=Indie+Flower&display=swap);
+/* @import url(https://fonts.googleapis.com/css?family=Dancing+Script&display=swap); */
+/* @import url(https://fonts.googleapis.com/css?family=Questrial&display=swap); */
+
 .login-form-forgot {
     float: right;
 }
@@ -31,3 +37,46 @@
 .Aligner-item--bottom {
     align-self: flex-end;
 }
+
+.script {
+    /* font-family: "Seaweed Script"; */
+    /* font-family: Arvo; */
+    font-weight: bold;
+    font-family: 'Indie Flower', cursive;
+    /* font-family: 'Dancing Script', cursive; */
+    /* font-family: 'Questrial', sans-serif; */
+    /* color: #fff;
+    text-align: center;
+    font-size: 40px;
+    position: relative;
+    margin:0; */
+  }
+
+  .glow {
+    /* font-size: 20px; */
+    color: #fff;
+    text-align: center;
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
+  }
+  
+  /* @keyframes glow {
+    from {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+    }
+    
+    to {
+      text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+    }
+  } */
+
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 3px #e60073, 0 0 4px #e60073, 0 0 5px #e60073, 0 0 6px #e60073, 0 0 7px #e60073;
+    }
+    
+    to {
+      text-shadow: 0 0 5px #fff, 0 0 6px #ff4da6, 0 0 7px #ff4da6, 0 0 8px #ff4da6, 0 0 9px #ff4da6, 0 0 10px #ff4da6, 0 0 11px #ff4da6;
+    }
+  }

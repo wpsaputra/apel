@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import './login.css';
 import { Form, Icon, Input, Button, Checkbox, Card, Popover } from 'antd';
 import { url_login } from '../constant/constant';
+import logo from '../logo_apple_digital.png';
 
 const axios = require('axios');
 // const url_login = "http://localhost/login.php";
@@ -84,7 +85,12 @@ export class login extends Component {
     return (
       <div className="Aligner">
         <div className="Aligner-item">
+          {/* <img src={logo} alt="logo" style={{position: 'relative', width:'50px', height: '50px'}}/> */}
           <Card style={{ width: "300px" }}>
+            <div style={{height: '50px', margin: '0 auto', width: '200px', marginBottom: '10px'}}>
+              <img src={logo} alt="logo" style={{position: 'relative', width:'50px', height: '50px', float: 'left'}}/>
+              <h2 className="script glow" style={{float: 'left', marginLeft: '10px', marginTop: '10px' }}>APEL CAKEP</h2>
+            </div>
             <Form onSubmit={this.handleSubmit} className="login-form">
               <Form.Item>
                 {getFieldDecorator('username', {
