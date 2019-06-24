@@ -83,7 +83,7 @@ export class login extends Component {
     const { getFieldDecorator } = this.props.form;
     // console.log(localStorage.getItem("apel-state"));
     return (
-      <div className="Aligner">
+      <div className="Aligner bg">
         <div className="Aligner-item">
           {/* <img src={logo} alt="logo" style={{position: 'relative', width:'50px', height: '50px'}}/> */}
           <Card style={{ width: "300px" }}>

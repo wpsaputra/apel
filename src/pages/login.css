@@ -80,3 +80,16 @@
       text-shadow: 0 0 5px #fff, 0 0 6px #ff4da6, 0 0 7px #ff4da6, 0 0 8px #ff4da6, 0 0 9px #ff4da6, 0 0 10px #ff4da6, 0 0 11px #ff4da6;
     }
   }
+
+  .bg { 
+    /* The image used */
+    background-image: url("../login_background.jpg");
+  
+    /* Full height */
+    /* height: 100%;  */
+  
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
