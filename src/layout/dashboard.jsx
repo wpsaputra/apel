@@ -3,6 +3,8 @@ import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 import { NavLink } from "react-router-dom";
 import { withRouter } from 'react-router-dom';
 import { Avatar } from "antd";
+import './dashboard.css';
+import logo from '../logo_apple_digital.png';
 
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -67,7 +69,13 @@ class Login extends React.Component {
             <div>
                 <Layout style={{ minHeight: '100vh' }}>
                     <Sider breakpoint="lg" collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-                        <div className="logo"> <Icon type="apple" theme="filled" style={{ fontSize: '40px', color: 'grey' }} /> </div>
+                        <div className="logo"> 
+                            {/* <Icon type="apple" theme="filled" style={{ fontSize: '40px', color: 'grey', float: 'left'}} /> */}
+                            <img src={logo} alt="logo" style={{position: 'relative', width:'40px', height: '40px', float: 'left'}}/> 
+                            {/* <h2 className="script glow" style={{float: 'left', marginLeft: '10px', marginTop: '10px' }}>APEL CAKEP</h2> */}
+                            {/* <h2 className="script " style={{float: 'left', marginLeft: '10px', marginTop: '10px', color: 'white'}}>APEL CAKEP</h2> */}
+                            <h2 className={"script " + (!this.state.collapsed ? 'show' : 'hidden')} style={{float: 'left', marginLeft: '10px', marginTop: '10px', color: 'white'}}>APEL CAKEP</h2>
+                        </div>
                         <Menu theme="dark" selectedKeys={[this.props.location.pathname]} mode="inline">
                             <Menu.Item key="/">
                                 <Icon type="home" />
