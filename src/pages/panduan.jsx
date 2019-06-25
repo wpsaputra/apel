@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Card } from 'antd';
 import {url_panduan} from '../constant/constant';
+// import video_login from '../video/login.webm';
+import video_login from '../video/login.gif';
 
 export class panduan extends Component {
   render() {
@@ -22,6 +24,11 @@ export class panduan extends Component {
         <strong>Q: Apakah ada panduan tata cara penggunaan aplikasi?</strong>
         <p>A: Panduan penggunaan aplikasi dapat di download pada <a href={url_panduan} target="_blank" >link</a> berikut</p>
         <br/>
+        <img src={video_login} className="App-logo" alt="logo" style={{position: 'relative', width:'100%', maxWidth: '664.747px'}}/>
+        {/* <video autoplay loop muted playsinline>
+          <source src={video_login} type="video/webm"/>
+        </video> */}
+
       </Card>
     )
   }
