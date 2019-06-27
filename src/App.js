@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 // import ReactDOM from 'react-dom';
 // import 'antd/dist/antd.css';
 import './index.css';
@@ -11,10 +11,20 @@ import Penilaianes3 from './pages/penilaianes3'
 import Rekapb from './pages/rekapb';
 import Rekapp from './pages/rekapp';
 // import Admin from './pages/admin';
-import Panduan from './pages/panduan';
+// import Panduan from './pages/panduan';
 import RouteLayout from './layout/RouteLayout';
 import NotFound from './pages/notfound';
 import Rekapu from './pages/rekapu';
+
+const Panduan = React.lazy(() => import("./pages/panduan"));
+function WaitingComponent(Component) {
+  return props => (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Component {...props} />
+    </Suspense>
+  );
+}
+
 
 class App extends React.Component {
   constructor(props) {
@@ -32,6 +42,8 @@ class App extends React.Component {
     };
     this.checkLocalStorage = this.checkLocalStorage.bind(this); 
   }
+
+  
 
   checkLocalStorage(){
     let storage = localStorage.getItem("apel-state");
@@ -64,25 +76,14 @@ class App extends React.Component {
       <div className="App">
         <Router basename={process.env.PUBLIC_URL}>
           <Switch>
-            {/* <Route exact path="/">
-                <Redirect to="/login" />
-              </Route>
-              <Route path="/login" component={Login} />
-              <RouteLayout path="/home" component={Home} />
-              <RouteLayout path="/page1" component={Page1} />
-              <RouteLayout path="/page2" component={Page2} />
-              <Route component={PageNotFound} /> */}
             <RouteLayout auth={this.state} exact path="/" component={Home} />
             <RouteLayout auth={this.state} path="/penilaian" component={Penilaian} />
             <RouteLayout auth={this.state} path="/penilaian_eselon_3" component={Penilaianes3} />
             <RouteLayout auth={this.state} path="/rekapp" component={Rekapp} />
             <RouteLayout auth={this.state} path="/rekapb" component={Rekapb} />
             <RouteLayout auth={this.state} path="/rekapu" component={Rekapu} />
-            {/* <RouteLayout auth={this.state} path="/admin" component={Admin} /> */}
-            <RouteLayout auth={this.state} path="/faq" component={Panduan} />
-            {/* <RouteLayout auth={this.state} path="/404" component={NotFound} /> */}
-            {/* <RouteLayout auth={this.state} component={NotFound} /> */}
-            {/* <Route auth={this.state} signIn={this.signIn} path="/login" component={WrappedNormalLoginForm} /> */}
+            {/* <RouteLayout auth={this.state} path="/faq" component={Panduan} /> */}
+            <RouteLayout auth={this.state} path="/faq" component={WaitingComponent(Panduan)} />
             <Route
               path='/login'
               render={(props) => <WrappedNormalLoginForm {...props} auth={this.state} />}
