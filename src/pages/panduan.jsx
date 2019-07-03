@@ -14,18 +14,19 @@ export class panduan extends Component {
           <h1>FAQ</h1>
           <hr></hr>
           <strong>Q: Apa tujuan APEL CAKEP?</strong>
-          <p>A: Aplikasi ini merupakan alat bantu penilaian kinerja pegawai secara bulanan. Nilai dihitung berdasarkan komponen Realisasi Pekerjaan, 
-            Ketepatan Waktu Pengumpulan CKP, Kepatuhan Pengisian Daily Activity dan Skoring Terlambat dan Cepat Pulang Pegawai Bulanan.</p>
+          <p>A: Aplikasi ini merupakan alat bantu penilaian kinerja pegawai secara bulanan. Nilai dihitung berdasarkan 3 (tiga) komponen yaitu
+             Komponen Kinerja, Komponen Kepatuhan Pengisian Daily Activity dan Komponen Absensi (Terlambat dan Cepat Pulang Pegawai) secara Bulanan.
+             Bagi pejabat struktural Eselon III, Komponen Kinerja terdiri dari pengukuran atas 5 (lima) hal, yaitu Realisasi Pekerjaan, Ketepatan Waktu, Kualitas Pekerjaan, Kesungguhan Kerja dan Administrasi. Sedangkan bagi pejabat struktural Eselon IV, fungsional tertentu, serta fungsional umum, Komponen Kinerja terdiri dari pengukuran atas 4 (empat) hal, yaitu Realisasi Pekerjaan, Ketepatan Waktu, Kualitas Pekerjaan, dan Kesungguhan Kerja.</p>
           <br/>
           <strong>Q: Apa saja fitur-fitur APEL CAKEP?</strong>
           <p>A: (1) Pembuatan penilaian ckp berdasarkan komponen perhitungan. (2) Rekapitulasi nilai per pegawai dan per tahun. 
-            (3) Registrasi administrator.</p>
+            (3) FAQ.</p>
           <br/>
           <strong>Q: Browser apa yang disupport oleh APEL CAKEP?</strong>
           <p>A: Browser terbaru (evergreen) firefox dan chrome disuport oleh APEL CAKEP, sedangkan internet explorer dan browser versi lawas tidak disupport oleh APEL CAKEP.</p>
           <br/>
           <strong>Q: Bagaimana tata cara untuk pelaporan bug aplikasi dan request penambahan fitur?</strong>
-          <p>A: Silahkan menghubungi via email <strong>laode.haerul@bps.go.id</strong>.</p>
+          <p>A: Silahkan menghubungi via email <strong>kpg7400@bps.go.id</strong>.</p>
           <br/>
           <strong>Q: Apakah ada panduan tata cara penggunaan aplikasi?</strong>
           <p>A: Panduan penggunaan aplikasi dapat di download pada <a href={url_panduan} target="_blank" >link</a> berikut</p>

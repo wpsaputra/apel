@@ -1,8 +1,8 @@
-export const url_api = "http://localhost/api.php";
-export const url_refresh = "http://localhost/refresh.php";
-export const url_pegawai = "http://localhost/pegawai.php";
-export const url_login = "http://localhost/login.php";
-export const url_panduan = "http://localhost/panduan_apel_cakep.pdf";
+export const url_api = "https://sultradata.com/project/apel-cakep-api/api.php";
+export const url_refresh = "https://sultradata.com/project/apel-cakep-api/refresh.php";
+export const url_pegawai = "https://sultradata.com/project/apel-cakep-api/pegawai.php";
+export const url_login = "https://sultradata.com/project/apel-cakep-api/login.php";
+export const url_panduan = "https://sultradata.com/project/apel-cakep-api/panduan_apel_cakep.pdf";
 export const unit_kerja_prov = [
     {
         "id_org": 92000,
