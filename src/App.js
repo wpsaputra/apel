@@ -15,6 +15,7 @@ import Rekapp from './pages/rekapp';
 import RouteLayout from './layout/RouteLayout';
 import NotFound from './pages/notfound';
 import Rekapu from './pages/rekapu';
+import Absensi from './pages/absensi';
 
 const Panduan = React.lazy(() => import("./pages/panduan"));
 function WaitingComponent(Component) {
@@ -82,6 +83,7 @@ class App extends React.Component {
             <RouteLayout auth={this.state} path="/rekapp" component={Rekapp} />
             <RouteLayout auth={this.state} path="/rekapb" component={Rekapb} />
             <RouteLayout auth={this.state} path="/rekapu" component={Rekapu} />
+            <RouteLayout auth={this.state} path="/absensi" component={Absensi} />
             {/* <RouteLayout auth={this.state} path="/faq" component={Panduan} /> */}
             <RouteLayout auth={this.state} path="/faq" component={WaitingComponent(Panduan)} />
             <Route

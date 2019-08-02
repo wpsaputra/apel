@@ -58,6 +58,9 @@ class Login extends React.Component {
             case "/admin":
                 path = "Administrator";
                 break;
+            case "/absensi":
+                path = "Absensi";
+                break;
             case "/faq":
                 path = "FAQ";
                 break;
@@ -111,6 +114,13 @@ class Login extends React.Component {
                                 <Menu.Item key="/rekapu">Per Unit Kerja <NavLink to='/rekapu'> Per Unit Kerja </NavLink></Menu.Item>
                                 {/* <Menu.Item key="5">Alex</Menu.Item> */}
                             </SubMenu>
+
+                            <Menu.Item key="/absensi">
+                                <Icon type="clock-circle" />
+                                <span>Absensi</span>
+                                {/* <NavLink to='/' exact={true}> Home </NavLink> */}
+                                <NavLink to='/absensi'> Absensi </NavLink>
+                            </Menu.Item>
                             {/* <SubMenu
                                 key="sub2"
                                 title={
