@@ -3,6 +3,7 @@ export const url_refresh = "https://sultradata.com/project/apel-cakep-api/refres
 export const url_pegawai = "https://sultradata.com/project/apel-cakep-api/pegawai.php";
 export const url_login = "https://sultradata.com/project/apel-cakep-api/login.php";
 export const url_panduan = "https://sultradata.com/project/apel-cakep-api/panduan_apel_cakep.pdf";
+export const url_absensi = "http://localhost/absensi.php";
 export const unit_kerja_prov = [
     {
         "id_org": 92000,

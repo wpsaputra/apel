@@ -1,6 +1,6 @@
 <?php
 
-// header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
 header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 header('Access-Control-Max-Age: 1000');
 header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
@@ -147,11 +147,12 @@ class Absensi
         
         $tabel_absensi = $dom->saveXML($element);
 
-        $xml = simplexml_load_string($tabel_absensi);
-        $json = json_encode($xml);
-        $array = json_decode($json,TRUE);
+        // $xml = simplexml_load_string($tabel_absensi);
+        // $json = json_encode($xml);
+        // $array = json_decode($json,TRUE);
 
-        echo json_encode($array);
+        // echo json_encode($array);
+        echo ($tabel_absensi);
        
 
 

@@ -3,12 +3,22 @@ import { Card, DatePicker, Table, Tag, notification, Button, Input, Icon, Select
 import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import 'moment/locale/id'
-import { url_api, url_refresh, url_pegawai, unit_kerja_prov, unit_kerja_kab } from '../constant/constant';
+import { url_api, url_refresh, url_pegawai, unit_kerja_prov, unit_kerja_kab, url_absensi } from '../constant/constant';
 import { PDFExport } from '@progress/kendo-react-pdf';
 
 const { MonthPicker } = DatePicker;
 const { Option } = Select;
 const axios = require('axios');
+const tabletojson = require('tabletojson');
+ 
+// tabletojson.convertUrl(
+//     'http://localhost/absensi.php',
+//     function(tablesAsJson) {
+//         tablesAsJson[0].pop();
+//         console.log(tablesAsJson[0]);
+//     }
+// );
+
 
 export class absensi extends Component {
     constructor(props) {
@@ -30,72 +40,57 @@ export class absensi extends Component {
             row_record: {},
             columns: [
                 {
-                    title: 'NIP Pegawai',
-                    dataIndex: 'niplama',
-                    key: 'niplama',
-                    // render: text => <a href="javascript:;">{text.niplama}</a>,
-                    render: text => <span>{text.niplama}</span>,
-                    // sorter: (a, b) => a.niplama.niplama - b.niplama.niplama,
+                    title: 'Day',
+                    dataIndex: 'Day',
+                    key: 'Day',
                 },
                 {
-                    title: 'Nama Pegawai',
-                    dataIndex: 'niplama',
-                    key: 'nama',
-                    render: text => <span>{text.nama}</span>,
+                    title: 'Date',
+                    dataIndex: 'Date',
+                    key: 'Date',
+                    // render: text => <span>{text.nama}</span>,
                     // sorter: (a, b) => a.niplama.nama.localeCompare(b.niplama.nama),
                     // ...this.getColumnSearchProps('nama'),
 
                 },
                 {
-                    title: 'Bulan',
-                    dataIndex: 'bulan_ckp',
-                    key: 'bulan_ckp',
-                    render: text => <span>{moment(text, 'M').format('MMMM')}</span>,
+                    title: 'Working Hour',
+                    dataIndex: 'Working Hour',
+                    key: 'Working Hour',
+                    // render: text => <span>{moment(text, 'M').format('MMMM')}</span>,
                 },
                 {
-                    title: 'Skor Realisasi Pekerjaan',
-                    dataIndex: 'skor_realisasi_pekerjaan',
-                    key: 'skor_realisasi_pekerjaan',
+                    title: 'Activity',
+                    dataIndex: 'Activity',
+                    key: 'Activity',
+                    // render: text => <span color={"volcano"}>{text}</span>
                     // sorter: (a, b) => a.skor_realisasi_pekerjaan - b.skor_realisasi_pekerjaan,
                 },
                 {
-                    title: 'Skor Ketepatan Waktu',
-                    dataIndex: 'skor_ketepatan_waktu',
-                    key: 'skor_ketepatan_waktu',
+                    title: 'Duty On',
+                    dataIndex: 'Duty On',
+                    key: 'Duty On',
+                    render: status => (
+                        <span>
+                            <font color={status > '07:30:00' ? 'red' : ''}>
+                                {status.toUpperCase()}
+                            </font>
+                        </span>
+                    ),
                     // sorter: (a, b) => a.skor_ketepatan_waktu - b.skor_ketepatan_waktu,
                 },
                 {
-                    title: 'Skor Daily Activity',
-                    dataIndex: 'skor_daily_activity',
-                    key: 'skor_daily_activity',
+                    title: 'Duty Off',
+                    dataIndex: 'Duty Off',
+                    key: 'Duty Off',
                     // sorter: (a, b) => a.skor_daily_activity - b.skor_daily_activity,
                 },
                 {
-                    title: 'Skor TL & PSW',
-                    dataIndex: 'skor_tl_psw',
-                    key: 'skor_tl_psw',
+                    title: 'Notes',
+                    dataIndex: 'Notes',
+                    key: 'Notes',
                     // sorter: (a, b) => a.skor_tl_psw - b.skor_tl_psw,
-                },
-                {
-                    title: 'Nilai CKP R',
-                    dataIndex: 'nilai_ckp_r',
-                    key: 'nilai_ckp_r',
-                    // sorter: (a, b) => a.nilai_ckp_r - b.nilai_ckp_r,
-                },
-                {
-                    title: 'Status',
-                    key: 'status',
-                    dataIndex: 'status',
-                    // render: status => (
-                    //     <span>
-                    //         <Tag color={status === 'incomplete' ? 'volcano' : 'green'}>
-                    //             {status.toUpperCase()}
-                    //         </Tag>
-                    //     </span>
-                    // ),
-                    // filters: [{ text: 'complete', value: 'complete' }, { text: 'incomplete', value: 'incomplete' }],
-                    // onFilter: (value, record) => record.status.indexOf(value) === 0,
-                },
+                }
             ],
             data: []
         };
@@ -131,25 +126,31 @@ export class absensi extends Component {
 
     fetchData(date) {
         var self = this;
-        let url = url_api + "/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
+        let url = url_absensi + "/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
         url = url.replace("$month", date.format('M')).replace("$year", date.format('YYYY'));
         // axios.get('http://localhost/api.php/records/penilaian')
         self.setState({ isTableLoading: true });
         axios.get(url)
             .then(function (response) {
                 // handle success
-                console.log(response.data.records);
-                let newData = response.data.records;
-                // newData.filter(v => v.id === self.state.row_record.id);
-                newData = newData.filter(v => v.niplama.id_satker === self.state.auth.id_satker);
-                newData = newData.sort((a, b) => a.niplama.nama.localeCompare(b.niplama.nama));
-                if(self.state.bidangFilter!=92000 && self.state.auth.id_satker=='7400'){
-                    newData = newData.filter(v => v.niplama.id_org.substring(0,3) == self.state.bidangFilter.toString().substring(0,3));
-                }
-                if(self.state.bidangFilter!=92800 && self.state.auth.id_satker!='7400'){
-                    newData = newData.filter(v => v.niplama.id_org.substring(0,4) == self.state.bidangFilter.toString().substring(0,4));
-                }
+                // console.log(response.data.records);
+                console.log(response.data);
+                console.log(tabletojson.convert(response.data));
+                let newData = tabletojson.convert(response.data)[0];
+                newData.pop();
                 self.setState({ data: newData, confirmLoading: false, isAsyncModalVisible: false });
+                
+                // let newData = response.data.records;
+                // newData = newData.filter(v => v.niplama.id_satker === self.state.auth.id_satker);
+                // newData = newData.sort((a, b) => a.niplama.nama.localeCompare(b.niplama.nama));
+                // if(self.state.bidangFilter!=92000 && self.state.auth.id_satker=='7400'){
+                //     newData = newData.filter(v => v.niplama.id_org.substring(0,3) == self.state.bidangFilter.toString().substring(0,3));
+                // }
+                // if(self.state.bidangFilter!=92800 && self.state.auth.id_satker!='7400'){
+                //     newData = newData.filter(v => v.niplama.id_org.substring(0,4) == self.state.bidangFilter.toString().substring(0,4));
+                // }
+                // self.setState({ data: newData, confirmLoading: false, isAsyncModalVisible: false });
+                
             })
             .catch(function (error) {
                 // handle error
@@ -276,10 +277,13 @@ export class absensi extends Component {
                 {/* <MyDatePicker format='YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih tahun" topMode='year'/> */}
                 <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} onClick={this.exportPDFWithComponent} >Download Pdf</Button>
                 <PDFExport ref={(component) => this.pdfExportComponent = component} paperSize="A4" landscape scale={0.8} margin="2cm" >
-                    <h1 style={{ textAlign: 'center' }}>{"Rekap Penilaian CKP-R Pegawai " + this.state.date.format("MMMM YYYY")}</h1>
+                    <h1 style={{ textAlign: 'center' }}>{"Rekap Absensi Pegawai " + this.state.date.format("MMMM YYYY")}</h1>
                     <h1 style={{ textAlign: 'center' }}>{this.state.auth.nm_satker} </h1>
-                    <h4>Unit Kerja : {this.state.nama_unit_kerja}</h4>
-                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
+                    {/* <h4>Unit Kerja : {this.state.nama_unit_kerja}</h4> */}
+                    <h4>Nip Lama : {this.state.auth.niplama}</h4>
+                    <h4>Nama Pegawai : {this.state.auth.nama}</h4>
+                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.Date} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
+                    {/* <Table columns={this.state.columns} dataSource={this.state.data} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} /> */}
                 </PDFExport>
             </Card>
         )
