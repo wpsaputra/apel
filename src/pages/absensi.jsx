@@ -70,10 +70,15 @@ export class absensi extends Component {
                     title: 'Duty On',
                     dataIndex: 'Duty On',
                     key: 'Duty On',
-                    render: status => (
+                    render: (text, row) => (
+                        // <span>
+                        //     <font color={(text > '07:30:00'&&!(row.Day=="Sat"||row.onFilterDay=="Mon")) ? 'red' : ''}>
+                        //         {text.toUpperCase()}
+                        //     </font>
+                        // </span>
                         <span>
-                            <font color={status > '07:30:00' ? 'red' : ''}>
-                                {status.toUpperCase()}
+                            <font color={(text > row["Working Hour"].slice(0,5)+":00"&&!(row.Day=="Sat"||row.onFilterDay=="Mon")) ? 'red' : ''}>
+                                {text.toUpperCase()}
                             </font>
                         </span>
                     ),
@@ -83,6 +88,19 @@ export class absensi extends Component {
                     title: 'Duty Off',
                     dataIndex: 'Duty Off',
                     key: 'Duty Off',
+                    render: (text, row) => (
+                        // <span>
+                        //     <font color={(text < '16:00:00'&&!(row.Day=="Sat"||row.Day=="Mon"||row.Day=="Fri"))||(text < '16:30:00'&&(row.Day=="Fri")) ? 'red' : ''}>
+                        //         {text.toUpperCase()}
+                        //     </font>
+                        // </span>
+
+                        <span>
+                            <font color={(text < row["Working Hour"].slice(-5)+":00"&&!(row.Day=="Sat"||row.Day=="Mon")) ? 'red' : ''}>
+                                {text.toUpperCase()}
+                            </font>
+                        </span>
+                    ),
                     // sorter: (a, b) => a.skor_daily_activity - b.skor_daily_activity,
                 },
                 {
@@ -126,8 +144,10 @@ export class absensi extends Component {
 
     fetchData(date) {
         var self = this;
-        let url = url_absensi + "/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
-        url = url.replace("$month", date.format('M')).replace("$year", date.format('YYYY'));
+        let url = url_absensi + "?datestart=$datestart&dateend=$dateend&userid=$userid";
+        let yearmonth = date.format('YYYY-MM');
+        url = url.replace("$datestart", yearmonth+"-01").replace("$dateend", yearmonth+"-31")
+            .replace("$userid", self.state.auth.niplama.slice(-5));
         // axios.get('http://localhost/api.php/records/penilaian')
         self.setState({ isTableLoading: true });
         axios.get(url)
@@ -263,18 +283,11 @@ export class absensi extends Component {
         return (
             <Card>
                 <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
-                <Select defaultValue={defaultSelect} style={{ width: 200, marginLeft: "5px" }} onChange={this.handleSelectChange}>
+                {/* <Select defaultValue={defaultSelect} style={{ width: 200, marginLeft: "5px" }} onChange={this.handleSelectChange}>
                     {this.state.unit_kerja.map((val, index) => {
                         return <Option key={index} value={val.id_org}>{val.nm_org}</Option>
                     })}
-                    {/* <Option value="jack">Jack</Option>
-                    <Option value="lucy">Lucy</Option>
-                    <Option value="disabled" disabled>
-                        Disabled
-                    </Option>
-                    <Option value="Yiminghe">yiminghe</Option> */}
-                </Select>
-                {/* <MyDatePicker format='YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih tahun" topMode='year'/> */}
+                </Select> */}
                 <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} onClick={this.exportPDFWithComponent} >Download Pdf</Button>
                 <PDFExport ref={(component) => this.pdfExportComponent = component} paperSize="A4" landscape scale={0.8} margin="2cm" >
                     <h1 style={{ textAlign: 'center' }}>{"Rekap Absensi Pegawai " + this.state.date.format("MMMM YYYY")}</h1>
@@ -283,7 +296,6 @@ export class absensi extends Component {
                     <h4>Nip Lama : {this.state.auth.niplama}</h4>
                     <h4>Nama Pegawai : {this.state.auth.nama}</h4>
                     <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.Date} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
-                    {/* <Table columns={this.state.columns} dataSource={this.state.data} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} /> */}
                 </PDFExport>
             </Card>
         )

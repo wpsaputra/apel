@@ -94,7 +94,7 @@ class Absensi
     //     //echo $result;
     // }
 
-    public function actionAbsen2()
+    public function actionAbsen2($datestart, $dateend, $userid)
     {
         $ch = curl_init();
         // curl_setopt($ch, CURLOPT_URL, 'http://10.0.0.50/woowtime/users/login');
@@ -112,24 +112,12 @@ class Absensi
             echo curl_error($ch);
         }
 
-        // echo $answer;
-
-        //another request preserving the session
-
-        // curl_setopt($ch, CURLOPT_URL, 'http://10.0.0.50/woowtime/report/saveatttemp?datestart=2019-07-01&dateend=2019-07-31&selall=false&sorting=false&orgid=undefined&userid=8433,&excelid=0&dateinfo=1');
-        // curl_setopt($ch, CURLOPT_POST, true);
-        // curl_setopt($ch, CURLOPT_POSTFIELDS, "");
-        // $answer = curl_exec($ch);
-        // if (curl_error($ch)) {
-        //     echo curl_error($ch);
-        // }
-        // echo $answer;
-
         // Will return the response, if false it print the response
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         // Set the url
-        curl_setopt($ch, CURLOPT_URL, "http://10.0.0.50/woowtime/report/saveatttemp?datestart=2019-07-01&dateend=2019-07-31&selall=false&sorting=false&orgid=undefined&userid=8433,&excelid=0&dateinfo=1");
+        // curl_setopt($ch, CURLOPT_URL, "http://10.0.0.50/woowtime/report/saveatttemp?datestart=2019-07-01&dateend=2019-07-31&selall=false&sorting=false&orgid=undefined&userid=8433,&excelid=0&dateinfo=1");
+        curl_setopt($ch, CURLOPT_URL, "http://10.0.0.50/woowtime/report/saveatttemp?datestart=".$datestart."&dateend=".$dateend."&selall=false&sorting=false&orgid=undefined&userid=".$userid.",&excelid=0&dateinfo=1");
 
         //port
         curl_setopt($ch, CURLOPT_PORT, 8090);
@@ -153,36 +141,17 @@ class Absensi
 
         // echo json_encode($array);
         echo ($tabel_absensi);
+        // echo ($result);
        
 
 
     }
 }
+// http://localhost/absensi.php?datestart=2019-01-01&dateend=2019-01-31&userid=57236
+
+$datestart = $_GET["datestart"];
+$dateend = $_GET["dateend"];
+$userid = $_GET["userid"];
 
 $absen = new Absensi();
-$absen->actionAbsen2();
-// $id_lvl = $_GET["id_lvl"];
-// $id_satker = $_GET["id_satker"];
-// $id_org = $_GET["id_org"];
-
-// $pegawai->id_satker = $id_satker;
-// $pegawai->id_org = $id_org;
-
-// // print_r($_GET);
-// // echo json_encode($pegawai->get_pegawai_es4_ksk());
-
-// if (strcmp($id_lvl, '1') == 0) {
-//     $result = $pegawai->get_pegawai_es3();
-// } else if (strcmp($id_lvl, '2') == 0) {
-//     if (strcmp(substr($id_satker, 2, 2), '00') == 0) {
-//         $result = $pegawai->get_pegawai_es4();
-//     } else {
-//         $result = $pegawai->get_pegawai_es4_ksk();
-//     }
-// } else {
-//     $result = $pegawai->get_pegawai_by_org_jab($id_org, $id_lvl);
-// }
-
-// echo json_encode($result);
-
-// // http://localhost/pegawai.php?id_lvl=3&id_org=92860&id_satker=7471
+$absen->actionAbsen2($datestart, $dateend, $userid);
