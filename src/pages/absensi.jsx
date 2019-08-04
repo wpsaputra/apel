@@ -77,7 +77,7 @@ export class absensi extends Component {
                         //     </font>
                         // </span>
                         <span>
-                            <font color={(text > row["Working Hour"].slice(0,5)+":00"&&!(row.Day=="Sat"||row.onFilterDay=="Mon")) ? 'red' : ''}>
+                            <font color={(text > row["Working Hour"].slice(0,5)+":00"&&!(row.Day=="Sat"||row.Day=="Sun")) ? 'red' : ''}>
                                 {text.toUpperCase()}
                             </font>
                         </span>
@@ -96,7 +96,7 @@ export class absensi extends Component {
                         // </span>
 
                         <span>
-                            <font color={(text < row["Working Hour"].slice(-5)+":00"&&!(row.Day=="Sat"||row.Day=="Mon")) ? 'red' : ''}>
+                            <font color={(text < row["Working Hour"].slice(-5)+":00"&&!(row.Day=="Sat"||row.Day=="Sun")) ? 'red' : ''}>
                                 {text.toUpperCase()}
                             </font>
                         </span>
@@ -144,10 +144,10 @@ export class absensi extends Component {
 
     fetchData(date) {
         var self = this;
-        let url = url_absensi + "?datestart=$datestart&dateend=$dateend&userid=$userid";
+        let url = url_absensi + "?datestart=$datestart&dateend=$dateend&userid=$userid&idkabkot=$idkabkot";
         let yearmonth = date.format('YYYY-MM');
         url = url.replace("$datestart", yearmonth+"-01").replace("$dateend", yearmonth+"-31")
-            .replace("$userid", self.state.auth.niplama.slice(-5));
+            .replace("$userid", self.state.auth.niplama.slice(-5)).replace("$idkabkot", self.state.auth.id_satker);
         // axios.get('http://localhost/api.php/records/penilaian')
         self.setState({ isTableLoading: true });
         axios.get(url)
