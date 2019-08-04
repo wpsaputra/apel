@@ -20,8 +20,8 @@ class Absensi
             'password' => 'admin74'
         ),
         7401 => array(
-            'username' => '',
-            'password' => ''
+            'username' => 'bps7401',
+            'password' => 'password7401!'
         ),
         7402 => array(
             'username' => 'bps7402',
