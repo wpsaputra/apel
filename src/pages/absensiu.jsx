@@ -1,32 +1,20 @@
 import React, { Component } from 'react'
-import { Card, DatePicker, Table, Tag, notification, Button, Input, Icon, Select } from 'antd'
+import { Card, DatePicker, Table, Tag, notification, Button, Input, Icon } from 'antd'
 import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import 'moment/locale/id'
-import { url_api, url_refresh, url_pegawai, unit_kerja_prov, unit_kerja_kab, url_absensi } from '../constant/constant';
+import { url_api, url_refresh, url_pegawai, url_absensi } from '../constant/constant';
 import { PDFExport } from '@progress/kendo-react-pdf';
 
 const { MonthPicker } = DatePicker;
-const { Option } = Select;
 const axios = require('axios');
 const tabletojson = require('tabletojson');
- 
-// tabletojson.convertUrl(
-//     'http://localhost/absensi.php',
-//     function(tablesAsJson) {
-//         tablesAsJson[0].pop();
-//         console.log(tablesAsJson[0]);
-//     }
-// );
 
-
-export class absensi extends Component {
+export class absensiu extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            nama_unit_kerja: '',
-            unit_kerja: [],
-            bidangFilter: 92000,
+            filterData: [],
             isTableLoading: false,
             auth: this.props.auth,
             isAsyncModalVisible: false,
@@ -119,7 +107,6 @@ export class absensi extends Component {
         this.getColumnSearchProps = this.getColumnSearchProps.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
-        this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
     openNotification() {
@@ -153,24 +140,17 @@ export class absensi extends Component {
         axios.get(url)
             .then(function (response) {
                 // handle success
-                // console.log(response.data.records);
                 console.log(response.data);
                 console.log(tabletojson.convert(response.data));
                 let newData = tabletojson.convert(response.data)[0];
                 newData.pop();
                 self.setState({ data: newData, confirmLoading: false, isAsyncModalVisible: false });
-                
-                // let newData = response.data.records;
-                // newData = newData.filter(v => v.niplama.id_satker === self.state.auth.id_satker);
-                // newData = newData.sort((a, b) => a.niplama.nama.localeCompare(b.niplama.nama));
-                // if(self.state.bidangFilter!=92000 && self.state.auth.id_satker=='7400'){
-                //     newData = newData.filter(v => v.niplama.id_org.substring(0,3) == self.state.bidangFilter.toString().substring(0,3));
-                // }
-                // if(self.state.bidangFilter!=92800 && self.state.auth.id_satker!='7400'){
-                //     newData = newData.filter(v => v.niplama.id_org.substring(0,4) == self.state.bidangFilter.toString().substring(0,4));
-                // }
-                // self.setState({ data: newData, confirmLoading: false, isAsyncModalVisible: false });
-                
+
+                // console.log(response.data.records);
+                // let tempRecord = response.data.records;
+                // tempRecord = tempRecord.filter(v =>  self.state.filterData.some(item => item.niplama === v.niplama.niplama));
+                // console.log("temp record", tempRecord); 
+                // self.setState({ data: tempRecord, confirmLoading: false, isAsyncModalVisible: false });
             })
             .catch(function (error) {
                 // handle error
@@ -181,6 +161,26 @@ export class absensi extends Component {
                 self.openNotification();
                 self.setState({ isTableLoading: false });
             });
+    }
+
+    fetchPegawai() {
+        var self = this;
+        let url = url_pegawai + "?id_lvl=$id_lvl&id_org=$id_org&id_satker=$id_satker";
+        url = url.replace("$id_lvl", this.state.auth.id_level).replace("$id_org", this.state.auth.id_org).replace("$id_satker", this.state.auth.id_satker);
+        // axios.get('http://localhost/api.php/records/penilaian')
+        console.log(url);
+        axios.get(url)
+            .then(function (response) {
+                // handle success
+                console.log(response.data);
+                self.setState({ filterData: response.data });
+                self.fetchData(self.state.date);
+                // self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
     }
 
 
@@ -253,11 +253,7 @@ export class absensi extends Component {
 
 
     componentDidMount() {
-        if(this.state.auth.id_satker==7400){
-            this.setState({unit_kerja: unit_kerja_prov, nama_unit_kerja: "BPS Propinsi"});
-        }else{
-            this.setState({unit_kerja: unit_kerja_kab, bidangFilter: 92800, nama_unit_kerja: "BPS Kabupaten/Kota"});
-        }
+        this.fetchPegawai();
         this.fetchData(this.state.date);
     }
 
@@ -265,41 +261,21 @@ export class absensi extends Component {
         this.pdfExportComponent.save();
     }
 
-    handleSelectChange(value) {
-        console.log(`selected ${value}`);
-        this.setState({ bidangFilter: value, nama_unit_kerja: this.state.unit_kerja.filter(v => v.id_org === value)[0].nm_org });
-        this.fetchData(this.state.date);
-        // console.log(this.state.unit_kerja.filter(v => v.id_org === value)[0].nm_org);
-    }
-
     render() {
         console.log(this.props);
-        let defaultSelect = "";
-        if(this.state.auth.id_satker==7400){
-            defaultSelect = "BPS Propinsi"
-        }else{
-            defaultSelect = "BPS Kabupaten/Kota"
-        }
         return (
             <Card>
                 <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
-                {/* <Select defaultValue={defaultSelect} style={{ width: 200, marginLeft: "5px" }} onChange={this.handleSelectChange}>
-                    {this.state.unit_kerja.map((val, index) => {
-                        return <Option key={index} value={val.id_org}>{val.nm_org}</Option>
-                    })}
-                </Select> */}
+                {/* <MyDatePicker format='YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih tahun" topMode='year'/> */}
                 <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} onClick={this.exportPDFWithComponent} >Download Pdf</Button>
                 <PDFExport ref={(component) => this.pdfExportComponent = component} paperSize="A4" landscape scale={0.8} margin="2cm" >
-                    <h1 style={{ textAlign: 'center' }}>{"Rekap Absensi Pegawai " + this.state.date.format("MMMM YYYY")}</h1>
+                    <h1 style={{ textAlign: 'center' }}>{"Rekap Absensi Pegawai "+this.state.date.format("MMMM YYYY")}</h1>
                     <h1 style={{ textAlign: 'center' }}>{this.state.auth.nm_satker} </h1>
-                    {/* <h4>Unit Kerja : {this.state.nama_unit_kerja}</h4> */}
-                    <h4>Nip Lama : {this.state.auth.niplama}</h4>
-                    <h4>Nama Pegawai : {this.state.auth.nama}</h4>
-                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.Date} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
+                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
                 </PDFExport>
             </Card>
         )
     }
 }
 
-export default absensi
+export default absensiu

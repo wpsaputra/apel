@@ -58,8 +58,11 @@ class Login extends React.Component {
             case "/admin":
                 path = "Administrator";
                 break;
-            case "/absensi":
-                path = "Absensi";
+            case "/absensip":
+                path = "Absensi per Pegawai";
+                break;
+            case "/absensiu":
+                path = "Absensi per Unit Kerja";
                 break;
             case "/faq":
                 path = "FAQ";
@@ -115,12 +118,28 @@ class Login extends React.Component {
                                 {/* <Menu.Item key="5">Alex</Menu.Item> */}
                             </SubMenu>
 
-                            <Menu.Item key="/absensi">
+                            {/* <Menu.Item key="/absensi">
                                 <Icon type="clock-circle" />
                                 <span>Absensi</span>
-                                {/* <NavLink to='/' exact={true}> Home </NavLink> */}
                                 <NavLink to='/absensi'> Absensi </NavLink>
-                            </Menu.Item>
+                            </Menu.Item> */}
+
+                            <SubMenu
+                                key="sub2"
+                                title={
+                                    <span>
+                                        <Icon type="clock-circle" />
+                                        <span>Absensi</span>
+                                    </span>
+                                }
+                            >
+                                <Menu.Item key="/absensip">Per Pegawai <NavLink to='/absensip'> Per Pegawai </NavLink></Menu.Item>
+                                <Menu.Item key="/absensiu">Per Unit Kerja <NavLink to='/absensiu'> Per Unit Kerja </NavLink></Menu.Item>
+                                {/* <Menu.Item key="/rekapb">Bulanan <NavLink to='/rekapb'> Bulanan </NavLink></Menu.Item>
+                                <Menu.Item key="/rekapu">Per Unit Kerja <NavLink to='/rekapu'> Per Unit Kerja </NavLink></Menu.Item> */}
+                            </SubMenu>
+
+                            
                             {/* <SubMenu
                                 key="sub2"
                                 title={
