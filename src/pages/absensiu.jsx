@@ -272,32 +272,14 @@ export class absensiu extends Component {
     }
 
     createTable() {
-        // let table = []
-
-        // for (let i = 0; i < 3; i++) {
-        //     table.push(<tr>
-        //         {
-        //             //inner loop to create columns
-        //         }
-        //     </tr>)
-        // }
-        // return table
-
-        // let table = [];
-        // {this.state.data.map((item, key) =>
-        //     // <p>{item.Day}</p>
-        //     table.push(<Table columns={this.state.columns} dataSource={item} rowKey={record => record.Date} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />)
-        // )}
-
         let content = [];
         let arrTable = this.state.data;
-        // arrTable.forEach(element => {
-        //     content.push(<b>{element.Day}</b>);
-        // });
 
         for (let i = 0; i < arrTable.length; i++) {
             const element = arrTable[i];
             // content.push(<b>{element[0].Day}</b>);
+            content.push(<h4>Nip Lama : {this.state.filterData[i].niplama}</h4>);
+            content.push(<h4>Nama Pegawai : {this.state.filterData[i].nama}</h4>);
             content.push(<pre>{JSON.stringify(element)}</pre>);
             content.push(<br></br>);
             // content.push(<Table columns={this.state.columns} dataSource={element} rowKey={record => record.Date} 
@@ -305,8 +287,6 @@ export class absensiu extends Component {
             
         }
 
-        // console.log(content);
-        // return <b>sfsdfs</b>;
         return content;
     }
 

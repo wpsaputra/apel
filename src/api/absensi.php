@@ -174,16 +174,19 @@ class Absensi
         foreach ($userid as $key => $value) {
             echo $this->actionAbsen($datestart, $dateend, $value, $idkabkot);
             echo "<br/>";
-
             // $result[$value] = $this->actionAbsen($datestart, $dateend, $value, $idkabkot);
         }
-
         // echo json_encode($result);
     }
 
     public function actionMultipleKabkot($datestart, $dateend, $userid, $idkabkot)
     {
-
+        $userid = explode(",", $userid);
+        // $result = array();
+        foreach ($userid as $key => $value) {
+            echo $this->actionAbsenKabkot($datestart, $dateend, $value, $idkabkot);
+            echo "<br/>";
+        }
     }
 
 }
