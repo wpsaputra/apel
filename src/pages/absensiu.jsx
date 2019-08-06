@@ -107,6 +107,7 @@ export class absensiu extends Component {
         this.getColumnSearchProps = this.getColumnSearchProps.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         this.handleReset = this.handleReset.bind(this);
+        this.createTable = this.createTable.bind(this);
     }
 
     openNotification() {
@@ -131,20 +132,29 @@ export class absensiu extends Component {
 
     fetchData(date) {
         var self = this;
+        let niplama = "";
+        self.state.filterData.forEach(function (filterData, index) {
+            niplama = niplama + filterData.niplama.slice(-5) + ",";
+        });
+
         let url = url_absensi + "?datestart=$datestart&dateend=$dateend&userid=$userid&idkabkot=$idkabkot";
         let yearmonth = date.format('YYYY-MM');
+        // url = url.replace("$datestart", yearmonth+"-01").replace("$dateend", yearmonth+"-31")
+        //     .replace("$userid", self.state.auth.niplama.slice(-5)).replace("$idkabkot", self.state.auth.id_satker);
         url = url.replace("$datestart", yearmonth+"-01").replace("$dateend", yearmonth+"-31")
-            .replace("$userid", self.state.auth.niplama.slice(-5)).replace("$idkabkot", self.state.auth.id_satker);
-        // axios.get('http://localhost/api.php/records/penilaian')
+            .replace("$userid", niplama).replace("$idkabkot", self.state.auth.id_satker);
         self.setState({ isTableLoading: true });
         axios.get(url)
             .then(function (response) {
                 // handle success
-                console.log(response.data);
+                // console.log(response.data);
                 console.log(tabletojson.convert(response.data));
-                let newData = tabletojson.convert(response.data)[0];
-                newData.pop();
+                // let newData = tabletojson.convert(response.data)[0];
+                let newData = tabletojson.convert(response.data);
+                // newData.pop();
                 self.setState({ data: newData, confirmLoading: false, isAsyncModalVisible: false });
+
+                
 
                 // console.log(response.data.records);
                 // let tempRecord = response.data.records;
@@ -261,6 +271,45 @@ export class absensiu extends Component {
         this.pdfExportComponent.save();
     }
 
+    createTable() {
+        // let table = []
+
+        // for (let i = 0; i < 3; i++) {
+        //     table.push(<tr>
+        //         {
+        //             //inner loop to create columns
+        //         }
+        //     </tr>)
+        // }
+        // return table
+
+        // let table = [];
+        // {this.state.data.map((item, key) =>
+        //     // <p>{item.Day}</p>
+        //     table.push(<Table columns={this.state.columns} dataSource={item} rowKey={record => record.Date} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />)
+        // )}
+
+        let content = [];
+        let arrTable = this.state.data;
+        // arrTable.forEach(element => {
+        //     content.push(<b>{element.Day}</b>);
+        // });
+
+        for (let i = 0; i < arrTable.length; i++) {
+            const element = arrTable[i];
+            // content.push(<b>{element[0].Day}</b>);
+            content.push(<pre>{JSON.stringify(element)}</pre>);
+            content.push(<br></br>);
+            // content.push(<Table columns={this.state.columns} dataSource={element} rowKey={record => record.Date} 
+            //     style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />);
+            
+        }
+
+        // console.log(content);
+        // return <b>sfsdfs</b>;
+        return content;
+    }
+
     render() {
         console.log(this.props);
         return (
@@ -271,7 +320,17 @@ export class absensiu extends Component {
                 <PDFExport ref={(component) => this.pdfExportComponent = component} paperSize="A4" landscape scale={0.8} margin="2cm" >
                     <h1 style={{ textAlign: 'center' }}>{"Rekap Absensi Pegawai "+this.state.date.format("MMMM YYYY")}</h1>
                     <h1 style={{ textAlign: 'center' }}>{this.state.auth.nm_satker} </h1>
-                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.id} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
+                    {this.createTable()}
+                    {/* {this.state.data.map((item, key) =>
+                        // <p>{item.Day}</p>
+                        <Table columns={this.state.columns} dataSource={item} rowKey={record => record.Date} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
+                    )} */}
+                    {/* {this.state.data.map(function (object, i) {
+                        // return <ObjectRow obj={object} key={i} />;
+                        return <pre>object</pre>;
+                        // return <Table columns={this.state.columns} dataSource={object} rowKey={record => record.Date} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} />
+                    })} */}
+                    {/* <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.Date} style={{ overflowY: 'auto' }} pagination={false} bordered loading={this.state.isTableLoading} /> */}
                 </PDFExport>
             </Card>
         )

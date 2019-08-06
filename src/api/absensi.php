@@ -115,7 +115,8 @@ class Absensi
         
         $tabel_absensi = $dom->saveXML($element);
 
-        echo ($tabel_absensi);
+        // echo ($tabel_absensi);
+        return $tabel_absensi;
     }
 
     // public function actionAbsenKabkot()
@@ -159,10 +160,30 @@ class Absensi
         
         $tabel_absensi = $dom->saveXML($element);
 
-        echo ($tabel_absensi);
+        // echo ($tabel_absensi);
+        return $tabel_absensi;
 
         // print_r($this->array_password[7410]["username"]);
         // print_r($this->array_password[7410]["password"]);
+    }
+
+    public function actionMultiple($datestart, $dateend, $userid, $idkabkot)
+    {
+        $userid = explode(",", $userid);
+        // $result = array();
+        foreach ($userid as $key => $value) {
+            echo $this->actionAbsen($datestart, $dateend, $value, $idkabkot);
+            echo "<br/>";
+
+            // $result[$value] = $this->actionAbsen($datestart, $dateend, $value, $idkabkot);
+        }
+
+        // echo json_encode($result);
+    }
+
+    public function actionMultipleKabkot($datestart, $dateend, $userid, $idkabkot)
+    {
+
     }
 
 }
@@ -176,7 +197,15 @@ $idkabkot = $_GET["idkabkot"];
 
 $absen = new Absensi();
 if($idkabkot==7400){
-    $absen->actionAbsen($datestart, $dateend, $userid, $idkabkot);
+    if(strpos($userid, ",") !== false) {
+        $absen->actionMultiple($datestart, $dateend, $userid, $idkabkot);
+    }else{
+        echo $absen->actionAbsen($datestart, $dateend, $userid, $idkabkot);
+    }
 }else{
-    $absen->actionAbsenKabkot($datestart, $dateend, $userid, $idkabkot);
+    if(strpos($userid, ",") !== false) {
+        $absen->actionMultipleKabkot($datestart, $dateend, $userid, $idkabkot);
+    }else{
+        echo $absen->actionAbsenKabkot($datestart, $dateend, $userid, $idkabkot);
+    }
 }
