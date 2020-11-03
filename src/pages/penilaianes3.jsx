@@ -450,7 +450,7 @@ export class penilaianes3 extends Component {
 
         //calculate ckor ckp-r 
         let nilai_total = 0;
-        nilai_total = skor_kinerja*0.5 + skor_daily_activity*0.2 + skor_tl_psw*0.3;
+        nilai_total = skor_kinerja*0.7 + skor_daily_activity*0.2 + skor_tl_psw*0.1;
         values.nilai_total = nilai_total.toFixed(2);
 
 
