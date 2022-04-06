@@ -36,12 +36,14 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
                                 initialValue: row_record.skor_realisasi_pekerjaan,
                             })(<InputNumber min={0} max={100} autoFocus={true} />)}
                         </Form.Item>
-                        <Form.Item label="Skor Ketepatan Waktu">
-                            {getFieldDecorator('skor_ketepatan_waktu', {
-                                rules: [{ required: true, message: 'Silahkan input Skor Ketepatan Waktu!' }],
-                                initialValue: row_record.skor_ketepatan_waktu,
-                            })(<InputNumber min={0} max={100} />)}
-                        </Form.Item>
+                        <div style={{display: "none"}}>
+                            <Form.Item label="Skor Ketepatan Waktu">
+                                {getFieldDecorator('skor_ketepatan_waktu', {
+                                    rules: [{ required: true, message: 'Silahkan input Skor Ketepatan Waktu!' }],
+                                    initialValue: row_record.skor_ketepatan_waktu,
+                                })(<InputNumber min={0} max={100} />)}
+                            </Form.Item>
+                        </div>
                         <Form.Item label="Skor Kualitas Pekerjaan">
                             {getFieldDecorator('skor_kualitas_pekerjaan', {
                                 rules: [{ required: true, message: 'Silahkan input Skor Kualitas Pekerjaan!' }],
@@ -130,12 +132,12 @@ export class penilaian extends Component {
                             key: 'skor_realisasi_pekerjaan',
                             sorter: (a, b) => a.skor_realisasi_pekerjaan - b.skor_realisasi_pekerjaan,
                         },
-                        {
-                            title: 'Ketepatan Waktu',
-                            dataIndex: 'skor_ketepatan_waktu',
-                            key: 'skor_ketepatan_waktu',
-                            sorter: (a, b) => a.skor_ketepatan_waktu - b.skor_ketepatan_waktu,
-                        },
+                        // {
+                        //     title: 'Ketepatan Waktu',
+                        //     dataIndex: 'skor_ketepatan_waktu',
+                        //     key: 'skor_ketepatan_waktu',
+                        //     sorter: (a, b) => a.skor_ketepatan_waktu - b.skor_ketepatan_waktu,
+                        // },
                         {
                             title: 'Kualitas Pekerjaan',
                             dataIndex: 'skor_kualitas_pekerjaan',
@@ -369,7 +371,7 @@ export class penilaian extends Component {
         let url = url_api + "/records/penilaian/" + this.state.row_record.id;
         let status = "complete";
         for (const key of Object.keys(values)) {
-            if (values[key] == 0 && key!=='jumlah_daily_kosong' && key!=='jumlah_tl_psw') {
+            if (values[key] == 0 && key!=='jumlah_daily_kosong' && key!=='jumlah_tl_psw'&& key!=='skor_ketepatan_waktu') {
                 status = "incomplete";
             }
         }
@@ -382,7 +384,7 @@ export class penilaian extends Component {
 
         // calculate field rata_rata_kinerja 
         let rata_rata_kinerja = 0;
-        rata_rata_kinerja = (values.skor_realisasi_pekerjaan*0.25 + values.skor_ketepatan_waktu*0.25 + values.skor_kualitas_pekerjaan*0.25 + values.skor_kesungguhan_kerja*0.25);
+        rata_rata_kinerja = (values.skor_realisasi_pekerjaan/3 + values.skor_ketepatan_waktu*0 + values.skor_kualitas_pekerjaan/3 + values.skor_kesungguhan_kerja/3);
         values.rata_rata_kinerja = rata_rata_kinerja.toFixed(2);
 
         // calculate field skor_kinerja
