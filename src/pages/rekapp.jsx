@@ -163,6 +163,12 @@ export class rekapp extends Component {
                 //     // sorter: (a, b) => a.skor_tl_psw - b.skor_tl_psw,
                 // },
                 {
+                    title: 'Rincian Perilaku Kerja (Core Value)',
+                    dataIndex: 'core_value',
+                    key: 'core_value',
+                    // sorter: (a, b) => a.nilai_ckp_r - b.nilai_ckp_r,
+                },
+                {
                     title: 'Nilai CKP R',
                     dataIndex: 'nilai_ckp_r',
                     key: 'nilai_ckp_r',
