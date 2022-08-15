@@ -65,7 +65,7 @@ class App extends React.Component {
   }
 
   componentWillMount(){
-    console.log = function() {}
+    // console.log = function() {}
     this.checkLocalStorage();
     // this.setState({isSignedIn: true});
     console.log(this.state);

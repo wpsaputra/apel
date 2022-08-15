@@ -50,30 +50,40 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
                                 initialValue: row_record.skor_kualitas_pekerjaan,
                             })(<InputNumber min={0} max={100} />)}
                         </Form.Item>
-                        <Form.Item label="Skor Kesungguhan Kerja">
-                            {getFieldDecorator('skor_kesungguhan_kerja', {
-                                rules: [{ required: true, message: 'Silahkan input Skor Kesungguhan Kerja!' }],
-                                initialValue: row_record.skor_kesungguhan_kerja,
-                            })(<InputNumber min={0} max={100} />)}
-                        </Form.Item>
+                        <div style={{display: "none"}}>
+                            <Form.Item label="Skor Kesungguhan Kerja">
+                                {getFieldDecorator('skor_kesungguhan_kerja', {
+                                    rules: [{ required: true, message: 'Silahkan input Skor Kesungguhan Kerja!' }],
+                                    initialValue: row_record.skor_kesungguhan_kerja,
+                                })(<InputNumber min={0} max={100} />)}
+                            </Form.Item>
+                        </div>
                         <Form.Item label="Jumlah Daily Kosong">
                             {getFieldDecorator('jumlah_daily_kosong', {
                                 rules: [{ required: true, message: 'Silahkan input Skor Daily Activity' }],
                                 initialValue: row_record.jumlah_daily_kosong,
                             })(<InputNumber min={0} max={31} />)}
                         </Form.Item>
-                        <Form.Item label="Jumlah TL & PSW">
-                            {getFieldDecorator('jumlah_tl_psw', {
-                                rules: [{ required: true, message: 'Silahkan input Skor TL & PSW!' }],
-                                initialValue: row_record.jumlah_tl_psw,
-                            })(<InputNumber min={0} max={31} />)}
-                        </Form.Item>
+                        <div style={{display: "none"}}>
+                            <Form.Item label="Jumlah TL & PSW">
+                                {getFieldDecorator('jumlah_tl_psw', {
+                                    rules: [{ required: true, message: 'Silahkan input Skor TL & PSW!' }],
+                                    initialValue: row_record.jumlah_tl_psw,
+                                })(<InputNumber min={0} max={31} />)}
+                            </Form.Item>
+                        </div>
                         {/* <Form.Item label="Nilai CKP R">
                             {getFieldDecorator('nilai_ckp_r', {
                                 rules: [{ required: true, message: 'Silahkan input Nilai CKP R!' }],
                                 initialValue: row_record.nilai_ckp_r,
                             })(<InputNumber min={0} max={100} />)}
                         </Form.Item> */}
+                        <Form.Item label="Rincian Perilaku Kerja (Core Value)">
+                            {getFieldDecorator('core_value', {
+                                rules: [{ required: true, message: 'Silahkan input Nilai Rincian Perilaku Kerja (Core Value)!' }],
+                                initialValue: row_record.core_value,
+                            })(<InputNumber min={75} max={100} />)}
+                        </Form.Item>
                     </Form>
                 </Modal>
             );
@@ -144,11 +154,23 @@ export class penilaian extends Component {
                             key: 'skor_kualitas_pekerjaan',
                             sorter: (a, b) => a.skor_kualitas_pekerjaan - b.skor_kualitas_pekerjaan,
                         },
+                        // {
+                        //     title: 'Kesungguhan Kerja',
+                        //     dataIndex: 'skor_kesungguhan_kerja',
+                        //     key: 'skor_kesungguhan_kerja',
+                        //     sorter: (a, b) => a.skor_kesungguhan_kerja - b.skor_kesungguhan_kerja,
+                        // },
                         {
-                            title: 'Kesungguhan Kerja',
-                            dataIndex: 'skor_kesungguhan_kerja',
-                            key: 'skor_kesungguhan_kerja',
-                            sorter: (a, b) => a.skor_kesungguhan_kerja - b.skor_kesungguhan_kerja,
+                            title: 'Jumlah Daily Kosong',
+                            dataIndex: 'jumlah_daily_kosong',
+                            key: 'jumlah_daily_kosong',
+                            sorter: (a, b) => a.jumlah_daily_kosong - b.jumlah_daily_kosong,
+                        },
+                        {
+                            title: 'Skor Daily Activity',
+                            dataIndex: 'skor_daily_activity',
+                            key: 'skor_daily_activity',
+                            sorter: (a, b) => a.skor_daily_activity - b.skor_daily_activity,
                         },
                         {
                             title: 'Rata-rata',
@@ -164,47 +186,60 @@ export class penilaian extends Component {
                         },
                     ],
                 },
-                {
-                    title: 'Daily Activity',
-                    children: [
-                        {
-                            title: 'Jumlah Daily Kosong',
-                            dataIndex: 'jumlah_daily_kosong',
-                            key: 'jumlah_daily_kosong',
-                            sorter: (a, b) => a.jumlah_daily_kosong - b.jumlah_daily_kosong,
-                        },
-                        {
-                            title: 'Skor Daily Activity',
-                            dataIndex: 'skor_daily_activity',
-                            key: 'skor_daily_activity',
-                            sorter: (a, b) => a.skor_daily_activity - b.skor_daily_activity,
-                        },
-                    ],
+                // {
+                //     title: 'Daily Activity',
+                //     children: [
+                //         {
+                //             title: 'Jumlah Daily Kosong',
+                //             dataIndex: 'jumlah_daily_kosong',
+                //             key: 'jumlah_daily_kosong',
+                //             sorter: (a, b) => a.jumlah_daily_kosong - b.jumlah_daily_kosong,
+                //         },
+                //         {
+                //             title: 'Skor Daily Activity',
+                //             dataIndex: 'skor_daily_activity',
+                //             key: 'skor_daily_activity',
+                //             sorter: (a, b) => a.skor_daily_activity - b.skor_daily_activity,
+                //         },
+                //     ],
 
+                // },
+                // {
+                //     title: 'TL & PSW',
+                //     children: [
+                //         {
+                //             title: 'Jumlah TL & PSW',
+                //             dataIndex: 'jumlah_tl_psw',
+                //             key: 'jumlah_tl_psw',
+                //             sorter: (a, b) => a.jumlah_tl_psw - b.jumlah_tl_psw,
+                //         },
+                //         {
+                //             title: 'Skor TL & PSW',
+                //             dataIndex: 'skor_tl_psw',
+                //             key: 'skor_tl_psw',
+                //             sorter: (a, b) => a.skor_tl_psw - b.skor_tl_psw,
+                //         },
+                //     ],
+
+                // },
+                // {
+                //     title: 'Nilai CKP-R',
+                //     dataIndex: 'nilai_ckp_r',
+                //     key: 'nilai_ckp_r',
+                //     sorter: (a, b) => a.nilai_ckp_r - b.nilai_ckp_r,
+                // },
+
+                {
+                    title: 'Rincian Perilaku Kerja (Core Value)',
+                    dataIndex: 'core_value',
+                    key: 'core_value',
+                    sorter: (a, b) => a.core_value - b.nilai_core_value,
                 },
                 {
-                    title: 'TL & PSW',
-                    children: [
-                        {
-                            title: 'Jumlah TL & PSW',
-                            dataIndex: 'jumlah_tl_psw',
-                            key: 'jumlah_tl_psw',
-                            sorter: (a, b) => a.jumlah_tl_psw - b.jumlah_tl_psw,
-                        },
-                        {
-                            title: 'Skor TL & PSW',
-                            dataIndex: 'skor_tl_psw',
-                            key: 'skor_tl_psw',
-                            sorter: (a, b) => a.skor_tl_psw - b.skor_tl_psw,
-                        },
-                    ],
-
-                },
-                {
-                    title: 'Nilai CKP-R',
-                    dataIndex: 'nilai_ckp_r',
-                    key: 'nilai_ckp_r',
-                    sorter: (a, b) => a.nilai_ckp_r - b.nilai_ckp_r,
+                    title: 'Nilai Total/Nilai CKP-R',
+                    dataIndex: 'nilai_total',
+                    key: 'nilai_total',
+                    sorter: (a, b) => a.nilai_total - b.nilai_total,
                 },
                 {
                     title: 'Status',
@@ -371,11 +406,28 @@ export class penilaian extends Component {
         let url = url_api + "/records/penilaian/" + this.state.row_record.id;
         let status = "complete";
         for (const key of Object.keys(values)) {
-            if (values[key] == 0 && key!=='jumlah_daily_kosong' && key!=='jumlah_tl_psw'&& key!=='skor_ketepatan_waktu') {
+            if (values[key] == 0 && key!=='jumlah_daily_kosong' && key!=='jumlah_tl_psw'&& key!=='skor_ketepatan_waktu'
+            && key!=='skor_kesungguhan_kerja'&& key!=='skor_tl_psw'&& key!=='nilai_ckp_r') {
                 status = "incomplete";
             }
         }
         values.status = status;
+
+         //calculate skor_daily_activity
+         let skor_daily_activity = 96;
+         if(values.jumlah_daily_kosong==0){
+             skor_daily_activity = 100;
+         }
+         if(values.jumlah_daily_kosong>=1&&values.jumlah_daily_kosong<=5){
+             skor_daily_activity = 99;
+         }
+         if(values.jumlah_daily_kosong>=6&&values.jumlah_daily_kosong<=10){
+             skor_daily_activity = 98;
+         }
+         if(values.jumlah_daily_kosong>=11&&values.jumlah_daily_kosong<=15){
+             skor_daily_activity = 97;
+         }
+         values.skor_daily_activity = skor_daily_activity;
 
         // let nilai_ckp_r = 0;
         // nilai_ckp_r = values.skor_realisasi_pekerjaan * 0.3 + values.skor_ketepatan_waktu * 0.2 + values.skor_daily_activity * 0.2 +
@@ -384,58 +436,53 @@ export class penilaian extends Component {
 
         // calculate field rata_rata_kinerja 
         let rata_rata_kinerja = 0;
-        rata_rata_kinerja = (values.skor_realisasi_pekerjaan/3 + values.skor_ketepatan_waktu*0 + values.skor_kualitas_pekerjaan/3 + values.skor_kesungguhan_kerja/3);
+        rata_rata_kinerja = (values.skor_realisasi_pekerjaan/3 + values.skor_ketepatan_waktu*0 + values.skor_kualitas_pekerjaan/3 
+        + values.skor_kesungguhan_kerja*0 + values.skor_daily_activity/3);
         values.rata_rata_kinerja = rata_rata_kinerja.toFixed(2);
 
         // calculate field skor_kinerja
-        let skor_kinerja = 98;
-        if(rata_rata_kinerja.toFixed(2)>=95){
-            skor_kinerja = 100;
-        }
-        if(rata_rata_kinerja.toFixed(2)<95&&rata_rata_kinerja.toFixed(0)>=90){
-            skor_kinerja = 99;
-        }
+        // let skor_kinerja = 98;
+        // if(rata_rata_kinerja.toFixed(2)>=95){
+        //     skor_kinerja = 100;
+        // }
+        // if(rata_rata_kinerja.toFixed(2)<95&&rata_rata_kinerja.toFixed(0)>=90){
+        //     skor_kinerja = 99;
+        // }
+        let skor_kinerja = values.rata_rata_kinerja;
         values.skor_kinerja = skor_kinerja;
 
-        //calculate skor_daily_activity
-        let skor_daily_activity = 96;
-        if(values.jumlah_daily_kosong==0){
-            skor_daily_activity = 100;
-        }
-        if(values.jumlah_daily_kosong>=1&&values.jumlah_daily_kosong<=5){
-            skor_daily_activity = 99;
-        }
-        if(values.jumlah_daily_kosong>=6&&values.jumlah_daily_kosong<=10){
-            skor_daily_activity = 98;
-        }
-        if(values.jumlah_daily_kosong>=11&&values.jumlah_daily_kosong<=15){
-            skor_daily_activity = 97;
-        }
-        values.skor_daily_activity = skor_daily_activity;
+       
 
         //calculate skor tl& psw
-        let skor_tl_psw=95;
-        if(values.jumlah_tl_psw<=1){
-            skor_tl_psw = 100;
-        }
-        if(values.jumlah_tl_psw>=2&&values.jumlah_tl_psw<=3){
-            skor_tl_psw = 99;
-        }
-        if(values.jumlah_tl_psw>=4&&values.jumlah_tl_psw<=5){
-            skor_tl_psw = 98;
-        }
-        if(values.jumlah_tl_psw>=6&&values.jumlah_tl_psw<=7){
-            skor_tl_psw = 97;
-        }
-        if(values.jumlah_tl_psw>=8&&values.jumlah_tl_psw<=9){
-            skor_tl_psw = 96;
-        }
-        values.skor_tl_psw = skor_tl_psw;
+        // let skor_tl_psw=95;
+        // if(values.jumlah_tl_psw<=1){
+        //     skor_tl_psw = 100;
+        // }
+        // if(values.jumlah_tl_psw>=2&&values.jumlah_tl_psw<=3){
+        //     skor_tl_psw = 99;
+        // }
+        // if(values.jumlah_tl_psw>=4&&values.jumlah_tl_psw<=5){
+        //     skor_tl_psw = 98;
+        // }
+        // if(values.jumlah_tl_psw>=6&&values.jumlah_tl_psw<=7){
+        //     skor_tl_psw = 97;
+        // }
+        // if(values.jumlah_tl_psw>=8&&values.jumlah_tl_psw<=9){
+        //     skor_tl_psw = 96;
+        // }
+        // values.skor_tl_psw = skor_tl_psw;
 
         //calculate ckor ckp-r 
-        let nilai_ckp_r = 0;
-        nilai_ckp_r = skor_kinerja*0.7 + skor_daily_activity*0.2 + skor_tl_psw*0.1;
-        values.nilai_ckp_r = nilai_ckp_r.toFixed(2);
+        // let nilai_ckp_r = 0;
+        // nilai_ckp_r = skor_kinerja*0.7 + skor_daily_activity*0.2 + skor_tl_psw*0.1;
+        // values.nilai_ckp_r = nilai_ckp_r.toFixed(2);
+
+        let nilai_total = 0;
+        // nilai_total = skor_kinerja*0.7 + skor_daily_activity*0.2 + skor_tl_psw*0.1;
+        nilai_total = skor_kinerja*0.7 + values.core_value*0.3;
+        values.nilai_total = nilai_total.toFixed(2);
+
+        values.nilai_ckp_r = values.nilai_total;
 
 
         axios.put(url, values)
@@ -467,6 +514,9 @@ export class penilaian extends Component {
                 newData.filter(v => v.id === self.state.row_record.id)[0].skor_tl_psw = values.skor_tl_psw;
                 newData.filter(v => v.id === self.state.row_record.id)[0].nilai_ckp_r = values.nilai_ckp_r;
                 newData.filter(v => v.id === self.state.row_record.id)[0].status = values.status;
+                
+                newData.filter(v => v.id === self.state.row_record.id)[0].core_value = values.core_value;
+                newData.filter(v => v.id === self.state.row_record.id)[0].nilai_total = values.nilai_total;
 
                 // console.log("newData :");
                 // console.log(newData);

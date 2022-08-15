@@ -56,23 +56,29 @@ export class rekapu extends Component {
                     // sorter: (a, b) => a.skor_realisasi_pekerjaan - b.skor_realisasi_pekerjaan,
                 },
                 {
-                    title: 'Skor Ketepatan Waktu',
-                    dataIndex: 'skor_ketepatan_waktu',
-                    key: 'skor_ketepatan_waktu',
+                    title: 'Skor Kualitas Pekerjaan',
+                    dataIndex: 'skor_kualitas_pekerjaan',
+                    key: 'skor_kualitas_pekerjaan',
                     // sorter: (a, b) => a.skor_ketepatan_waktu - b.skor_ketepatan_waktu,
                 },
+                // {
+                //     title: 'Skor Ketepatan Waktu',
+                //     dataIndex: 'skor_ketepatan_waktu',
+                //     key: 'skor_ketepatan_waktu',
+                //     // sorter: (a, b) => a.skor_ketepatan_waktu - b.skor_ketepatan_waktu,
+                // },
                 {
                     title: 'Skor Daily Activity',
                     dataIndex: 'skor_daily_activity',
                     key: 'skor_daily_activity',
                     // sorter: (a, b) => a.skor_daily_activity - b.skor_daily_activity,
                 },
-                {
-                    title: 'Skor TL & PSW',
-                    dataIndex: 'skor_tl_psw',
-                    key: 'skor_tl_psw',
-                    // sorter: (a, b) => a.skor_tl_psw - b.skor_tl_psw,
-                },
+                // {
+                //     title: 'Skor TL & PSW',
+                //     dataIndex: 'skor_tl_psw',
+                //     key: 'skor_tl_psw',
+                //     // sorter: (a, b) => a.skor_tl_psw - b.skor_tl_psw,
+                // },
                 {
                     title: 'Nilai CKP R',
                     dataIndex: 'nilai_ckp_r',
