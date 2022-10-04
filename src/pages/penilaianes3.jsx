@@ -89,8 +89,8 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
                         <Form.Item label="Rincian Perilaku Kerja (Core Value)">
                             {getFieldDecorator('core_value', {
                                 rules: [{ required: true, message: 'Silahkan input Nilai Rincian Perilaku Kerja (Core Value)!' }],
-                                initialValue: row_record.core_value,
-                            })(<InputNumber min={75} max={100} />)}
+                                initialValue: row_record.core_value==0?100:row_record.core_value,
+                            })(<InputNumber min={75} max={100} value={100} />)}
                         </Form.Item>
                     </Form>
                 </Modal>
