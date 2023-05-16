@@ -4,6 +4,7 @@ import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import 'moment/locale/id'
 import {url_api, url_refresh, url_pegawai} from '../constant/constant';
+import XLSX from 'xlsx';
 
 const { MonthPicker } = DatePicker;
 const axios = require('axios');
@@ -12,7 +13,7 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
     // eslint-disable-next-line
     class extends React.Component {
         render() {
-            const { visible, onCancel, onCreate, form, title, row_record, confirmLoading } = this.props;
+            const { visible, onCancel, onCreate, form, title, row_record, confirmLoading, handleFileChange } = this.props;
             const { getFieldDecorator } = form;
 
             return (
@@ -25,65 +26,8 @@ const CollectionCreateForm = Form.create({ name: 'form_in_modal' })(
                     confirmLoading={confirmLoading}
                 >
                     <Form layout="vertical">
-                        {/* <Form.Item label="Title">
-                            {getFieldDecorator('title', {
-                                rules: [{ required: true, message: 'Please input the title of collection!' }],
-                            })(<Input />)}
-                        </Form.Item> */}
-                        <Form.Item label="Skor Realisasi Pekerjaan">
-                            {getFieldDecorator('skor_realisasi_pekerjaan', {
-                                rules: [{ required: true, message: 'Silahkan input Skor Realisasi Pekerjaan!' }],
-                                initialValue: row_record.skor_realisasi_pekerjaan,
-                            })(<InputNumber min={0} max={100} autoFocus={true} />)}
-                        </Form.Item>
-                        <div style={{display: "none"}}>
-                            <Form.Item label="Skor Ketepatan Waktu">
-                                {getFieldDecorator('skor_ketepatan_waktu', {
-                                    rules: [{ required: true, message: 'Silahkan input Skor Ketepatan Waktu!' }],
-                                    initialValue: row_record.skor_ketepatan_waktu,
-                                })(<InputNumber min={0} max={100} />)}
-                            </Form.Item>
-                        </div>
-                        <Form.Item label="Skor Kualitas Pekerjaan">
-                            {getFieldDecorator('skor_kualitas_pekerjaan', {
-                                rules: [{ required: true, message: 'Silahkan input Skor Kualitas Pekerjaan!' }],
-                                initialValue: row_record.skor_kualitas_pekerjaan,
-                            })(<InputNumber min={0} max={100} />)}
-                        </Form.Item>
-                        <div style={{display: "none"}}>
-                            <Form.Item label="Skor Kesungguhan Kerja">
-                                {getFieldDecorator('skor_kesungguhan_kerja', {
-                                    rules: [{ required: true, message: 'Silahkan input Skor Kesungguhan Kerja!' }],
-                                    initialValue: row_record.skor_kesungguhan_kerja,
-                                })(<InputNumber min={0} max={100} />)}
-                            </Form.Item>
-                        </div>
-                        <Form.Item label="Jumlah Daily Kosong">
-                            {getFieldDecorator('jumlah_daily_kosong', {
-                                rules: [{ required: true, message: 'Silahkan input Skor Daily Activity' }],
-                                initialValue: row_record.jumlah_daily_kosong,
-                            })(<InputNumber min={0} max={31} />)}
-                        </Form.Item>
-                        <div style={{display: "none"}}>
-                            <Form.Item label="Jumlah TL & PSW">
-                                {getFieldDecorator('jumlah_tl_psw', {
-                                    rules: [{ required: true, message: 'Silahkan input Skor TL & PSW!' }],
-                                    initialValue: row_record.jumlah_tl_psw,
-                                })(<InputNumber min={0} max={31} />)}
-                            </Form.Item>
-                        </div>
-                        {/* <Form.Item label="Nilai CKP R">
-                            {getFieldDecorator('nilai_ckp_r', {
-                                rules: [{ required: true, message: 'Silahkan input Nilai CKP R!' }],
-                                initialValue: row_record.nilai_ckp_r,
-                            })(<InputNumber min={0} max={100} />)}
-                        </Form.Item> */}
-                        <Form.Item label="Rincian Perilaku Kerja (Core Value)">
-                            {getFieldDecorator('core_value', {
-                                rules: [{ required: true, message: 'Silahkan input Nilai Rincian Perilaku Kerja (Core Value)!' }],
-                                initialValue: row_record.core_value==0?100:row_record.core_value,
-                            })(<InputNumber min={75} max={100} />)}
-                        </Form.Item>
+                        <h3>Download Excel dari Menu BOS &gt; Kepegawaian &gt; Cetak Presensi &gt; Rekap Presensi Unit Kerja &gt; Export Excel </h3>
+                        <input type="file" onChange={handleFileChange} />
                     </Form>
                 </Modal>
             );
@@ -143,120 +87,6 @@ export class absensi extends Component {
                 
 
 
-                // {
-                //     title: 'Kinerja',
-                //     children: [
-                //         {
-                //             title: 'Realisasi Pekerjaan',
-                //             dataIndex: 'skor_realisasi_pekerjaan',
-                //             key: 'skor_realisasi_pekerjaan',
-                //             sorter: (a, b) => a.skor_realisasi_pekerjaan - b.skor_realisasi_pekerjaan,
-                //         },
-                //         // {
-                //         //     title: 'Ketepatan Waktu',
-                //         //     dataIndex: 'skor_ketepatan_waktu',
-                //         //     key: 'skor_ketepatan_waktu',
-                //         //     sorter: (a, b) => a.skor_ketepatan_waktu - b.skor_ketepatan_waktu,
-                //         // },
-                //         {
-                //             title: 'Kualitas Pekerjaan',
-                //             dataIndex: 'skor_kualitas_pekerjaan',
-                //             key: 'skor_kualitas_pekerjaan',
-                //             sorter: (a, b) => a.skor_kualitas_pekerjaan - b.skor_kualitas_pekerjaan,
-                //         },
-                //         // {
-                //         //     title: 'Kesungguhan Kerja',
-                //         //     dataIndex: 'skor_kesungguhan_kerja',
-                //         //     key: 'skor_kesungguhan_kerja',
-                //         //     sorter: (a, b) => a.skor_kesungguhan_kerja - b.skor_kesungguhan_kerja,
-                //         // },
-                //         {
-                //             title: 'Jumlah Daily Kosong',
-                //             dataIndex: 'jumlah_daily_kosong',
-                //             key: 'jumlah_daily_kosong',
-                //             sorter: (a, b) => a.jumlah_daily_kosong - b.jumlah_daily_kosong,
-                //         },
-                //         {
-                //             title: 'Skor Daily Activity',
-                //             dataIndex: 'skor_daily_activity',
-                //             key: 'skor_daily_activity',
-                //             sorter: (a, b) => a.skor_daily_activity - b.skor_daily_activity,
-                //         },
-                //         {
-                //             title: 'Rata-rata',
-                //             dataIndex: 'rata_rata_kinerja',
-                //             key: 'rata_rata_kinerja',
-                //             sorter: (a, b) => a.rata_rata_kinerja - b.rata_rata_kinerja,
-                //         },
-                //         {
-                //             title: 'Skor',
-                //             dataIndex: 'skor_kinerja',
-                //             key: 'skor_kinerja',
-                //             sorter: (a, b) => a.skor_kinerja - b.skor_kinerja,
-                //         },
-                //     ],
-                // },
-
-                // {
-                //     title: 'Daily Activity',
-                //     children: [
-                //         {
-                //             title: 'Jumlah Daily Kosong',
-                //             dataIndex: 'jumlah_daily_kosong',
-                //             key: 'jumlah_daily_kosong',
-                //             sorter: (a, b) => a.jumlah_daily_kosong - b.jumlah_daily_kosong,
-                //         },
-                //         {
-                //             title: 'Skor Daily Activity',
-                //             dataIndex: 'skor_daily_activity',
-                //             key: 'skor_daily_activity',
-                //             sorter: (a, b) => a.skor_daily_activity - b.skor_daily_activity,
-                //         },
-                //     ],
-
-                // },
-
-                //////////////////////////////////
-                
-                // {
-                //     title: 'Rincian Perilaku Kerja (Core Value)',
-                //     dataIndex: 'core_value',
-                //     key: 'core_value',
-                //     sorter: (a, b) => a.core_value - b.nilai_core_value,
-                // },
-                // {
-                //     title: 'Nilai Total/Nilai CKP-R',
-                //     dataIndex: 'nilai_total',
-                //     key: 'nilai_total',
-                //     sorter: (a, b) => a.nilai_total - b.nilai_total,
-                // },
-                // {
-                //     title: 'Status',
-                //     key: 'status',
-                //     dataIndex: 'status',
-                //     render: status => (
-                //         <span>
-                //             <Tag color={status === 'incomplete' ? 'volcano' : 'green'}>
-                //                 {status.toUpperCase()}
-                //             </Tag>
-                //         </span>
-                //     ),
-                //     filters: [{ text: 'complete', value: 'complete' }, { text: 'incomplete', value: 'incomplete' }],
-                //     onFilter: (value, record) => record.status.indexOf(value) === 0,
-                // },
-                // {
-                //     title: 'Action',
-                //     key: 'action',
-                //     render: (text, record) => (
-                //         <span>
-                //             <a href="javascript:;" onClick={() => this.edit(record)}>Edit</a>
-                //             {/* <Button type="primary" icon="search" /> */}
-                //             <Divider type="vertical" />
-                //             {/* <Button type="primary" icon="search" /> */}
-                //             <a href="javascript:;" onClick={() => this.delete(record)}>Delete</a>
-                //         </span>
-                //     ),
-                // },
             ],
             data: []
         };
@@ -276,6 +106,37 @@ export class absensi extends Component {
         this.showAsyncModal = this.showAsyncModal.bind(this);
         this.cancelAsyncModal = this.cancelAsyncModal.bind(this);
         this.okAsyncModal = this.okAsyncModal.bind(this);
+
+        this.handleFileChange = this.handleFileChange.bind(this);
+    }
+
+    //excel
+    handleFileChange = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const worksheet = workbook.Sheets['Rekap Presensi Satker'];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { range: 6 });
+
+            // const columnNames = jsonData.shift(); // Remove and get the column names from the first row
+            // const jsonOutput = jsonData.map(row => {
+            //     const obj = {};
+            //     columnNames.forEach((colName, index) => {
+            //         obj[colName] = row[index];
+            //     });
+            //     return obj;
+            // });
+
+            // // Do something with the JSON data
+            // console.log(jsonOutput);
+            console.log(jsonData);
+            console.log(this.state.date.format("YYYY-MM"));
+        };
+
+        reader.readAsArrayBuffer(file);
     }
 
     // Table Action
@@ -683,23 +544,29 @@ export class absensi extends Component {
                     {/* <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal} disabled>Add Penilaian</Button> */}
                     {this.state.auth.id_level==4 ? (
                         <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} disabled>Add Penilaian</Button>
-                        ) : (<Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Add Penilaian</Button>
+                        ) : (<Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Import Absensi</Button>
                     )}
                     <h1 style={{ textAlign: 'center' }}>Rekap Absensi Pegawai {this.state.dateString}</h1>
                     <h1 style={{ textAlign: 'center' }}> {this.state.auth.nm_satker} </h1>
                     {/* <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{ overflowY: 'auto' }} bordered loading={this.state.isTableLoading} /> */}
                     <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.NIP} style={{ overflowY: 'auto' }} bordered loading={this.state.isTableLoading} />
                     <CollectionCreateForm
-                        title={"Edit Nilai " + this.state.name}
+                        title={"Import Absensi " + this.state.date.format("MMMM YYYY")}
                         wrappedComponentRef={this.saveFormRef}
-                        visible={this.state.isModalVisible}
-                        onCancel={this.handleCancel}
+                        // visible={this.state.isModalVisible}
+                        // onCancel={this.handleCancel}
                         onCreate={this.handleCreate}
                         row_record={this.state.row_record}
+                        // confirmLoading={this.state.confirmLoading}
+                        handleFileChange={this.handleFileChange}
+
+                        visible={this.state.isAsyncModalVisible}
+                        onOk={this.okAsyncModal}
                         confirmLoading={this.state.confirmLoading}
+                        onCancel={this.cancelAsyncModal}
                     />
 
-                    <Modal
+                    {/* <Modal
                         title="Add Penilaian"
                         visible={this.state.isAsyncModalVisible}
                         onOk={this.okAsyncModal}
@@ -707,7 +574,7 @@ export class absensi extends Component {
                         onCancel={this.cancelAsyncModal}
                     >
                         <p>{this.state.asyncModalText} {this.state.dateString}</p>
-                    </Modal>
+                    </Modal> */}
 
                 </Card>
             </div>

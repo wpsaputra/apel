@@ -14,7 +14,8 @@
     "react-dom": "^16.8.6",
     "react-highlight-words": "^0.16.0",
     "react-router-dom": "^5.0.0",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
   },
   "scripts": {
     "start": "react-app-rewired start",
