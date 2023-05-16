@@ -61,6 +61,9 @@ class Login extends React.Component {
             case "/best_employee":
                 path = "Best Employee";
                 break;
+            case "/absensi":
+                path = "Absensi";
+                break;
             case "/faq":
                 path = "FAQ";
                 break;
@@ -130,6 +133,12 @@ class Login extends React.Component {
                                 <Icon type="star" />
                                 <span>Best Employee</span>
                                 <NavLink to='/best_employee'> Best Employee </NavLink>
+                            </Menu.Item>
+
+                            <Menu.Item key="/absensi">
+                                <Icon type="star" />
+                                <span>Absensi</span>
+                                <NavLink to='/absensi'> Absensi </NavLink>
                             </Menu.Item>
 
                             <Menu.Item key="/faq">
