@@ -75,6 +75,22 @@ export class employee extends Component {
                     sorter: (a, b) => a.nilai_total - b.nilai_total,
                     defaultSortOrder: 'descend',
                 },
+
+                {
+                    title: 'Jumlah Pulang Sebelum Waktu (PSW)',
+                    dataIndex: 'PSW',
+                    key: 'PSW',
+                    render: text => <span>{text==null?"Data absensi belum diimport":text}</span>,
+                    sorter: (a, b) => a.PSW - b.PSW,
+                },
+                {
+                    title: 'Jumlah Hadir Terlambat (HT)',
+                    dataIndex: 'HT',
+                    key: 'HT',
+                    // render: text => <span>{text.kjk}</span>,
+                    render: text => <span>{text==null?"Data absensi belum diimport":text}</span>,
+                    sorter: (a, b) => a.HT - b.HT,
+                },
                 // {
                 //     title: 'Status',
                 //     key: 'status',
@@ -117,7 +133,8 @@ export class employee extends Component {
                     ),
                 },
             ],
-            data: []
+            data: [],
+            absen: []
         };
         this.openNotification = this.openNotification.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -239,12 +256,20 @@ export class employee extends Component {
         }
     }
 
-    fetchData(date) {
+    async fetchData(date) {
         var self = this;
-        let url = url_api + "/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
+        let url = url_api + "/records/absensi?filter=tanggal_absen,eq,$tanggal_absen";
+        url = url.replace("$tanggal_absen", date.format('YYYY-MM')+"-01");
+        let absensi = await axios.get(url);
+        absensi = absensi.data.records;
+        console.log(absensi);
+        
+        
+        url = url_api + "/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
         url = url.replace("$month", date.format('M')).replace("$year", date.format('YYYY'));
         // axios.get('http://localhost/api.php/records/penilaian')
         self.setState({ isTableLoading: true });
+
         axios.get(url)
             .then(function (response) {
                 // handle success
@@ -257,6 +282,11 @@ export class employee extends Component {
                 // tempRecord = tempRecord.filter(v =>  self.state.filterData.some(item => item.niplama === v.niplama.niplama));
                 console.log("temp record", tempRecord); 
                 // self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
+
+                let merged = tempRecord.map(a => Object.assign(a, absensi.find(b => b.NIP == a.niplama.niplama)));
+                console.log(merged);
+
+
                 self.setState({ data: tempRecord, confirmLoading: false, isAsyncModalVisible: false });
             })
             .catch(function (error) {
@@ -268,6 +298,32 @@ export class employee extends Component {
                 self.openNotification();
                 self.setState({ isTableLoading: false });
             });
+        
+        // url2
+        // url = url_api + "/records/absensi?filter=tanggal_absen,eq,$tanggal_absen";
+        // url = url.replace("$tanggal_absen", date.format('YYYY-MM')+"-01");
+        // let response = await axios.get(url);
+        // console.log(response.data.records);
+
+        // axios.get('http://localhost/api.php/records/penilaian')
+        // axios.get(url)
+        //     .then(function (response) {
+        //         // handle success
+        //         console.log(response.data.records);
+        //         let tempRecord = response.data.records;
+        //         // tempRecord = tempRecord.filter(v =>  self.state.filterData.niplama.includes(v.niplama.niplama));
+        //         // tempRecord = tempRecord.filter(v =>  v.niplama.niplama==="340057236");
+        //         // tempRecord = tempRecord.filter(v =>  v.niplama.niplama===self.state.filterData[0].niplama);
+                
+        //         // tempRecord = tempRecord.filter(v =>  self.state.filterData.some(item => item.niplama === v.niplama.niplama));
+        //         console.log("temp record", tempRecord); 
+        //         // self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
+        //         self.setState({ absen: tempRecord });
+        //     })
+        //     .catch(function (error) {
+        //         // handle error
+        //         console.log(error);
+        //     })
     }
 
     fetchPegawai() {
