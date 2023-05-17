@@ -478,8 +478,8 @@ export class absensi extends Component {
                 <Card>
                     <MonthPicker format='MMMM YYYY' style={{ marginBottom: "10px" }} onChange={this.onChange} placeholder="Pilih bulan" />
                     {/* <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal} disabled>Add Penilaian</Button> */}
-                    {this.state.auth.id_level==4 ? (
-                        <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} disabled>Add Penilaian</Button>
+                    {!(this.state.auth.niplama=="340057236"||this.state.auth.niplama=="340055490"||this.state.auth.niplama=="340020416"||this.state.auth.niplama=="340017756") ? (
+                        <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} disabled>Import Absensi</Button>
                         ) : (<Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Import Absensi</Button>
                     )}
                     <h1 style={{ textAlign: 'center' }}>Rekap Absensi Pegawai {this.state.dateString}</h1>

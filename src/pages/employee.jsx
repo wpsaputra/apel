@@ -91,20 +91,6 @@ export class employee extends Component {
                     render: text => <span>{text==null?"Data absensi belum diimport":text}</span>,
                     sorter: (a, b) => a.HT - b.HT,
                 },
-                // {
-                //     title: 'Status',
-                //     key: 'status',
-                //     dataIndex: 'status',
-                //     render: status => (
-                //         <span>
-                //             <Tag color={status === 'incomplete' ? 'volcano' : 'green'}>
-                //                 {status.toUpperCase()}
-                //             </Tag>
-                //         </span>
-                //     ),
-                //     filters: [{ text: 'complete', value: 'complete' }, { text: 'incomplete', value: 'incomplete' }],
-                //     onFilter: (value, record) => record.status.indexOf(value) === 0,
-                // },
                 {
                     title: 'Best Employee',
                     key: 'best_employee',
@@ -134,7 +120,76 @@ export class employee extends Component {
                 },
             ],
             data: [],
-            absen: []
+            absen: [],
+            columns2: [
+                {
+                    title: 'NIP Pegawai',
+                    dataIndex: 'niplama',
+                    key: 'niplama',
+                    render: text => <a href="javascript:;">{text.niplama}</a>,
+                    sorter: (a, b) => a.niplama.niplama - b.niplama.niplama,
+                    // ...this.getColumnSearchProps('niplama'),
+                },
+                {
+                    title: 'Nama Pegawai',
+                    dataIndex: 'niplama',
+                    key: 'nama',
+                    // render: text => <span>{text.nama}</span>,
+                    sorter: (a, b) => a.niplama.nama.localeCompare(b.niplama.nama),
+                    ...this.getColumnSearchProps('nama'),
+
+                },
+                {
+                    title: 'Nilai Total/Nilai CKP-R',
+                    dataIndex: 'nilai_total',
+                    key: 'nilai_total',
+                    sorter: (a, b) => a.nilai_total - b.nilai_total,
+                    defaultSortOrder: 'descend',
+                },
+
+                {
+                    title: 'Jumlah Pulang Sebelum Waktu (PSW)',
+                    dataIndex: 'PSW',
+                    key: 'PSW',
+                    render: text => <span>{text==null?"Data absensi belum diimport":text}</span>,
+                    sorter: (a, b) => a.PSW - b.PSW,
+                },
+                {
+                    title: 'Jumlah Hadir Terlambat (HT)',
+                    dataIndex: 'HT',
+                    key: 'HT',
+                    // render: text => <span>{text.kjk}</span>,
+                    render: text => <span>{text==null?"Data absensi belum diimport":text}</span>,
+                    sorter: (a, b) => a.HT - b.HT,
+                },
+                {
+                    title: 'Best Employee',
+                    key: 'best_employee',
+                    dataIndex: 'best_employee',
+                    render: best_employee => (
+                        <span>
+                            <Tag style={{ display: best_employee === 0 ? 'none' : 'flex'}} color={best_employee === 0 ? 'volcano' : 'green'} >
+                                {best_employee === 0 ? "": "Best Employee"}
+                            </Tag>
+                        </span>
+                    ),
+                    filters: [{ text: 'Non Best Employee', value: 0 }, { text: 'Best Employee', value: 1 }],
+                    onFilter: (value, record) => record.best_employee === value,
+                },
+                // {
+                //     title: 'Action',
+                //     key: 'action',
+                //     render: (text, record) => (
+                //         <span>
+                //             <a href="javascript:;" onClick={() => this.edit(record)}>Nominate</a>
+                //             {/* <Button type="primary" icon="search" /> */}
+                //             <Divider type="vertical" />
+                //             {/* <Button type="primary" icon="search" /> */}
+                //             <a href="javascript:;" onClick={() => this.delete(record)}>Delete</a>
+                //         </span>
+                //     ),
+                // },
+            ],
         };
         this.openNotification = this.openNotification.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -519,6 +574,14 @@ export class employee extends Component {
 
     render() {
         console.log(this.props);
+        // if(!(this.state.auth.niplama=="340016171"||this.state.auth.niplama=="340012043")){
+        //     let col = this.state.columns;
+        //     // col = col;
+        //     col.splice(6, 1);
+        //     console.log(col);
+        //     this.setState({columns: col});
+
+        // }
         return (
             <div>
                 {this.state.auth.id_level==4 ? (
@@ -541,7 +604,7 @@ export class employee extends Component {
                     )} */}
                     <h1 style={{ textAlign: 'center' }}>Rekap Best Employee {this.state.dateString}</h1>
                     <h1 style={{ textAlign: 'center' }}> {this.state.auth.nm_satker} </h1>
-                    <Table columns={this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{ overflowY: 'auto' }} bordered loading={this.state.isTableLoading} />
+                    <Table columns={(!(this.state.auth.niplama=="340016171"||this.state.auth.niplama=="340012043"))?this.state.columns2:this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{ overflowY: 'auto' }} bordered loading={this.state.isTableLoading} />
                     <CollectionCreateForm
                         title={"Edit Nilai " + this.state.name}
                         wrappedComponentRef={this.saveFormRef}
