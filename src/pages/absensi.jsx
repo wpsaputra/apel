@@ -88,7 +88,8 @@ export class absensi extends Component {
 
 
             ],
-            data: []
+            data: [],
+            excel:[]
         };
         this.openNotification = this.openNotification.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -111,9 +112,12 @@ export class absensi extends Component {
     }
 
     //excel
-    handleFileChange = (event) => {
+    handleFileChange(event){
         const file = event.target.files[0];
         const reader = new FileReader();
+
+        // let x = this;
+        var self = this;
 
         reader.onload = (e) => {
             const data = new Uint8Array(e.target.result);
@@ -132,8 +136,17 @@ export class absensi extends Component {
 
             // // Do something with the JSON data
             // console.log(jsonOutput);
-            console.log(jsonData);
-            console.log(this.state.date.format("YYYY-MM"));
+            console.log(this.state.date.format("YYYY-MM")+"-01");
+            for (let index = 0; index < jsonData.length; index++) {
+                const element = jsonData[index];
+                element["tanggal_absen"] = this.state.date.format("YYYY-MM")+"-01";
+            }
+
+            // self.setState({})
+            self.setState({ excel: jsonData });
+
+            
+
         };
 
         reader.readAsArrayBuffer(file);
@@ -255,129 +268,51 @@ export class absensi extends Component {
             })
     }
 
-    updateData(values, form) {
+    async updateData(values, form) {
+        
         var self = this;
-        let url = url_api + "/records/penilaian/" + this.state.row_record.id;
-        let status = "complete";
-        for (const key of Object.keys(values)) {
-            if (values[key] == 0 && key!=='jumlah_daily_kosong' && key!=='jumlah_tl_psw'&& key!=='skor_ketepatan_waktu'
-            && key!=='skor_kesungguhan_kerja'&& key!=='skor_tl_psw'&& key!=='nilai_ckp_r') {
-                status = "incomplete";
-            }
+        console.log("WEEE");
+        console.log(self.state.data);
+
+        if(self.state.data.length>0){
+            //delete previous imported data
+            let ids = self.state.data.map(function(val) {
+                return val.id;
+            }).join(',');
+            console.log(ids);
+
+            let url = url_api + "/records/absensi/" + ids;
+            await axios.delete(url);
+            // axios.delete(url)
+            //     .then(function (response) {
+            //         // handle success
+            //         console.log(response.data.records);
+            //         self.setState({ data: newData });
+            //     })
+            //     .catch(function (error) {
+            //         // handle error
+            //         console.log(error);
+            //     })
+            //     .finally(function () {
+            //         // always executed
+            //         self.openNotification();
+            //     });
+
         }
-        values.status = status;
-
-         //calculate skor_daily_activity
-         let skor_daily_activity = 96;
-         if(values.jumlah_daily_kosong==0){
-             skor_daily_activity = 100;
-         }
-         if(values.jumlah_daily_kosong>=1&&values.jumlah_daily_kosong<=5){
-             skor_daily_activity = 99;
-         }
-         if(values.jumlah_daily_kosong>=6&&values.jumlah_daily_kosong<=10){
-             skor_daily_activity = 98;
-         }
-         if(values.jumlah_daily_kosong>=11&&values.jumlah_daily_kosong<=15){
-             skor_daily_activity = 97;
-         }
-         values.skor_daily_activity = skor_daily_activity;
-
-        // let nilai_ckp_r = 0;
-        // nilai_ckp_r = values.skor_realisasi_pekerjaan * 0.3 + values.skor_ketepatan_waktu * 0.2 + values.skor_daily_activity * 0.2 +
-        //     values.skor_tl_psw * 0.3;
-        // values.nilai_ckp_r = nilai_ckp_r.toFixed(0);
-
-        // calculate field rata_rata_kinerja 
-        let rata_rata_kinerja = 0;
-        rata_rata_kinerja = (values.skor_realisasi_pekerjaan/3 + values.skor_ketepatan_waktu*0 + values.skor_kualitas_pekerjaan/3 
-        + values.skor_kesungguhan_kerja*0 + values.skor_daily_activity/3);
-        values.rata_rata_kinerja = rata_rata_kinerja.toFixed(2);
-
-        // calculate field skor_kinerja
-        // let skor_kinerja = 98;
-        // if(rata_rata_kinerja.toFixed(2)>=95){
-        //     skor_kinerja = 100;
-        // }
-        // if(rata_rata_kinerja.toFixed(2)<95&&rata_rata_kinerja.toFixed(0)>=90){
-        //     skor_kinerja = 99;
-        // }
-        let skor_kinerja = values.rata_rata_kinerja;
-        values.skor_kinerja = skor_kinerja;
-
-       
-
-        //calculate skor tl& psw
-        // let skor_tl_psw=95;
-        // if(values.jumlah_tl_psw<=1){
-        //     skor_tl_psw = 100;
-        // }
-        // if(values.jumlah_tl_psw>=2&&values.jumlah_tl_psw<=3){
-        //     skor_tl_psw = 99;
-        // }
-        // if(values.jumlah_tl_psw>=4&&values.jumlah_tl_psw<=5){
-        //     skor_tl_psw = 98;
-        // }
-        // if(values.jumlah_tl_psw>=6&&values.jumlah_tl_psw<=7){
-        //     skor_tl_psw = 97;
-        // }
-        // if(values.jumlah_tl_psw>=8&&values.jumlah_tl_psw<=9){
-        //     skor_tl_psw = 96;
-        // }
-        // values.skor_tl_psw = skor_tl_psw;
-
-        //calculate ckor ckp-r 
-        // let nilai_ckp_r = 0;
-        // nilai_ckp_r = skor_kinerja*0.7 + skor_daily_activity*0.2 + skor_tl_psw*0.1;
-        // values.nilai_ckp_r = nilai_ckp_r.toFixed(2);
-
-        let nilai_total = 0;
-        // nilai_total = skor_kinerja*0.7 + skor_daily_activity*0.2 + skor_tl_psw*0.1;
-        nilai_total = skor_kinerja*0.7 + values.core_value*0.3;
-        values.nilai_total = nilai_total.toFixed(2);
-
-        values.nilai_ckp_r = values.nilai_total;
 
 
-        axios.put(url, values)
+        this.setState({ confirmLoading: true });
+
+        let url = url_api + "/records/absensi";
+        values = self.state.excel;
+        console.log(values);
+        axios.post(url, values)
             .then(function (response) {
                 // handle success
                 console.log("update data");
                 console.log(response.data);
+                self.fetchData(self.state.date);
 
-                let newData = self.state.data;
-                // newData.filter(v => v.id === self.state.row_record.id)[0] = values;
-
-                // newData.filter(v => v.id === self.state.row_record.id)[0].skor_realisasi_pekerjaan = values.skor_realisasi_pekerjaan;
-                // newData.filter(v => v.id === self.state.row_record.id)[0].skor_ketepatan_waktu = values.skor_ketepatan_waktu;
-                // newData.filter(v => v.id === self.state.row_record.id)[0].skor_daily_activity = values.skor_daily_activity;
-                // newData.filter(v => v.id === self.state.row_record.id)[0].skor_tl_psw = values.skor_tl_psw;
-                // newData.filter(v => v.id === self.state.row_record.id)[0].nilai_ckp_r = values.nilai_ckp_r;
-                // newData.filter(v => v.id === self.state.row_record.id)[0].status = values.status;
-
-                newData.filter(v => v.id === self.state.row_record.id)[0].skor_realisasi_pekerjaan = values.skor_realisasi_pekerjaan;
-                newData.filter(v => v.id === self.state.row_record.id)[0].skor_ketepatan_waktu = values.skor_ketepatan_waktu;
-                newData.filter(v => v.id === self.state.row_record.id)[0].skor_kualitas_pekerjaan = values.skor_kualitas_pekerjaan;
-                newData.filter(v => v.id === self.state.row_record.id)[0].skor_kesungguhan_kerja = values.skor_kesungguhan_kerja;
-                newData.filter(v => v.id === self.state.row_record.id)[0].rata_rata_kinerja = values.rata_rata_kinerja;
-                newData.filter(v => v.id === self.state.row_record.id)[0].skor_kinerja = values.skor_kinerja;
-
-                newData.filter(v => v.id === self.state.row_record.id)[0].jumlah_daily_kosong = values.jumlah_daily_kosong;
-                newData.filter(v => v.id === self.state.row_record.id)[0].skor_daily_activity = values.skor_daily_activity;
-                newData.filter(v => v.id === self.state.row_record.id)[0].jumlah_tl_psw = values.jumlah_tl_psw;
-                newData.filter(v => v.id === self.state.row_record.id)[0].skor_tl_psw = values.skor_tl_psw;
-                newData.filter(v => v.id === self.state.row_record.id)[0].nilai_ckp_r = values.nilai_ckp_r;
-                newData.filter(v => v.id === self.state.row_record.id)[0].status = values.status;
-                
-                newData.filter(v => v.id === self.state.row_record.id)[0].core_value = values.core_value;
-                newData.filter(v => v.id === self.state.row_record.id)[0].nilai_total = values.nilai_total;
-
-                // console.log("newData :");
-                // console.log(newData);
-
-                self.setState({ data: newData });
-                self.setState({ isModalVisible: false, confirmLoading: false });
-                form.resetFields();
 
             })
             .catch(function (error) {
@@ -386,7 +321,7 @@ export class absensi extends Component {
             })
             .finally(function () {
                 // always executed
-                self.openNotification();
+                // self.openNotification();
             });
 
     }
@@ -494,29 +429,30 @@ export class absensi extends Component {
     }
 
     okAsyncModal() {
-        var self = this;
-        let url = url_refresh + "?month=$month&year=$year&nip=$nip";
-        let nip = "";
-        this.state.filterData.forEach(item => nip = nip+item.niplama+",");
-        nip = nip.substring(0, nip.length-1);
-        console.log(nip);
-        url = url.replace("$month", this.state.date.format('M')).replace("$year", this.state.date.format('YYYY')).replace("$nip", nip);
-        // axios.get('http://localhost/api.php/records/penilaian')
-
-        this.setState({ confirmLoading: true });
-
-        axios.get(url)
-            .then(function (response) {
-                // handle success
-                console.log(response.data);
-                // self.setState({ data: response.data.records });
-                self.fetchData(self.state.date);
-            })
-            .catch(function (error) {
-                // handle error
-                // self.setState({asyncModalText: error});
-                console.log(error);
-            })
+        console.log("ADAADDDDDDDDDDDDD");
+        // let url = url_refresh + "?month=$month&year=$year&nip=$nip";
+        // let nip = "";
+        // this.state.filterData.forEach(item => nip = nip+item.niplama+",");
+        // nip = nip.substring(0, nip.length-1);
+        // console.log(nip);
+        // url = url.replace("$month", this.state.date.format('M')).replace("$year", this.state.date.format('YYYY')).replace("$nip", nip);
+        
+        
+        
+        // axios.get(url)
+        //     .then(function (response) {
+        //         // handle success
+        //         console.log(response.data);
+        //         // self.setState({ data: response.data.records });
+        //         self.fetchData(self.state.date);
+        //     })
+        //     .catch(function (error) {
+        //         // handle error
+        //         // self.setState({asyncModalText: error});
+        //         console.log(error);
+        //     })
+        
+        
     }
 
     componentDidMount() {
