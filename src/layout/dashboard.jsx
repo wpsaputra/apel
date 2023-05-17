@@ -136,7 +136,7 @@ class Login extends React.Component {
                             </Menu.Item>
 
                             <Menu.Item key="/absensi">
-                                <Icon type="star" />
+                                <Icon type="clock-circle" />
                                 <span>Absensi</span>
                                 <NavLink to='/absensi'> Absensi </NavLink>
                             </Menu.Item>
