@@ -153,6 +153,7 @@ export class employee extends Component {
                     key: 'PSW',
                     render: text => <span>{text==null?"Data absensi belum diimport":text}</span>,
                     sorter: (a, b) => a.PSW - b.PSW,
+                    defaultSortOrder: 'ascend',
                 },
                 {
                     title: 'Jumlah Hadir Terlambat (HT)',
@@ -161,6 +162,7 @@ export class employee extends Component {
                     // render: text => <span>{text.kjk}</span>,
                     render: text => <span>{text==null?"Data absensi belum diimport":text}</span>,
                     sorter: (a, b) => a.HT - b.HT,
+                    defaultSortOrder: 'ascend',
                 },
                 {
                     title: 'Best Employee',
@@ -334,15 +336,18 @@ export class employee extends Component {
                 // tempRecord = tempRecord.filter(v =>  v.niplama.niplama==="340057236");
                 // tempRecord = tempRecord.filter(v =>  v.niplama.niplama===self.state.filterData[0].niplama);
                 
-                // tempRecord = tempRecord.filter(v =>  self.state.filterData.some(item => item.niplama === v.niplama.niplama));
+                tempRecord = tempRecord.filter(v =>  self.state.filterData.some(item => item.niplama === v.niplama.niplama));
                 console.log("temp record", tempRecord); 
                 // self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
 
                 let merged = tempRecord.map(a => Object.assign(a, absensi.find(b => b.NIP == a.niplama.niplama)));
+                merged = merged.filter(v=>v.PSW==0||v.PSW==null);
+                merged = merged.filter(v=>v.HT==0||v.PSW==null);
                 console.log(merged);
 
 
-                self.setState({ data: tempRecord, confirmLoading: false, isAsyncModalVisible: false });
+                // self.setState({ data: tempRecord, confirmLoading: false, isAsyncModalVisible: false });
+                self.setState({ data: merged, confirmLoading: false, isAsyncModalVisible: false });
             })
             .catch(function (error) {
                 // handle error
@@ -383,15 +388,19 @@ export class employee extends Component {
 
     fetchPegawai() {
         var self = this;
-        let url = url_pegawai + "?id_lvl=$id_lvl&id_org=$id_org&id_satker=$id_satker";
+        // let url = url_pegawai + "?id_lvl=$id_lvl&id_org=$id_org&id_satker=$id_satker";
+        // let url = url_api + "?id_satker=$id_satker";
+        let url = url_api + "/records/master_pegawai?filter=id_satker,eq,$id_satker";;
         url = url.replace("$id_lvl", this.state.auth.id_level).replace("$id_org", this.state.auth.id_org).replace("$id_satker", this.state.auth.id_satker);
         // axios.get('http://localhost/api.php/records/penilaian')
         console.log(url);
         axios.get(url)
             .then(function (response) {
                 // handle success
-                console.log(response.data);
-                self.setState({ filterData: response.data });
+                // console.log(response.data);
+                console.log(response.data.records);
+                // self.setState({ filterData: response.data });
+                self.setState({ filterData: response.data.records });
                 self.fetchData(self.state.date);
                 // self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
             })
