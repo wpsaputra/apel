@@ -4,6 +4,7 @@ import Highlighter from 'react-highlight-words';
 import moment from 'moment';
 import 'moment/locale/id'
 import {url_api, url_refresh, url_pegawai} from '../constant/constant';
+import { PDFExport } from '@progress/kendo-react-pdf';
 
 const { MonthPicker } = DatePicker;
 const axios = require('axios');
@@ -576,6 +577,10 @@ export class employee extends Component {
             })
     }
 
+    exportPDFWithComponent = () => {
+        this.pdfExportComponent.save();
+    }
+
     componentDidMount() {
         // this.fetchData(this.state.date);
         this.fetchPegawai();
@@ -611,18 +616,23 @@ export class employee extends Component {
                         <Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} disabled>Add Penilaian</Button>
                         ) : (<Button type="primary" shape="round" icon="plus" size="small" style={{ float: 'right' }} onClick={this.showAsyncModal}>Add Penilaian</Button>
                     )} */}
-                    <h1 style={{ textAlign: 'center' }}>Rekap Best Employee {this.state.dateString}</h1>
-                    <h1 style={{ textAlign: 'center' }}> {this.state.auth.nm_satker} </h1>
-                    <Table columns={(!(this.state.auth.niplama=="340016171"||this.state.auth.niplama=="340012043"))?this.state.columns2:this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{ overflowY: 'auto' }} bordered loading={this.state.isTableLoading} />
-                    <CollectionCreateForm
-                        title={"Edit Nilai " + this.state.name}
-                        wrappedComponentRef={this.saveFormRef}
-                        visible={this.state.isModalVisible}
-                        onCancel={this.handleCancel}
-                        onCreate={this.handleCreate}
-                        row_record={this.state.row_record}
-                        confirmLoading={this.state.confirmLoading}
-                    />
+
+                    <Button type="primary" shape="round" icon="download" size="small" style={{ float: 'right' }} onClick={this.exportPDFWithComponent} >Download Pdf</Button>
+                    <PDFExport ref={(component) => this.pdfExportComponent = component} paperSize="A4" landscape scale={0.8} margin="2cm" >
+                        <h1 style={{ textAlign: 'center' }}>Rekap Best Employee {this.state.dateString}</h1>
+                        <h1 style={{ textAlign: 'center' }}> {this.state.auth.nm_satker} </h1>
+                        <Table pagination={false} columns={(!(this.state.auth.niplama=="340016171"||this.state.auth.niplama=="340012043"))?this.state.columns2:this.state.columns} dataSource={this.state.data} rowKey={record => record.niplama.niplama} style={{ overflowY: 'auto' }} bordered loading={this.state.isTableLoading} />
+                        <CollectionCreateForm
+                            title={"Edit Nilai " + this.state.name}
+                            wrappedComponentRef={this.saveFormRef}
+                            visible={this.state.isModalVisible}
+                            onCancel={this.handleCancel}
+                            onCreate={this.handleCreate}
+                            row_record={this.state.row_record}
+                            confirmLoading={this.state.confirmLoading}
+                        />
+
+                    </PDFExport>
 
                     <Modal
                         title="Add Penilaian"
