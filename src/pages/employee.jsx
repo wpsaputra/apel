@@ -218,6 +218,8 @@ export class employee extends Component {
         this.setState({ row_record: record });
         this.setState({ name: record.niplama.nama });
 
+        console.log("record", record);
+
         // let newData = this.state.data;
         // newData.filter(v => v.id === record.id)[0].niplama.nama = "tsubasa";
         // console.log("edit");
@@ -320,8 +322,12 @@ export class employee extends Component {
         url = url.replace("$tanggal_absen", date.format('YYYY-MM')+"-01");
         let absensi = await axios.get(url);
         absensi = absensi.data.records;
-        console.log(absensi);
-        
+        console.log("absensi", absensi);
+
+        for (let index = 0; index < absensi.length; index++) {
+            let element = absensi[index];
+            delete element.id;
+        }
         
         url = url_api + "/records/penilaian?filter=bulan_ckp,eq,$month&filter=tahun_ckp,eq,$year&join=master_pegawai";
         url = url.replace("$month", date.format('M')).replace("$year", date.format('YYYY'));
@@ -330,24 +336,22 @@ export class employee extends Component {
 
         axios.get(url)
             .then(function (response) {
+                console.log("url", url);
                 // handle success
-                console.log(response.data.records);
+                // console.log(response.data.records);
                 let tempRecord = response.data.records;
-                // tempRecord = tempRecord.filter(v =>  self.state.filterData.niplama.includes(v.niplama.niplama));
-                // tempRecord = tempRecord.filter(v =>  v.niplama.niplama==="340057236");
-                // tempRecord = tempRecord.filter(v =>  v.niplama.niplama===self.state.filterData[0].niplama);
+                console.log("t0", response.data);
+                console.log("t1", tempRecord);
                 
                 tempRecord = tempRecord.filter(v =>  self.state.filterData.some(item => item.niplama === v.niplama.niplama));
                 console.log("temp record", tempRecord); 
-                // self.setState({ data: response.data.records, confirmLoading: false, isAsyncModalVisible: false });
 
                 let merged = tempRecord.map(a => Object.assign(a, absensi.find(b => b.NIP == a.niplama.niplama)));
                 merged = merged.filter(v=>v.PSW==0||v.PSW==null);
                 merged = merged.filter(v=>v.HT==0||v.PSW==null);
-                console.log(merged);
+                console.log("merged", merged);
 
 
-                // self.setState({ data: tempRecord, confirmLoading: false, isAsyncModalVisible: false });
                 self.setState({ data: merged, confirmLoading: false, isAsyncModalVisible: false });
             })
             .catch(function (error) {
